@@ -1,0 +1,70 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+buildscript {
+    repositories {
+        maven {
+            url "https://maven.mozilla.org/maven2"
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion config.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+    }
+
+    buildTypes {
+        debug {
+            // Export experiments proguard rules even in debug since consuming apps may still
+            // enable proguard/R8
+            consumerProguardFiles 'proguard-rules-consumer.pro'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules-consumer.pro'
+        }
+    }
+
+    namespace 'mozilla.components.service.nimbus'
+}
+
+dependencies {
+    // These dependencies are part of this module's public API.
+    api (ComponentsDependencies.mozilla_nimbus) {
+        // Use our own version of the Glean dependency,
+        // which might be different from the version declared by A-S.
+        exclude group: 'org.mozilla.components', module: 'service-glean'
+    }
+
+    implementation ComponentsDependencies.androidx_core_ktx
+    implementation ComponentsDependencies.androidx_constraintlayout
+    implementation ComponentsDependencies.androidx_coordinatorlayout
+    implementation ComponentsDependencies.androidx_recyclerview
+    implementation ComponentsDependencies.kotlin_stdlib
+    implementation ComponentsDependencies.kotlin_coroutines
+    implementation project(':support-base')
+    implementation project(':support-locale')
+
+    testImplementation ComponentsDependencies.androidx_work_testing
+
+    testImplementation ComponentsDependencies.mozilla_full_megazord_forUnitTests
+    testImplementation ComponentsDependencies.androidx_test_core
+    testImplementation ComponentsDependencies.androidx_test_junit
+    testImplementation ComponentsDependencies.testing_mockito
+    testImplementation ComponentsDependencies.testing_mockwebserver
+    testImplementation ComponentsDependencies.testing_robolectric
+    testImplementation project(':support-test')
+}
+
+apply from: '../../../android-lint.gradle'
+apply from: '../../../publish.gradle'
+ext.configurePublish(config.componentsGroupId, archivesBaseName, project.ext.description)
