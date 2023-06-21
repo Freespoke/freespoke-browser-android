@@ -1154,9 +1154,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">തകരാറുകള്‍</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">സ്വകാര്യതാ അറിയിപ്പ്</string>
+    <string name="about_privacy_policy">സ്വകാര്യതാ അറിയിപ്പ്</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">നിങ്ങളുടെ അവകാശങ്ങള്‍ അറിയുക</string>
+    <string name="about_terms">നിങ്ങളുടെ അവകാശങ്ങള്‍ അറിയുക</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">ലൈസന്‍സ് വിവരം</string>
     <!-- About page link text to open a screen with libraries that are used -->

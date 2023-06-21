@@ -1535,9 +1535,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Վթարներ</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Գաղտնիության ծանուցում</string>
+    <string name="about_privacy_policy">Գաղտնիության ծանուցում</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Իմացե՛ք Ձեր իրավունքները</string>
+    <string name="about_terms">Իմացե՛ք Ձեր իրավունքները</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Արտոնագրի տեղեկություն</string>
     <!-- About page link text to open a screen with libraries that are used -->

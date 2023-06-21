@@ -350,13 +350,13 @@ open class DefaultToolbarMenu(
         onItemTapped.invoke(ToolbarMenu.Item.Quit)
     }
 
-    private fun syncMenuItem(): BrowserMenuItem {
-        return BrowserMenuSignIn(primaryTextColor()) {
-            onItemTapped.invoke(
-                ToolbarMenu.Item.SyncAccount(accountManager.accountState),
-            )
-        }
-    }
+//    private fun syncMenuItem(): BrowserMenuItem {
+//        return BrowserMenuSignIn(primaryTextColor()) {
+//            onItemTapped.invoke(
+//                ToolbarMenu.Item.SyncAccount(accountManager.accountState),
+//            )
+//        }
+//    }
 
     @VisibleForTesting(otherwise = PRIVATE)
     val coreMenuItems by lazy {
@@ -369,7 +369,7 @@ open class DefaultToolbarMenu(
                 historyItem,
                 downloadsItem,
                 extensionsItem,
-                syncMenuItem(),
+//                syncMenuItem(),
                 BrowserMenuDivider(),
                 findInPageItem,
                 desktopSiteItem,

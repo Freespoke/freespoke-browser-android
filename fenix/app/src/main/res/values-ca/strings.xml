@@ -1540,9 +1540,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Fallades</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Avís de privadesa</string>
+    <string name="about_privacy_policy">Avís de privadesa</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Coneixeu els vostres drets</string>
+    <string name="about_terms">Coneixeu els vostres drets</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Informació de la llicència</string>
     <!-- About page link text to open a screen with libraries that are used -->

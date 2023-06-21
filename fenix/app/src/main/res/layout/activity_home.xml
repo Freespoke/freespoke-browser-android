@@ -1,29 +1,391 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<org.mozilla.fenix.perf.HomeActivityRootLinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<org.mozilla.fenix.perf.HomeActivityRootLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/rootContainer"
     tools:context=".HomeActivity">
 
-    <ViewStub
-        android:id="@+id/navigationToolbarStub"
-        android:inflatedId="@id/navigationToolbar"
-        android:layout="@layout/navigation_toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp" />
+        android:layout_height="match_parent">
 
-    <!--The navGraph is set dynamically in NavGraphProvider -->
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph" />
+        <ViewStub
+            android:id="@+id/navigationToolbarStub"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:inflatedId="@id/navigationToolbar"
+            android:layout="@layout/navigation_toolbar" />
+
+        <!--The navGraph is set dynamically in NavGraphProvider -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/container"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_navigation"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/drawerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white_grey_transparent"
+            android:visibility="visible">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="0dp">
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fillViewport="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:layout_marginTop="28dp"
+                            android:layout_marginEnd="24dp"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    app:srcCompat="@drawable/ic_logo_freespoke_drawer" />
+
+                                <FrameLayout
+                                    android:id="@+id/closeIconDrawer"
+                                    android:layout_width="100dp"
+                                    android:layout_height="50dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true">
+
+                                    <ImageView
+                                        android:layout_width="15dp"
+                                        android:layout_height="15dp"
+                                        android:layout_gravity="center|end"
+                                        android:layout_marginEnd="8dp"
+                                        app:srcCompat="@drawable/ic_close_freespoke" />
+                                </FrameLayout>
+
+                            </RelativeLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="18dp"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:id="@+id/addDefault"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:background="@drawable/background_drawer_item"
+                                    android:padding="18dp">
+
+                                    <ImageView
+                                        android:id="@+id/icon"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_add_default"
+                                        app:tint="@color/drawer_icon" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="14dp"
+                                        android:layout_toEndOf="@id/icon"
+                                        android:text="@string/add_as_default"
+                                        android:textColor="@color/drawer_font_color"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:id="@+id/iconBack"
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_right_freespoke" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/shareFreespoke"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:background="@drawable/background_drawer_item"
+                                    android:padding="18dp">
+
+                                    <ImageView
+                                        android:id="@+id/iconShare"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_share_freespoke"
+                                        app:tint="@color/drawer_icon" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="14dp"
+                                        android:layout_toEndOf="@id/iconShare"
+                                        android:text="@string/share_freespoke"
+                                        android:textColor="@color/drawer_font_color"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_right_freespoke" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/freespokeBlog"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:background="@drawable/background_drawer_item"
+                                    android:padding="18dp">
+
+                                    <ImageView
+                                        android:id="@+id/iconBlog"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_freespoke_drawer"
+                                        app:tint="@color/drawer_icon" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="14dp"
+                                        android:layout_toEndOf="@id/iconBlog"
+                                        android:text="@string/freespoke_blog"
+                                        android:textColor="@color/drawer_font_color"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_right_freespoke" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/newsletters"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:background="@drawable/background_drawer_item"
+                                    android:padding="18dp">
+
+                                    <ImageView
+                                        android:id="@+id/iconNewsletters"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_newsletter"
+                                        app:tint="@color/drawer_icon" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="14dp"
+                                        android:layout_toEndOf="@id/iconNewsletters"
+                                        android:text="@string/our_newsletters"
+                                        android:textColor="@color/drawer_font_color"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_right_freespoke" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/getTouch"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:background="@drawable/background_drawer_item"
+                                    android:padding="18dp">
+
+                                    <ImageView
+                                        android:id="@+id/iconTouch"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_chat"
+                                        app:tint="@color/drawer_icon" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="14dp"
+                                        android:layout_toEndOf="@id/iconTouch"
+                                        android:text="@string/get_in_touch"
+                                        android:textColor="@color/drawer_font_color"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_right_freespoke" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:id="@+id/appSettings"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:background="@drawable/background_drawer_item"
+                                    android:padding="18dp">
+
+                                    <ImageView
+                                        android:id="@+id/iconSettings"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_settings_drawer"
+                                        app:tint="@color/drawer_icon" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginStart="14dp"
+                                        android:layout_toEndOf="@id/iconSettings"
+                                        android:text="@string/app_settings"
+                                        android:textColor="@color/drawer_font_color"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold" />
+
+                                    <ImageView
+                                        android:layout_width="10dp"
+                                        android:layout_height="10dp"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_centerVertical="true"
+                                        app:srcCompat="@drawable/ic_right_freespoke" />
+
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="22dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/twitterIcon"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:layout_marginEnd="18dp"
+                                    android:background="@drawable/background_social_icon"
+                                    android:padding="12dp"
+                                    app:srcCompat="@drawable/ic_twitter"
+                                    app:tint="@color/drawer_font_color" />
+
+                                <ImageView
+                                    android:id="@+id/linkedIcon"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:layout_marginEnd="18dp"
+                                    android:background="@drawable/background_social_icon"
+                                    android:padding="12dp"
+                                    app:srcCompat="@drawable/ic_linked"
+                                    app:tint="@color/drawer_font_color" />
+
+                                <ImageView
+                                    android:id="@+id/instagramIcon"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:layout_marginEnd="18dp"
+                                    android:background="@drawable/background_social_icon"
+                                    android:padding="12dp"
+                                    app:srcCompat="@drawable/ic_instagram"
+                                    app:tint="@color/drawer_font_color" />
+
+                                <ImageView
+                                    android:id="@+id/facebookIcon"
+                                    android:layout_width="45dp"
+                                    android:layout_height="45dp"
+                                    android:background="@drawable/background_social_icon"
+                                    android:padding="12dp"
+                                    app:srcCompat="@drawable/ic_facebook"
+                                    app:tint="@color/drawer_font_color" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </ScrollView>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:background="?attr/navigationBottomBar"
+            app:itemIconTint="@drawable/nav_menu_bg"
+            app:itemTextColor="@drawable/nav_menu_bg"
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/menu_navigation_items" />
+
+    </RelativeLayout>
+
 </org.mozilla.fenix.perf.HomeActivityRootLinearLayout>

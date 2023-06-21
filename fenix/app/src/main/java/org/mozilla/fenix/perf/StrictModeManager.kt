@@ -21,7 +21,6 @@ import mozilla.components.support.ktx.android.os.resetAfter
 import mozilla.components.support.utils.ManufacturerCodes
 import org.mozilla.fenix.Config
 import org.mozilla.fenix.components.Components
-import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicLong
 
 private const val DELAY_TO_REMOVE_STRICT_MODE_MILLIS = 1000L
@@ -176,17 +175,6 @@ private fun StrictMode.ThreadPolicy.Builder.penaltyDeathWithIgnores(): StrictMod
     // great so, if we have time, we should consider reimplementing these fixes using the methods below.
     if (isInStrictModeExceptionList()) {
         return this
-    }
-
-    // If we want to apply ignores based on stack trace contents to APIs below P, we can use this methodology:
-    // https://medium.com/@tokudu/how-to-whitelist-strictmode-violations-on-android-based-on-stacktrace-eb0018e909aa
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-        penaltyDeath()
-    } else {
-        // Ideally, we'd use a shared thread pool but we don't have any on the system currently
-        // (all shared ones are coroutine dispatchers).
-        val executor = Executors.newSingleThreadExecutor()
-        penaltyListener(executor, ThreadPenaltyDeathWithIgnoresListener())
     }
 
     return this

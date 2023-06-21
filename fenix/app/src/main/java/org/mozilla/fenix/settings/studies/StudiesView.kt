@@ -52,7 +52,7 @@ class StudiesView(
     @Suppress("TooGenericExceptionCaught", "ApplySharedPref")
     fun bind() {
         provideStudiesTitle().text = getSwitchTitle()
-        provideStudiesSwitch().isChecked = settings.isExperimentationEnabled
+        provideStudiesSwitch().isChecked = false
         provideStudiesSwitch().setOnClickListener {
             val isChecked = provideStudiesSwitch().isChecked
             Preferences.studiesPreferenceEnabled.record(NoExtras())

@@ -1583,10 +1583,10 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">충돌</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">개인정보처리방침</string>
+    <string name="about_privacy_policy">개인정보처리방침</string>
 
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">권리 읽기</string>
+    <string name="about_terms">권리 읽기</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">라이선스 정보</string>
     <!-- About page link text to open a screen with libraries that are used -->

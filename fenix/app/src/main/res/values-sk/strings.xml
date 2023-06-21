@@ -1547,9 +1547,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Zlyhania</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Vyhlásenie o ochrane osobných údajov</string>
+    <string name="about_privacy_policy">Vyhlásenie o ochrane osobných údajov</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Spoznajte svoje práva</string>
+    <string name="about_terms">Spoznajte svoje práva</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Informácie o licenciách</string>
     <!-- About page link text to open a screen with libraries that are used -->

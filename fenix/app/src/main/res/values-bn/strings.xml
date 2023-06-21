@@ -873,9 +873,9 @@
     <!-- About page link text to open support link -->
     <string name="about_support">সহায়তা</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">গোপনীয়তা বিজ্ঞপ্তি</string>
+    <string name="about_privacy_policy">গোপনীয়তা বিজ্ঞপ্তি</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">আপনার অধিকার সম্পর্কে জানুন</string>
+    <string name="about_terms">আপনার অধিকার সম্পর্কে জানুন</string>
 
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">লাইসেন্স এর তথ্য</string>

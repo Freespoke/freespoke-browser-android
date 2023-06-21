@@ -5,9 +5,7 @@
 package org.mozilla.fenix.tabstray.ext
 
 import android.content.Context
-import androidx.navigation.NavController
 import mozilla.components.feature.syncedtabs.view.SyncedTabsView
-import org.mozilla.fenix.NavGraphDirections
 import org.mozilla.fenix.R
 import org.mozilla.fenix.tabstray.syncedtabs.SyncedTabsListItem
 
@@ -18,7 +16,7 @@ import org.mozilla.fenix.tabstray.syncedtabs.SyncedTabsListItem
  * @param context Context used to obtain the strings.
  * @param navController The controller used to handle any navigation necessary for error scenarios.
  */
-fun SyncedTabsView.ErrorType.toSyncedTabsListItem(context: Context, navController: NavController) =
+fun SyncedTabsView.ErrorType.toSyncedTabsListItem(context: Context) =
     when (this) {
         SyncedTabsView.ErrorType.MULTIPLE_DEVICES_UNAVAILABLE ->
             SyncedTabsListItem.Error(errorText = context.getString(R.string.synced_tabs_connect_another_device))
@@ -34,13 +32,4 @@ fun SyncedTabsView.ErrorType.toSyncedTabsListItem(context: Context, navControlle
                 errorText = context.getString(R.string.synced_tabs_no_tabs),
             )
 
-        SyncedTabsView.ErrorType.SYNC_UNAVAILABLE ->
-            SyncedTabsListItem.Error(
-                errorText = context.getString(R.string.synced_tabs_sign_in_message),
-                errorButton = SyncedTabsListItem.ErrorButton(
-                    buttonText = context.getString(R.string.synced_tabs_sign_in_button),
-                ) {
-                    navController.navigate(NavGraphDirections.actionGlobalTurnOnSync())
-                },
-            )
     }

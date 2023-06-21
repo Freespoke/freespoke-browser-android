@@ -225,15 +225,12 @@ class DefaultTabsTrayController(
     private fun openNewTab(isPrivate: Boolean) {
         val startTime = profiler?.getProfilerTime()
         browsingModeManager.mode = BrowsingMode.fromBoolean(isPrivate)
-        navController.navigate(
-            TabsTrayFragmentDirections.actionGlobalHome(focusOnAddressBar = true),
-        )
+        activity.binding.bottomNavigation.selectedItemId = R.id.action_home
         navigationInteractor.onTabTrayDismissed()
         profiler?.addMarker(
             "DefaultTabTrayController.onNewTabTapped",
             startTime,
         )
-        sendNewTabEvent(isPrivate)
     }
 
     override fun handleTrayScrollingToPosition(position: Int, smoothScroll: Boolean) {

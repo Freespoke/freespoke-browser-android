@@ -1004,9 +1004,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Kooki</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Tintinol suturo</string>
+    <string name="about_privacy_policy">Tintinol suturo</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Anndu hakkeeji maa</string>
+    <string name="about_terms">Anndu hakkeeji maa</string>
     <!-- About page link text to open a screen with libraries that are used -->
     <string name="about_other_open_source_libraries">Deftorɗi ɗi min kuutortoo</string>
 

@@ -8,14 +8,7 @@ package org.mozilla.fenix.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import mozilla.components.ui.colors.PhotonColors
@@ -91,6 +84,7 @@ private val darkColorPalette = FirefoxColors(
     layer1 = PhotonColors.DarkGrey60,
     layer2 = PhotonColors.DarkGrey30,
     layer3 = PhotonColors.DarkGrey80,
+    layerOnboarding = PhotonColors.DarkGrey1D1D1D,
     layer4Start = PhotonColors.Purple70,
     layer4Center = PhotonColors.Violet80,
     layer4End = PhotonColors.Ink05,
@@ -151,12 +145,14 @@ private val darkColorPalette = FirefoxColors(
     borderAccent = PhotonColors.Violet40,
     borderDisabled = PhotonColors.LightGrey05A40,
     borderWarning = PhotonColors.Red40,
+    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor
 )
 
 private val lightColorPalette = FirefoxColors(
     layer1 = PhotonColors.LightGrey10,
     layer2 = PhotonColors.White,
     layer3 = PhotonColors.LightGrey20,
+    layerOnboarding = PhotonColors.White,
     layer4Start = PhotonColors.Purple70,
     layer4Center = PhotonColors.Violet80,
     layer4End = PhotonColors.Ink05,
@@ -217,6 +213,7 @@ private val lightColorPalette = FirefoxColors(
     borderAccent = PhotonColors.Ink20,
     borderDisabled = PhotonColors.DarkGrey90A40,
     borderWarning = PhotonColors.Red70,
+    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -234,6 +231,7 @@ class FirefoxColors(
     layer1: Color,
     layer2: Color,
     layer3: Color,
+    layerOnboarding: Color,
     layer4Start: Color,
     layer4Center: Color,
     layer4End: Color,
@@ -265,6 +263,7 @@ class FirefoxColors(
     textOnColorPrimary: Color,
     textOnColorSecondary: Color,
     textActionPrimary: Color,
+    onboardingButtonColor: Color,
     textActionSecondary: Color,
     textActionTertiary: Color,
     textActionTertiaryActive: Color,
@@ -307,6 +306,10 @@ class FirefoxColors(
 
     // Search
     var layer3 by mutableStateOf(layer3)
+        private set
+
+    // Onboarding
+    var layerOnboarding by mutableStateOf(layerOnboarding)
         private set
 
     // Homescreen background, Toolbar
@@ -543,10 +546,15 @@ class FirefoxColors(
     var borderWarning by mutableStateOf(borderWarning)
         private set
 
+    // Onboarding button
+    var onboardingButtonColor by mutableStateOf(onboardingButtonColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
         layer3 = other.layer3
+        layerOnboarding = other.layerOnboarding
         layer4Start = other.layer4Start
         layer4Center = other.layer4Center
         layer4End = other.layer4End
@@ -616,6 +624,7 @@ class FirefoxColors(
         layer1: Color = this.layer1,
         layer2: Color = this.layer2,
         layer3: Color = this.layer3,
+        layerOnboarding: Color = this.layerOnboarding,
         layer4Start: Color = this.layer4Start,
         layer4Center: Color = this.layer4Center,
         layer4End: Color = this.layer4End,
@@ -676,10 +685,12 @@ class FirefoxColors(
         borderAccent: Color = this.borderAccent,
         borderDisabled: Color = this.borderDisabled,
         borderWarning: Color = this.borderWarning,
+        buttonOnboarding: Color = this.onboardingButtonColor
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
         layer3 = layer3,
+        layerOnboarding = layerOnboarding,
         layer4Start = layer4Start,
         layer4Center = layer4Center,
         layer4End = layer4End,
@@ -740,6 +751,7 @@ class FirefoxColors(
         borderAccent = borderAccent,
         borderDisabled = borderDisabled,
         borderWarning = borderWarning,
+        onboardingButtonColor = buttonOnboarding
     )
 }
 

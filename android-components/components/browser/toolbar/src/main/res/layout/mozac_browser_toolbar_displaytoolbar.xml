@@ -74,13 +74,24 @@
         app:srcCompat="@drawable/mozac_browser_toolbar_icons_vertical_separator" />
 
     <mozilla.components.browser.toolbar.display.SiteSecurityIconView
-        android:id="@+id/mozac_browser_toolbar_security_indicator"
+        android:id="@+id/toolbar_back_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/mozac_browser_toolbar_content_description_site_info"
         android:scaleType="center"
         app:layout_constraintStart_toEndOf="@+id/mozac_browser_toolbar_separator"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back_freespoke" />
+
+    <mozilla.components.browser.toolbar.display.SiteSecurityIconView
+        android:id="@+id/mozac_browser_toolbar_security_indicator"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/mozac_browser_toolbar_content_description_site_info"
+        android:scaleType="center"
+        app:layout_constraintStart_toEndOf="@+id/toolbar_back_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/mozac_ic_site_security" />
 

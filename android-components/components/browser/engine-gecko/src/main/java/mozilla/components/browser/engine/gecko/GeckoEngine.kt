@@ -691,7 +691,7 @@ class GeckoEngine(
             set(value) { defaultSettings?.testingModeEnabled = value }
 
         override var userAgentString: String?
-            get() = defaultSettings?.userAgentString ?: GeckoSession.getDefaultUserAgent()
+            get() = "${GeckoSession.getDefaultUserAgent()} Freespoke/2.0.0"
             set(value) { defaultSettings?.userAgentString = value }
 
         override var preferredColorScheme: PreferredColorScheme

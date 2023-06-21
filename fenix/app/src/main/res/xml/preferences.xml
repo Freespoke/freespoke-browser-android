@@ -6,12 +6,12 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.preference.Preference
-        android:key="@string/pref_key_sign_in"
-        android:layout="@layout/sign_in_preference"
-        android:summary="@string/preferences_sign_in_description_2"
-        android:title="@string/preferences_sync_2"
-        app:allowDividerBelow="false" />
+<!--    <androidx.preference.Preference-->
+<!--        android:key="@string/pref_key_sign_in"-->
+<!--        android:layout="@layout/sign_in_preference"-->
+<!--        android:summary="@string/preferences_sign_in_description_2"-->
+<!--        android:title="@string/preferences_sync_2"-->
+<!--        app:allowDividerBelow="false" />-->
 
     <androidx.preference.SwitchPreference
         android:key="@string/pref_key_allow_domestic_china_fxa_server"
@@ -44,11 +44,6 @@
         android:layout="@layout/preference_category_no_icon_style">
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
-            android:key="@string/pref_key_search_settings"
-            android:title="@string/preferences_search" />
-
-        <androidx.preference.Preference
-            app:iconSpaceReserved="false"
             android:key="@string/pref_key_tabs"
             android:title="@string/preferences_tabs" />
 
@@ -61,11 +56,6 @@
             android:key="@string/pref_key_customize"
             app:iconSpaceReserved="false"
             android:title="@string/preferences_customize" />
-
-        <androidx.preference.Preference
-            android:key="@string/pref_key_passwords"
-            app:iconSpaceReserved="false"
-            android:title="@string/preferences_passwords_logins_and_passwords" />
 
         <androidx.preference.Preference
             app:iconSpaceReserved="false"
@@ -133,10 +123,10 @@
             app:iconSpaceReserved="false"
             android:title="@string/preferences_notifications" />
 
-        <androidx.preference.Preference
-            android:key="@string/pref_key_data_choices"
-            app:iconSpaceReserved="false"
-            android:title="@string/preferences_data_collection" />
+<!--        <androidx.preference.Preference-->
+<!--            android:key="@string/pref_key_data_choices"-->
+<!--            app:iconSpaceReserved="false"-->
+<!--            android:title="@string/preferences_data_collection" />-->
 
     </androidx.preference.PreferenceCategory>
 

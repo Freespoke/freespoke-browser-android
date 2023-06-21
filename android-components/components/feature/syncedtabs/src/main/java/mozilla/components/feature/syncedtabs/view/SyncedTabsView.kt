@@ -77,11 +77,6 @@ interface SyncedTabsView {
         SYNC_ENGINE_UNAVAILABLE,
 
         /**
-         * There is no Firefox Sync account available. A user needs to sign-in before this feature.
-         */
-        SYNC_UNAVAILABLE,
-
-        /**
          * The Firefox Sync account requires user-intervention to re-authenticate the account.
          */
         SYNC_NEEDS_REAUTHENTICATION,

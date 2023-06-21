@@ -1553,10 +1553,10 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Крахі</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Паведамленне аб прыватнасці</string>
+    <string name="about_privacy_policy">Паведамленне аб прыватнасці</string>
 
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Ведай свае правы</string>
+    <string name="about_terms">Ведай свае правы</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Звесткі пра ліцэнзію</string>
 

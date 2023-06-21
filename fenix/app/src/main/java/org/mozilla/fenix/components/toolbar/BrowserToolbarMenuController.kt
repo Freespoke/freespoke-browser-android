@@ -41,11 +41,7 @@ import org.mozilla.fenix.collections.SaveCollectionStep
 import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.components.TabCollectionStorage
 import org.mozilla.fenix.components.accounts.AccountState
-import org.mozilla.fenix.ext.components
-import org.mozilla.fenix.ext.getRootView
-import org.mozilla.fenix.ext.nav
-import org.mozilla.fenix.ext.navigateSafe
-import org.mozilla.fenix.ext.openSetDefaultBrowserOption
+import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.settings.deletebrowsingdata.deleteAndQuit
 import org.mozilla.fenix.utils.Do
 import org.mozilla.fenix.utils.Settings
@@ -354,9 +350,8 @@ class DefaultBrowserToolbarMenuController(
                 )
             }
             is ToolbarMenu.Item.NewTab -> {
-                navController.navigate(
-                    BrowserFragmentDirections.actionGlobalHome(focusOnAddressBar = true),
-                )
+                activity.binding.bottomNavigation.selectedItemId = R.id.action_home
+                activity.navigateToHome()
             }
             is ToolbarMenu.Item.SetDefaultBrowser -> {
                 activity.openSetDefaultBrowserOption()

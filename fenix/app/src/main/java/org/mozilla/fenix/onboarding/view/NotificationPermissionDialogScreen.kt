@@ -49,10 +49,6 @@ fun NotificationPermissionDialogScreen(
             grantNotificationPermission()
             Onboarding.notifPppPositiveBtnClick.record(NoExtras())
         },
-        onSecondaryButtonClick = {
-            onDismiss()
-            Onboarding.notifPppNegativeBtnClick.record(NoExtras())
-        },
         modifier = Modifier
             .statusBarsPadding()
             .navigationBarsPadding(),

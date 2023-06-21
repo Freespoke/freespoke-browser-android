@@ -340,4 +340,18 @@
 
     <!-- Material Design colors -->
     <color name="material_scrim_color">#52000000</color>
+
+    <!-- Bottom Navigation colors -->
+    <color name="bottom_navigation_background_color">#FFFFFF</color>
+    <color name="bottom_navigation_item_selected">#C43351</color>
+    <color name="bottom_navigation_item">#606671</color>
+
+    <!-- Drawer colors -->
+    <color name="drawer_font_color">#2F3644</color>
+    <color name="drawer_background_margin">#E1E5EB</color>
+    <color name="drawer_icon">#9AA2B2</color>
+    <color name="drawer_background_social_icons">#EDF0F5</color>
+
+    <color name="white_grey_transparent">#CCA3A3A3</color>
+
 </resources>

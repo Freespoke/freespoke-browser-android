@@ -1087,9 +1087,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">تێکشکانەکان</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">سەرنجی تایبەتێتی</string>
+    <string name="about_privacy_policy">سەرنجی تایبەتێتی</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">مافەکانت بزانە</string>
+    <string name="about_terms">مافەکانت بزانە</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">زانیاری مۆڵەت</string>
     <!-- About page link text to open a screen with libraries that are used -->

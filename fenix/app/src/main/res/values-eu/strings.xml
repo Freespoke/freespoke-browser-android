@@ -1546,9 +1546,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Hutsegiteak</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Pribatutasun-oharra</string>
+    <string name="about_privacy_policy">Pribatutasun-oharra</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Ezagutu zure eskubideak</string>
+    <string name="about_terms">Ezagutu zure eskubideak</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Lizentziaren informazioa</string>
     <!-- About page link text to open a screen with libraries that are used -->

@@ -26,7 +26,7 @@ class AboutPageAdapterTest {
         listOf(
             AboutPageItem(
                 AboutItem.ExternalLink(
-                    AboutItemType.WHATS_NEW,
+                    AboutItemType.ABOUT,
                     "https://mozilla.org",
                 ),
                 "Libraries",

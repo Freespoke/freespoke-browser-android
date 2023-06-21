@@ -1310,9 +1310,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Mga crash</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Paunawa sa privacy</string>
+    <string name="about_privacy_policy">Paunawa sa privacy</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Alamin ang iyong mga karapatan</string>
+    <string name="about_terms">Alamin ang iyong mga karapatan</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Impormasyon sa paglisensiya</string>
     <!-- About page link text to open a screen with libraries that are used -->

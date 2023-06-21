@@ -233,7 +233,6 @@ class TabDrawerRobot {
 
         fun openTabDrawer(interact: TabDrawerRobot.() -> Unit): TabDrawerRobot.Transition {
             mDevice.waitForIdle(waitingTime)
-            tabsCounter().click()
             mDevice.waitNotNull(
                 Until.findObject(By.res("$packageName:id/tab_layout")),
                 waitingTime,
@@ -580,7 +579,7 @@ private fun tabItem(title: String) =
             .textContains(title),
     )
 
-private fun tabsCounter() = onView(withId(R.id.tab_button))
+private fun tabsCounter() = onView(withId(R.id.tab_counter))
 
 private fun tabsTrayCounterBox() = onView(withId(R.id.counter_box))
 

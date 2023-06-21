@@ -1202,9 +1202,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Fallos</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Aviso de privacidat</string>
+    <string name="about_privacy_policy">Aviso de privacidat</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Conoixe las tuyas dreitos</string>
+    <string name="about_terms">Conoixe las tuyas dreitos</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Información de licencia</string>
     <!-- About page link text to open a screen with libraries that are used -->

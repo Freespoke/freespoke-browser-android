@@ -1562,10 +1562,10 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">ຂໍ້ຂັດຂ້ອງ</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</string>
+    <string name="about_privacy_policy">ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</string>
 
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">ຮັບຮູ້ສິດທິຂອງທ່ານ</string>
+    <string name="about_terms">ຮັບຮູ້ສິດທິຂອງທ່ານ</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">ຂໍ້ມູນກ່ຽວກັບລາຍເຊັນ</string>
     <!-- About page link text to open a screen with libraries that are used -->

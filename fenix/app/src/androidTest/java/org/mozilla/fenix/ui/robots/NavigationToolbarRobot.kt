@@ -308,7 +308,7 @@ private fun urlBar() = mDevice.findObject(UiSelector().resourceId("$packageName:
 private fun awesomeBar() =
     mDevice.findObject(UiSelector().resourceId("$packageName:id/mozac_browser_toolbar_edit_url_view"))
 private fun threeDotButton() = onView(withId(R.id.mozac_browser_toolbar_menu))
-private fun tabTrayButton() = onView(withId(R.id.tab_button))
+private fun tabTrayButton() = onView(withId(R.id.tab_counter))
 private fun fillLinkButton() = onView(withId(R.id.fill_link_from_clipboard))
 private fun clearAddressBar() =
     mDevice.findObject(

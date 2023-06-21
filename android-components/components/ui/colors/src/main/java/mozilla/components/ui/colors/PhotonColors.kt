@@ -144,6 +144,7 @@ object PhotonColors {
     val DarkGrey90A60 = Color(0x9915141A)
     val DarkGrey90A95 = Color(0xF215141A)
     val DarkGrey90A96 = Color(0xF515141A)
+    val DarkGrey1D1D1D = Color(0xFF1D1D1D)
 
     // Violet
     val Violet05 = Color(0xFFE7DFFF)
@@ -167,4 +168,6 @@ object PhotonColors {
 
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
+
+    val FreeSpokeButtonColor = Color(0xFFC43351)
 }

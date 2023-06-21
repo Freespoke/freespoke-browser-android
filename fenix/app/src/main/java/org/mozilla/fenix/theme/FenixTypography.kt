@@ -35,12 +35,14 @@ import androidx.compose.ui.unit.sp
  */
 @Suppress("LongParameterList")
 class FenixTypography(
+    val headline4: TextStyle,
     val headline5: TextStyle,
     val headline6: TextStyle,
     val headline7: TextStyle,
     val headline8: TextStyle,
     val subtitle1: TextStyle,
     val subtitle2: TextStyle,
+    val subtitle3: TextStyle,
     val body1: TextStyle,
     val body2: TextStyle,
     val button: TextStyle,
@@ -49,6 +51,12 @@ class FenixTypography(
 )
 
 val defaultTypography = FenixTypography(
+    headline4 = TextStyle(
+        fontSize = 36.sp,
+        fontWeight = FontWeight.W700,
+        letterSpacing = 0.18.sp,
+        lineHeight = 36.sp,
+    ),
     headline5 = TextStyle(
         fontSize = 24.sp,
         fontWeight = FontWeight.W400,
@@ -91,6 +99,13 @@ val defaultTypography = FenixTypography(
         lineHeight = 24.sp,
     ),
 
+    subtitle3 = TextStyle(
+        fontSize = 18.sp,
+        fontWeight = FontWeight.W700,
+        letterSpacing = 0.15.sp,
+        lineHeight = 18.sp,
+    ),
+
     body1 = TextStyle(
         fontSize = 16.sp,
         fontWeight = FontWeight.W400,
@@ -131,6 +146,7 @@ val defaultTypography = FenixTypography(
 @Preview
 private fun TypographyPreview() {
     val textStyles = listOf(
+        Pair("Headline 4", defaultTypography.headline4),
         Pair("Headline 5", defaultTypography.headline5),
         Pair("Headline 6", defaultTypography.headline6),
         Pair("Headline 7", defaultTypography.headline7),

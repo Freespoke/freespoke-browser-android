@@ -1189,9 +1189,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">ပျက်စီးမှုများ</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">ကိုယ်ရေးကာကွယ်မှု အသိပေးချက်</string>
+    <string name="about_privacy_policy">ကိုယ်ရေးကာကွယ်မှု အသိပေးချက်</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">သင့်အခွင့်အရေးများ သိရှိစေရန်</string>
+    <string name="about_terms">သင့်အခွင့်အရေးများ သိရှိစေရန်</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">လိုင်စင်အကြောင်းသိကောင်းစရာ</string>
     <!-- About page link text to open a screen with libraries that are used -->

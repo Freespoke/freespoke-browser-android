@@ -1247,7 +1247,8 @@ class GeckoEngineSession(
         defaultSettings?.testingModeEnabled?.let {
             geckoSession.settings.fullAccessibilityTree = it
         }
-        defaultSettings?.userAgentString?.let { geckoSession.settings.userAgentOverride = it }
+        geckoSession.settings.userAgentOverride =
+            "${GeckoSession.getDefaultUserAgent()} Freespoke/2.0.0"
         defaultSettings?.suspendMediaWhenInactive?.let {
             geckoSession.settings.suspendMediaWhenInactive = it
         }

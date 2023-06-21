@@ -1585,9 +1585,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Crashes</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Aviso de confidentialitate</string>
+    <string name="about_privacy_policy">Aviso de confidentialitate</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Prende acto de tu derectos</string>
+    <string name="about_terms">Prende acto de tu derectos</string>
 
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Informationes de licentias</string>

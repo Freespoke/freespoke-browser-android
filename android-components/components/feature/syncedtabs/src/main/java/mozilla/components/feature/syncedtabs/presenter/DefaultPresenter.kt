@@ -60,12 +60,6 @@ internal class DefaultPresenter(
             autoPause = true,
         )
 
-        // No authenticated account present at all.
-        if (accountManager.authenticatedAccount() == null) {
-            view.onError(ErrorType.SYNC_UNAVAILABLE)
-            return
-        }
-
         // Have an account, but it ran into auth issues.
         if (accountManager.accountNeedsReauth()) {
             view.onError(ErrorType.SYNC_NEEDS_REAUTHENTICATION)
@@ -101,7 +95,6 @@ internal class DefaultPresenter(
     ) : AccountObserver {
 
         override fun onLoggedOut() {
-            CoroutineScope(Dispatchers.Main).launch { view.onError(ErrorType.SYNC_UNAVAILABLE) }
         }
 
         override fun onAuthenticated(account: OAuthAccount, authType: AuthType) {

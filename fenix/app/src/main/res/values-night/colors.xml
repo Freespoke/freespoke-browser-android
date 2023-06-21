@@ -151,4 +151,16 @@
     <!-- Tab Counter colors -->
     <color name="mozac_ui_tabcounter_default_tint" tools:ignore="UnusedResources">@color/fx_mobile_icon_color_primary</color>
     <color name="mozac_ui_tabcounter_default_text" tools:ignore="UnusedResources">@color/fx_mobile_text_color_primary</color>
+
+    <!-- Bottom Navigation colors -->
+    <color name="bottom_navigation_background_color">#1D1D1D</color>
+    <color name="bottom_navigation_item_selected">#FFFF</color>
+    <color name="bottom_navigation_item">#9AA2B3</color>
+
+    <!-- Drawer colors -->
+    <color name="drawer_font_color">#FFFF</color>
+    <color name="drawer_background_margin">#2F3644</color>
+    <color name="drawer_icon">#606671</color>
+    <color name="drawer_background_social_icons">#2F3644</color>
+
 </resources>

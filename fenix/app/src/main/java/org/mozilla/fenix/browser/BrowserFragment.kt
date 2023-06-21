@@ -42,11 +42,7 @@ import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.components.TabCollectionStorage
 import org.mozilla.fenix.components.toolbar.BrowserToolbarView
 import org.mozilla.fenix.components.toolbar.ToolbarMenu
-import org.mozilla.fenix.ext.components
-import org.mozilla.fenix.ext.nav
-import org.mozilla.fenix.ext.requireComponents
-import org.mozilla.fenix.ext.runIfFragmentIsAttached
-import org.mozilla.fenix.ext.settings
+import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.nimbus.FxNimbus
 import org.mozilla.fenix.settings.quicksettings.protections.cookiebanners.dialog.CookieBannerReEngagementDialogUtils
 import org.mozilla.fenix.shortcut.PwaOnboardingObserver
@@ -89,18 +85,6 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
             )
         }
 
-        val homeAction = BrowserToolbar.Button(
-            imageDrawable = AppCompatResources.getDrawable(
-                context,
-                R.drawable.mozac_ic_home,
-            )!!,
-            contentDescription = context.getString(R.string.browser_toolbar_home),
-            iconTintColorResource = ThemeManager.resolveAttribute(R.attr.textPrimary, context),
-            listener = browserToolbarInteractor::onHomeButtonClicked,
-        )
-
-        browserToolbarView.view.addNavigationAction(homeAction)
-
         updateToolbarActions(isTablet = resources.getBoolean(R.bool.tablet))
 
         val readerModeAction =
@@ -125,7 +109,20 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
                 listener = browserToolbarInteractor::onReaderModePressed,
             )
 
+        val shareAction =
+            BrowserToolbar.Button(
+                imageDrawable = AppCompatResources.getDrawable(
+                    context,
+                    R.drawable.ic_share_freespoke,
+                )!!,
+                contentDescription = context.getString(R.string.browser_menu_share),
+                listener = {
+                    browserToolbarInteractor.onBrowserToolbarMenuItemTapped(ToolbarMenu.Item.Share)
+                },
+            )
+
         browserToolbarView.view.addPageAction(readerModeAction)
+        browserToolbarView.view.addPageAction(shareAction)
 
         thumbnailsFeature.set(
             feature = BrowserThumbnails(context, binding.engineView, components.core.store),

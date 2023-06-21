@@ -19,12 +19,8 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration.Builder
 import androidx.work.Configuration.Provider
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.onesignal.OneSignal
+import kotlinx.coroutines.*
 import mozilla.appservices.Megazord
 import mozilla.components.browser.state.action.SystemAction
 import mozilla.components.browser.state.selector.selectedTab
@@ -60,16 +56,8 @@ import mozilla.components.support.rusthttp.RustHttpConfig
 import mozilla.components.support.rustlog.RustLog
 import mozilla.components.support.utils.logElapsedTime
 import mozilla.components.support.webextensions.WebExtensionSupport
-import org.mozilla.fenix.GleanMetrics.Addons
-import org.mozilla.fenix.GleanMetrics.AndroidAutofill
-import org.mozilla.fenix.GleanMetrics.CustomizeHome
+import org.mozilla.fenix.GleanMetrics.*
 import org.mozilla.fenix.GleanMetrics.Events.marketingNotificationAllowed
-import org.mozilla.fenix.GleanMetrics.GleanBuildInfo
-import org.mozilla.fenix.GleanMetrics.Metrics
-import org.mozilla.fenix.GleanMetrics.PerfStartup
-import org.mozilla.fenix.GleanMetrics.Preferences
-import org.mozilla.fenix.GleanMetrics.SearchDefaultEngine
-import org.mozilla.fenix.GleanMetrics.TopSites
 import org.mozilla.fenix.components.Components
 import org.mozilla.fenix.components.Core
 import org.mozilla.fenix.components.appstate.AppAction
@@ -77,21 +65,10 @@ import org.mozilla.fenix.components.metrics.MetricServiceType
 import org.mozilla.fenix.components.metrics.MozillaProductDetector
 import org.mozilla.fenix.components.toolbar.ToolbarPosition
 import org.mozilla.fenix.experiments.maybeFetchExperiments
-import org.mozilla.fenix.ext.areNotificationsEnabledSafe
-import org.mozilla.fenix.ext.containsQueryParameters
-import org.mozilla.fenix.ext.getCustomGleanServerUrlIfAvailable
-import org.mozilla.fenix.ext.isCustomEngine
-import org.mozilla.fenix.ext.isKnownSearchDomain
-import org.mozilla.fenix.ext.isNotificationChannelEnabled
-import org.mozilla.fenix.ext.setCustomEndpointIfAvailable
-import org.mozilla.fenix.ext.settings
+import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.nimbus.FxNimbus
 import org.mozilla.fenix.onboarding.MARKETING_CHANNEL_ID
-import org.mozilla.fenix.perf.MarkersActivityLifecycleCallbacks
-import org.mozilla.fenix.perf.ProfilerMarkerFactProcessor
-import org.mozilla.fenix.perf.StartupTimeline
-import org.mozilla.fenix.perf.StorageStatsMetrics
-import org.mozilla.fenix.perf.runBlockingIncrement
+import org.mozilla.fenix.perf.*
 import org.mozilla.fenix.push.PushFxaIntegration
 import org.mozilla.fenix.push.WebPushEngineIntegration
 import org.mozilla.fenix.session.PerformanceActivityLifecycleCallbacks
@@ -102,7 +79,7 @@ import org.mozilla.fenix.utils.BrowsersCache
 import org.mozilla.fenix.utils.Settings
 import org.mozilla.fenix.utils.Settings.Companion.TOP_SITES_PROVIDER_MAX_THRESHOLD
 import org.mozilla.fenix.wallpapers.Wallpaper
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -113,6 +90,12 @@ import java.util.concurrent.TimeUnit
 open class FenixApplication : LocaleAwareApplication(), Provider {
     init {
         recordOnInit() // DO NOT MOVE ANYTHING ABOVE HERE: the timing of this measurement is critical.
+    }
+
+    private val ONESIGNAL_APP_ID = if (BuildConfig.DEBUG) {
+        BuildConfig.ONESIGNAL_APP_ID_DEBUG
+    } else {
+        BuildConfig.ONESIGNAL_APP_ID
     }
 
     private val logger = Logger("FenixApplication")
@@ -127,6 +110,17 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         val start = SystemClock.elapsedRealtimeNanos()
 
         super.onCreate()
+
+        //todo Logging set to help debug issues, remove before releasing your app.
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+
+        // OneSignal Initialization
+        OneSignal.initWithContext(this)
+        OneSignal.setAppId(ONESIGNAL_APP_ID)
+
+        // promptForPushNotifications will show the native Android notification permission prompt.
+        // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 7)
+        OneSignal.promptForPushNotifications()
 
         setupInAllProcesses()
 
@@ -888,7 +882,7 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         CustomizeHome.recentlyVisited.set(settings.historyMetadataUIFeature)
         CustomizeHome.pocket.set(settings.showPocketRecommendationsFeature)
         CustomizeHome.sponsoredPocket.set(settings.showPocketSponsoredStories)
-        CustomizeHome.contile.set(settings.showContileFeature)
+        CustomizeHome.contile.set(false)
     }
 
     protected fun recordOnInit() {

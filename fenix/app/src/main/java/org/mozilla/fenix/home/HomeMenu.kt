@@ -5,7 +5,6 @@
 package org.mozilla.fenix.home
 
 import android.content.Context
-import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -19,12 +18,10 @@ import mozilla.components.browser.menu.item.BrowserMenuDivider
 import mozilla.components.browser.menu.item.BrowserMenuHighlightableItem
 import mozilla.components.browser.menu.item.BrowserMenuImageSwitch
 import mozilla.components.browser.menu.item.BrowserMenuImageText
-import mozilla.components.browser.menu.item.SimpleBrowserMenuItem
 import mozilla.components.concept.sync.AccountObserver
 import mozilla.components.concept.sync.AuthType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.support.ktx.android.content.getColorFromAttr
-import org.mozilla.fenix.Config
 import org.mozilla.fenix.R
 import org.mozilla.fenix.components.accounts.AccountState
 import org.mozilla.fenix.components.accounts.FenixAccountManager
@@ -33,7 +30,6 @@ import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.nimbus.FxNimbus
 import org.mozilla.fenix.theme.ThemeManager
-import org.mozilla.fenix.whatsnew.WhatsNew
 
 @Suppress("LargeClass", "LongMethod")
 class HomeMenu(
@@ -148,39 +144,12 @@ class HomeMenu(
             onItemTapped.invoke(Item.Extensions)
         }
 
-        val manageAccountAndDevicesItem = SimpleBrowserMenuItem(
-            context.getString(R.string.browser_menu_manage_account_and_devices),
-            textColorResource = primaryTextColor,
-        ) {
-            onItemTapped.invoke(Item.ManageAccountAndDevices)
-        }
-
-        val whatsNewItem = BrowserMenuHighlightableItem(
-            context.getString(R.string.browser_menu_whats_new),
-            R.drawable.ic_whats_new,
-            iconTintColorResource = primaryTextColor,
-            highlight = BrowserMenuHighlight.LowPriority(
-                notificationTint = getColor(context, R.color.fx_mobile_icon_color_information),
-            ),
-            isHighlighted = { WhatsNew.shouldHighlightWhatsNew(context) },
-        ) {
-            onItemTapped.invoke(Item.WhatsNew)
-        }
-
         val helpItem = BrowserMenuImageText(
             context.getString(R.string.browser_menu_help),
             R.drawable.mozac_ic_help,
             primaryTextColor,
         ) {
             onItemTapped.invoke(Item.Help)
-        }
-
-        val customizeHomeItem = BrowserMenuImageText(
-            context.getString(R.string.browser_menu_customize_home_1),
-            R.drawable.ic_customize,
-            primaryTextColor,
-        ) {
-            onItemTapped.invoke(Item.CustomizeHome)
         }
 
         // Use nimbus to set the icon and title.
@@ -193,31 +162,15 @@ class HomeMenu(
             onItemTapped.invoke(Item.Settings)
         }
 
-        // Only query account manager if it has been initialized.
-        // We don't want to cause its initialization just for this check.
-        val accountAuthItem =
-            if (context.components.backgroundServices.accountManagerAvailableQueue.isReady() &&
-                context.components.backgroundServices.accountManager.accountNeedsReauth()
-            ) {
-                reconnectToSyncItem
-            } else {
-                null
-            }
-
         val menuItems = listOfNotNull(
             bookmarksItem,
             historyItem,
             downloadsItem,
             extensionsItem,
-            syncSignInMenuItem(),
-            accountAuthItem,
-            if (Config.channel.isMozillaOnline) manageAccountAndDevicesItem else null,
             BrowserMenuDivider(),
             desktopItem,
             BrowserMenuDivider(),
-            whatsNewItem,
             helpItem,
-            customizeHomeItem,
             settingsItem,
             if (settings.shouldDeleteBrowsingDataOnQuit) quitItem else null,
         ).also { items ->

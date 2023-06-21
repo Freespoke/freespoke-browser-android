@@ -1557,9 +1557,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">クラッシュ</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">個人情報保護方針</string>
+    <string name="about_privacy_policy">個人情報保護方針</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">あなたの権利について</string>
+    <string name="about_terms">あなたの権利について</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">ライセンス情報</string>
     <!-- About page link text to open a screen with libraries that are used -->

@@ -18,13 +18,9 @@ import android.os.SystemClock
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.util.AttributeSet
-import android.view.ActionMode
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewConfiguration
+import android.view.*
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
+import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
@@ -33,12 +29,15 @@ import androidx.annotation.VisibleForTesting.Companion.PROTECTED
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.onesignal.OSNotificationAction
+import com.onesignal.OneSignal
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
@@ -56,6 +55,7 @@ import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.storage.BookmarkNode
 import mozilla.components.concept.storage.BookmarkNodeType
+import mozilla.components.concept.storage.DBHelper
 import mozilla.components.concept.storage.HistoryMetadataKey
 import mozilla.components.feature.contextmenu.DefaultSelectionActionDelegate
 import mozilla.components.feature.media.ext.findActiveMediaTab
@@ -82,6 +82,8 @@ import org.mozilla.fenix.GleanMetrics.Metrics
 import org.mozilla.fenix.GleanMetrics.StartOnHome
 import org.mozilla.fenix.addons.AddonDetailsFragmentDirections
 import org.mozilla.fenix.addons.AddonPermissionsDetailsFragmentDirections
+import org.mozilla.fenix.browser.BrowserFragment
+import org.mozilla.fenix.browser.BrowserFragmentDirections
 import org.mozilla.fenix.browser.browsingmode.BrowsingMode
 import org.mozilla.fenix.browser.browsingmode.BrowsingModeManager
 import org.mozilla.fenix.browser.browsingmode.DefaultBrowsingModeManager
@@ -89,24 +91,10 @@ import org.mozilla.fenix.components.appstate.AppAction
 import org.mozilla.fenix.components.metrics.BreadcrumbsRecorder
 import org.mozilla.fenix.databinding.ActivityHomeBinding
 import org.mozilla.fenix.exceptions.trackingprotection.TrackingProtectionExceptionsFragmentDirections
-import org.mozilla.fenix.ext.alreadyOnDestination
-import org.mozilla.fenix.ext.areNotificationsEnabledSafe
-import org.mozilla.fenix.ext.breadcrumb
-import org.mozilla.fenix.ext.components
-import org.mozilla.fenix.ext.hasTopDestination
-import org.mozilla.fenix.ext.nav
-import org.mozilla.fenix.ext.setNavigationIcon
-import org.mozilla.fenix.ext.settings
+import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.gleanplumb.MessageNotificationWorker
 import org.mozilla.fenix.home.HomeFragmentDirections
-import org.mozilla.fenix.home.intent.AssistIntentProcessor
-import org.mozilla.fenix.home.intent.CrashReporterIntentProcessor
-import org.mozilla.fenix.home.intent.DefaultBrowserIntentProcessor
-import org.mozilla.fenix.home.intent.HomeDeepLinkIntentProcessor
-import org.mozilla.fenix.home.intent.OpenBrowserIntentProcessor
-import org.mozilla.fenix.home.intent.OpenSpecificTabIntentProcessor
-import org.mozilla.fenix.home.intent.SpeechProcessingIntentProcessor
-import org.mozilla.fenix.home.intent.StartSearchIntentProcessor
+import org.mozilla.fenix.home.intent.*
 import org.mozilla.fenix.library.bookmarks.BookmarkFragmentDirections
 import org.mozilla.fenix.library.bookmarks.DesktopFolders
 import org.mozilla.fenix.library.history.HistoryFragmentDirections
@@ -116,20 +104,11 @@ import org.mozilla.fenix.nimbus.FxNimbus
 import org.mozilla.fenix.onboarding.FenixOnboarding
 import org.mozilla.fenix.onboarding.ReEngagementNotificationWorker
 import org.mozilla.fenix.onboarding.ensureMarketingChannelExists
-import org.mozilla.fenix.perf.MarkersActivityLifecycleCallbacks
-import org.mozilla.fenix.perf.MarkersFragmentLifecycleCallbacks
-import org.mozilla.fenix.perf.Performance
-import org.mozilla.fenix.perf.PerformanceInflater
-import org.mozilla.fenix.perf.ProfilerMarkers
-import org.mozilla.fenix.perf.StartupPathProvider
-import org.mozilla.fenix.perf.StartupTimeline
-import org.mozilla.fenix.perf.StartupTypeTelemetry
+import org.mozilla.fenix.perf.*
 import org.mozilla.fenix.search.SearchDialogFragmentDirections
 import org.mozilla.fenix.session.PrivateNotificationService
-import org.mozilla.fenix.settings.CookieBannersFragmentDirections
-import org.mozilla.fenix.settings.HttpsOnlyFragmentDirections
-import org.mozilla.fenix.settings.SettingsFragmentDirections
-import org.mozilla.fenix.settings.TrackingProtectionFragmentDirections
+import org.mozilla.fenix.settings.*
+import org.mozilla.fenix.settings.SupportUtils.getFreespokeGithubRepo
 import org.mozilla.fenix.settings.about.AboutFragmentDirections
 import org.mozilla.fenix.settings.logins.fragment.LoginDetailFragmentDirections
 import org.mozilla.fenix.settings.logins.fragment.SavedLoginsAuthFragmentDirections
@@ -148,7 +127,7 @@ import org.mozilla.fenix.trackingprotection.TrackingProtectionPanelDialogFragmen
 import org.mozilla.fenix.utils.BrowsersCache
 import org.mozilla.fenix.utils.Settings
 import java.lang.ref.WeakReference
-import java.util.Locale
+import java.util.*
 
 /**
  * The main activity of the application. The application is primarily a single Activity (this one)
@@ -164,7 +143,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
     // components requires context to access.
     protected val homeActivityInitTimeStampNanoSeconds = SystemClock.elapsedRealtimeNanos()
 
-    private lateinit var binding: ActivityHomeBinding
+    lateinit var binding: ActivityHomeBinding
+    private val viewModel: HomeViewModel by viewModels {
+        ViewModelProvider.AndroidViewModelFactory(application)
+    }
     lateinit var themeManager: ThemeManager
     lateinit var browsingModeManager: BrowsingModeManager
 
@@ -252,6 +234,8 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         setContentView(binding.root)
         ProfilerMarkers.addListenerForOnGlobalLayout(components.core.engine, this, binding.root)
 
+        observeViewModel()
+
         // Must be after we set the content view
         if (isVisuallyComplete) {
             components.performance.visualCompletenessQueue
@@ -278,7 +262,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             StartOnHome.enterHomeScreen.record(NoExtras())
         }
 
-        if (settings().showHomeOnboardingDialog && onboarding.userHasBeenOnboarded()) {
+        if (settings().showHomeOnboardingDialog) {
             navHost.navController.navigate(NavGraphDirections.actionGlobalHomeOnboardingDialog())
         }
 
@@ -358,6 +342,171 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             "HomeActivity.onCreate",
         )
         StartupTimeline.onActivityCreateEndHome(this) // DO NOT MOVE ANYTHING BELOW HERE.
+
+        setBottomNavigationListener()
+        setDrawerClickListeners()
+
+        OneSignal.setNotificationOpenedHandler { result ->
+            val type = result.action.type // "ActionTaken" | "Opened"
+            val url = result.notification.launchURL
+            if (type == OSNotificationAction.ActionType.Opened) {
+                openToBrowserAndLoad(
+                    searchTermOrURL = url,
+                    newTab = true,
+                    from = BrowserDirection.FromHome,
+                )
+            }
+        }
+
+        importDataFromSQLite()
+    }
+
+    private fun observeViewModel() {
+        with(viewModel) {
+
+            showHomeDrawer.observe(this@HomeActivity) { showDrawer ->
+                if (showDrawer) {
+                    binding.container.visibility = View.GONE
+                    binding.drawerLayout.visibility = View.VISIBLE
+                } else {
+                    binding.container.visibility = View.VISIBLE
+                    binding.drawerLayout.visibility = View.GONE
+                }
+            }
+
+        }
+    }
+
+    private fun importDataFromSQLite() {
+        val dbHelper = DBHelper(this)
+        val savedTabsData = dbHelper.getSavedTabsData()
+        CoroutineScope(IO).launch {
+            savedTabsData.forEach {
+                bookmarkStorage.addItem(
+                    BookmarkRoot.Mobile.id,
+                    url = it.url,
+                    title = it.title,
+                    null,
+                )
+            }
+
+        }
+    }
+
+    private fun setBottomNavigationListener() {
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            if (viewModel.showHomeDrawer.value == true) {
+                viewModel.showHomeDrawer.value = false
+            }
+
+            when (item.itemId) {
+                R.id.action_news -> {
+                    openToBrowserAndLoad(
+                        searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.NEWS),
+                        newTab = false,
+                        from = BrowserDirection.FromHome,
+                    )
+                }
+                R.id.action_shop -> {
+                    openToBrowserAndLoad(
+                        searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRODUCTS),
+                        newTab = false,
+                        from = BrowserDirection.FromHome,
+                    )
+                }
+                R.id.action_home -> {
+                    navigateToHome()
+                }
+                R.id.action_tabs -> {
+                    navHost.navController.navigate(NavGraphDirections.actionGlobalTabsTrayFragment())
+                }
+                R.id.action_settings -> {
+                    val isDrawerShowing = viewModel.showHomeDrawer.value
+                    if (isDrawerShowing == true) {
+                        binding.bottomNavigation.selectedItemId = R.id.action_home
+                    }
+                    viewModel.showHomeDrawer.value = isDrawerShowing?.not()
+                }
+            }
+            true
+        }
+
+        if (settings().showHomeOnboardingDialog.not()) {
+            binding.bottomNavigation.selectedItemId = R.id.action_home
+        }
+    }
+
+    private fun setDrawerClickListeners() {
+        binding.closeIconDrawer.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+        }
+
+        binding.addDefault.setOnClickListener {
+            openSetDefaultBrowserOption()
+        }
+
+        binding.shareFreespoke.setOnClickListener {
+            share(getString(R.string.share_freespoke), SupportUtils.getFreespokeURL())
+        }
+
+        binding.freespokeBlog.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+            openToBrowserAndLoad(
+                searchTermOrURL = SupportUtils.getFreespokeBlogURL(),
+                newTab = true,
+                from = BrowserDirection.FromHome,
+            )
+        }
+
+        binding.newsletters.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+            openToBrowserAndLoad(
+                searchTermOrURL = SupportUtils.getFreespokeNewsletter(),
+                newTab = true,
+                from = BrowserDirection.FromHome,
+            )
+        }
+
+        binding.getTouch.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+            openToBrowserAndLoad(
+                searchTermOrURL = SupportUtils.getFreespokeSupportURLPage(SupportUtils.FreespokeSupportPage.CONTACT),
+                newTab = true,
+                from = BrowserDirection.FromHome,
+            )
+        }
+
+        binding.appSettings.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+
+            val directions = HomeFragmentDirections.actionGlobalSettingsFragment()
+            navHost.navController.nav(R.id.homeFragment, directions)
+
+            val directionsFromBrowser =
+                BrowserFragmentDirections.actionBrowserFragmentToSettingsFragment()
+            navHost.navController.nav(R.id.browserFragment, directionsFromBrowser)
+        }
+
+        binding.twitterIcon.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+            openSocialApplication(SupportUtils.SocialApplicationsURLS.TWITTER.url)
+        }
+
+        binding.linkedIcon.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+            openSocialApplication(SupportUtils.SocialApplicationsURLS.LINKED.url)
+        }
+
+        binding.instagramIcon.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+            openSocialApplication(SupportUtils.SocialApplicationsURLS.INSTAGRAM.url)
+        }
+
+        binding.facebookIcon.setOnClickListener {
+            viewModel.showHomeDrawer.value = false
+            openSocialApplication(SupportUtils.SocialApplicationsURLS.FACEBOOK.url)
+        }
+
     }
 
     /**
@@ -686,6 +835,9 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
     }
 
     final override fun onBackPressed() {
+        if (viewModel.showHomeDrawer.value == true) {
+            viewModel.showHomeDrawer.value = false
+        }
         supportFragmentManager.primaryNavigationFragment?.childFragmentManager?.fragments?.forEach {
             if (it is UserInteractionHandler && it.onBackPressed()) {
                 return

@@ -8,7 +8,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.doOnNextLayout
@@ -39,13 +38,9 @@ class TabPreview @JvmOverloads constructor(
 
             binding.fakeToolbar.background = AppCompatResources.getDrawable(
                 context,
-                ThemeManager.resolveAttribute(R.attr.bottomBarBackgroundTop, context),
+                ThemeManager.resolveAttribute(R.attr.navigationBottomBar, context),
             )
         }
-
-        // Change view properties to avoid confusing the UI tests
-        binding.tabButton.findViewById<View>(R.id.counter_box).id = View.NO_ID
-        binding.tabButton.findViewById<View>(R.id.counter_text).id = View.NO_ID
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {

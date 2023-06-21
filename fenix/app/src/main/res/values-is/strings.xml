@@ -1531,9 +1531,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Hrun</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Meðferð persónuupplýsinga</string>
+    <string name="about_privacy_policy">Meðferð persónuupplýsinga</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Lærðu um rétt þinn</string>
+    <string name="about_terms">Lærðu um rétt þinn</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Leyfisupplýsingar</string>
     <!-- About page link text to open a screen with libraries that are used -->

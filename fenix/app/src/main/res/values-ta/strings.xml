@@ -922,9 +922,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">செயலிழப்புகள்</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">தனியுரிமை அறிவுப்பு</string>
+    <string name="about_privacy_policy">தனியுரிமை அறிவுப்பு</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">உங்கள் உரிமையை அறியவும்</string>
+    <string name="about_terms">உங்கள் உரிமையை அறியவும்</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">உரிம தகவல்</string>
     <!-- About page link text to open a screen with libraries that are used -->

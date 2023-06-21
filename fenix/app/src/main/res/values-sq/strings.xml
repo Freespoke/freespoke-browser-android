@@ -1526,9 +1526,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Vithisje</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Shënim mbi privatësinë</string>
+    <string name="about_privacy_policy">Shënim mbi privatësinë</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Njihni të drejtat tuaja</string>
+    <string name="about_terms">Njihni të drejtat tuaja</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Të dhëna licencimi</string>
 

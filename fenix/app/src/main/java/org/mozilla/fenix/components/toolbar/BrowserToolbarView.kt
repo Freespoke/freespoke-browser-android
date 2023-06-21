@@ -174,10 +174,8 @@ class BrowserToolbarView(
                     this,
                     view,
                     menuToolbar,
-                    lifecycleOwner,
                     sessionId = null,
                     isPrivate = components.core.store.state.selectedTab?.content?.private ?: false,
-                    interactor = interactor,
                 )
             }
         }

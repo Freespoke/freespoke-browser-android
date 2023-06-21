@@ -1431,9 +1431,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Taq sachoj</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Ichinan na\'oj</string>
+    <string name="about_privacy_policy">Ichinan na\'oj</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Tawetamaj ach\'ojib\'al</string>
+    <string name="about_terms">Tawetamaj ach\'ojib\'al</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Na\'oj chi rij ya\'öl q\'ij</string>
 

@@ -23,7 +23,7 @@ object SupportUtils {
     const val RATE_APP_URL = "market://details?id=" + BuildConfig.APPLICATION_ID
     const val POCKET_TRENDING_URL = "https://getpocket.com/fenix-top-articles"
     const val WIKIPEDIA_URL = "https://www.wikipedia.org/"
-    const val FENIX_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+    const val FREESPOKE_PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
     const val GOOGLE_URL = "https://www.google.com/"
     const val BAIDU_URL = "https://m.baidu.com/?from=1000969a"
     const val JD_URL = "https://union-click.jd.com/jdc" +
@@ -55,11 +55,63 @@ object SupportUtils {
         SPONSOR_PRIVACY("sponsor-privacy"),
         HTTPS_ONLY_MODE("https-only-mode-firefox-android"),
         COOKIE_BANNER("cookie-banner-reduction-firefox-android"),
+        TERMS("terms-of-service"),
+        PRIVACY_POLICY("privacy-policy"),
+        ABOUT("about"),
+        PRODUCTS("products"),
+        NEWS("news"),
     }
 
     enum class MozillaPage(internal val path: String) {
         PRIVATE_NOTICE("privacy/firefox/"),
         MANIFESTO("about/manifesto/"),
+    }
+
+    enum class FreespokeSupportPage(internal val path: String) {
+        HOME("home"),
+        CONTACT("tickets/new"),
+    }
+
+    enum class SocialApplicationsURLS(internal val url: String) {
+        TWITTER("https://twitter.com/FreespokeSearch"),
+        LINKED("https://www.linkedin.com/company/freespoke-search"),
+        INSTAGRAM("https://www.instagram.com/freespokesearch"),
+        FACEBOOK("https://www.facebook.com/FreespokeSearch"),
+    }
+
+    /**
+     * Gets page URL based on topic for freespoke support website
+     */
+    fun getFreespokeSupportURLPage(page: FreespokeSupportPage): String {
+        return "https://freespoke-support.freshdesk.com/support/${page.path}"
+    }
+
+    /**
+     * Gets page URL based on topic for freespoke website
+     */
+    fun getFreespokeURLForTopic(topic: SumoTopic): String {
+        val topicPath = topic.topicStr
+        return if (topicPath.isEmpty()) getFreespokeURL() else "${getFreespokeURL()}${topic.topicStr}"
+    }
+
+    fun getFreespokeURL(): String {
+        return "https://freespoke.com/"
+    }
+
+    fun getFreespokeBlogURL(): String {
+        return "https://freespoke.substack.com"
+    }
+
+    fun getFreespokeNewsletter(): String {
+        return "https://about.freespoke.com/SignUp"
+    }
+
+    fun getFreespokeFacebook(): String {
+        return "https://www.facebook.com/FreespokeSearch/"
+    }
+
+    fun getFreespokeGithubRepo(): String {
+        return "https://github.com/Freespoke/freespoke-browser-android"
     }
 
     /**

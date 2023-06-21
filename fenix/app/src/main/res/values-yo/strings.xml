@@ -1419,9 +1419,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Àwọn ìjàmbá</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Àkíyèsí ìkọ̀kọ̀</string>
+    <string name="about_privacy_policy">Àkíyèsí ìkọ̀kọ̀</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Mọ àwọn ẹ̀tọ́ rẹ</string>
+    <string name="about_terms">Mọ àwọn ẹ̀tọ́ rẹ</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Ìwé-àṣẹ ìròyìn</string>
     <!-- About page link text to open a screen with libraries that are used -->

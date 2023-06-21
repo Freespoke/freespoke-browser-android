@@ -5,13 +5,7 @@
 package org.mozilla.fenix.compose.button
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -181,6 +175,25 @@ fun DestructiveButton(
 }
 
 @Composable
+fun PrimaryButtonOnboarding(
+    text: String,
+    textColor: Color = FirefoxTheme.colors.textActionPrimary,
+    backgroundColor: Color = FirefoxTheme.colors.onboardingButtonColor,
+    icon: Painter? = null,
+    onClick: () -> Unit,
+) {
+    Button(
+        text = text,
+        textColor = textColor,
+        backgroundColor = backgroundColor,
+        icon = icon,
+        tint = FirefoxTheme.colors.iconActionPrimary,
+        onClick = onClick,
+    )
+}
+
+
+@Composable
 @LightDarkPreview
 private fun ButtonPreview() {
     FirefoxTheme {
@@ -190,6 +203,11 @@ private fun ButtonPreview() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            PrimaryButtonOnboarding(
+                text = "Continue",
+                icon = painterResource(R.drawable.ic_tab_collection),
+                onClick = {},
+            )
             PrimaryButton(
                 text = "Label",
                 icon = painterResource(R.drawable.ic_tab_collection),

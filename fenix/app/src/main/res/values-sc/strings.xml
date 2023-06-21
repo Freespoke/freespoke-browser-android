@@ -1281,9 +1281,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Faddinas</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Avisu de riservadesa</string>
+    <string name="about_privacy_policy">Avisu de riservadesa</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Connosche is deretos tuos</string>
+    <string name="about_terms">Connosche is deretos tuos</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Informatziones de sa lissèntzia</string>
     <!-- About page link text to open a screen with libraries that are used -->

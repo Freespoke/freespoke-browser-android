@@ -33,11 +33,7 @@ import org.mozilla.fenix.R
 import org.mozilla.fenix.components.AppStore
 import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.databinding.TopSiteItemBinding
-import org.mozilla.fenix.ext.bitmapForUrl
-import org.mozilla.fenix.ext.components
-import org.mozilla.fenix.ext.isSystemInDarkTheme
-import org.mozilla.fenix.ext.loadIntoView
-import org.mozilla.fenix.ext.name
+import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.home.sessioncontrol.TopSiteInteractor
 import org.mozilla.fenix.settings.SupportUtils
 import org.mozilla.fenix.utils.view.ViewHolder
@@ -176,6 +172,9 @@ class TopSiteItemViewHolder(
                 }
                 SupportUtils.MEITUAN_URL -> {
                     binding.faviconImage.setImageDrawable(getDrawable(itemView.context, R.drawable.ic_meituan))
+                }
+                SupportUtils.getFreespokeURL() -> {
+                    binding.faviconImage.setImageDrawable(getDrawable(itemView.context, R.drawable.ic_freespoke))
                 }
                 else -> {
                     itemView.context.components.core.icons.loadIntoView(binding.faviconImage, topSite.url)

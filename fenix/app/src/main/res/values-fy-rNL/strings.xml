@@ -1535,9 +1535,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Ungelokken</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Privacyferklearring</string>
+    <string name="about_privacy_policy">Privacyferklearring</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Ken jo rjochten</string>
+    <string name="about_terms">Ken jo rjochten</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Lisinsje-ynformaasje</string>
 

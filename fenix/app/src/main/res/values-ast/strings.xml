@@ -1192,9 +1192,9 @@ en llinia y con nós.</string>
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Casques</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Avisu de privacidá</string>
+    <string name="about_privacy_policy">Avisu de privacidá</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Conoz los tos derechos</string>
+    <string name="about_terms">Conoz los tos derechos</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Información del llicenciamientu</string>
     <!-- About page link text to open a screen with libraries that are used -->

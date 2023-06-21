@@ -28,21 +28,13 @@ class DataChoicesFragment : PreferenceFragmentCompat() {
         val context = requireContext()
         preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(this) { _, key ->
             if (key == getPreferenceKey(R.string.pref_key_telemetry)) {
-                if (context.settings().isTelemetryEnabled) {
-                    context.components.analytics.metrics.start(MetricServiceType.Data)
-                } else {
-                    context.components.analytics.metrics.stop(MetricServiceType.Data)
-                }
+                context.components.analytics.metrics.stop(MetricServiceType.Data)
                 // Reset experiment identifiers on both opt-in and opt-out; it's likely
                 // that in future we will need to pass in the new telemetry client_id
                 // to this method when the user opts back in.
                 context.components.analytics.experiments.resetTelemetryIdentifiers()
             } else if (key == getPreferenceKey(R.string.pref_key_marketing_telemetry)) {
-                if (context.settings().isMarketingTelemetryEnabled) {
-                    context.components.analytics.metrics.start(MetricServiceType.Marketing)
-                } else {
-                    context.components.analytics.metrics.stop(MetricServiceType.Marketing)
-                }
+                context.components.analytics.metrics.stop(MetricServiceType.Marketing)
             }
         }
     }
@@ -57,7 +49,7 @@ class DataChoicesFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.data_choices_preferences, rootKey)
 
         requirePreference<SwitchPreference>(R.string.pref_key_telemetry).apply {
-            isChecked = context.settings().isTelemetryEnabled
+            isChecked = false
 
             val appName = context.getString(R.string.app_name)
             summary = context.getString(R.string.preferences_usage_data_description, appName)
@@ -66,19 +58,14 @@ class DataChoicesFragment : PreferenceFragmentCompat() {
         }
 
         requirePreference<SwitchPreference>(R.string.pref_key_marketing_telemetry).apply {
-            isChecked = context.settings().isMarketingTelemetryEnabled
+            isChecked = false
             onPreferenceChangeListener = SharedPreferenceUpdater()
         }
     }
 
     private fun updateStudiesSection() {
         val studiesPreference = requirePreference<Preference>(R.string.pref_key_studies_section)
-        val settings = requireContext().settings()
-        val stringId = if (settings.isExperimentationEnabled) {
-            R.string.studies_on
-        } else {
-            R.string.studies_off
-        }
+        val stringId = R.string.studies_off
         studiesPreference.summary = getString(stringId)
 
         studiesPreference.setOnPreferenceClickListener {

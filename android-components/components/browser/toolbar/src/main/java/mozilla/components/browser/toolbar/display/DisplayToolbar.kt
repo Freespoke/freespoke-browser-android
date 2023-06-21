@@ -159,6 +159,7 @@ class DisplayToolbar internal constructor(
         },
         progress = rootView.findViewById<ProgressBar>(R.id.mozac_browser_toolbar_progress),
         highlight = rootView.findViewById(R.id.mozac_browser_toolbar_permission_indicator),
+        backIcon = rootView.findViewById(R.id.toolbar_back_icon),
     )
 
     /**
@@ -168,7 +169,7 @@ class DisplayToolbar internal constructor(
         securityIconSecure = ContextCompat.getColor(context, photonColors.photonWhite),
         securityIconInsecure = ContextCompat.getColor(context, photonColors.photonWhite),
         emptyIcon = ContextCompat.getColor(context, photonColors.photonWhite),
-        menu = ContextCompat.getColor(context, photonColors.photonWhite),
+        menu = ContextCompat.getColor(context, photonColors.photonMenu),
         hint = views.origin.hintColor,
         title = views.origin.titleColor,
         text = views.origin.textColor,
@@ -253,6 +254,16 @@ class DisplayToolbar internal constructor(
             )
 
             views.securityIndicator.setBackgroundResource(outValue.resourceId)
+        }
+    }
+
+    fun setBackIconClickedListener(listener: (() -> Unit)?) {
+        if (listener == null) {
+            views.backIcon.setOnClickListener(null)
+        } else {
+            views.backIcon.setOnClickListener {
+                listener.invoke()
+            }
         }
     }
 
@@ -667,4 +678,5 @@ internal class DisplayToolbarViews(
     val origin: OriginView,
     val progress: ProgressBar,
     val highlight: HighlightView,
+    val backIcon: ImageView
 )

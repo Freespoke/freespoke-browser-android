@@ -41,7 +41,6 @@ class ShareFragment : AppCompatDialogFragment() {
     }
     private lateinit var shareInteractor: ShareInteractor
     private lateinit var shareCloseView: ShareCloseView
-    private lateinit var shareToAccountDevicesView: ShareToAccountDevicesView
     private lateinit var shareToAppsView: ShareToAppsView
 
     override fun onAttach(context: Context) {
@@ -101,8 +100,6 @@ class ShareFragment : AppCompatDialogFragment() {
         )
 
         binding.shareWrapper.setOnClickListener { shareInteractor.onShareClosed() }
-        shareToAccountDevicesView =
-            ShareToAccountDevicesView(binding.devicesShareLayout, shareInteractor)
 
         if (args.showPage) {
             // Show the previous fragment underneath the share background scrim
@@ -136,9 +133,6 @@ class ShareFragment : AppCompatDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.devicesList.observe(viewLifecycleOwner) { devicesShareOptions ->
-            shareToAccountDevicesView.setShareTargets(devicesShareOptions)
-        }
         viewModel.appsList.observe(viewLifecycleOwner) { appsToShareTo ->
             shareToAppsView.setShareTargets(appsToShareTo)
         }

@@ -78,12 +78,7 @@ import mozilla.components.service.pocket.Profile
 import mozilla.components.service.sync.autofill.AutofillCreditCardsAddressesStorage
 import mozilla.components.service.sync.logins.SyncableLoginsStorage
 import mozilla.components.support.base.worker.Frequency
-import mozilla.components.support.locale.LocaleManager
-import org.mozilla.fenix.AppRequestInterceptor
-import org.mozilla.fenix.BuildConfig
-import org.mozilla.fenix.Config
-import org.mozilla.fenix.IntentReceiverActivity
-import org.mozilla.fenix.R
+import org.mozilla.fenix.*
 import org.mozilla.fenix.components.search.SearchMigration
 import org.mozilla.fenix.downloads.DownloadService
 import org.mozilla.fenix.ext.components
@@ -96,12 +91,11 @@ import org.mozilla.fenix.media.MediaSessionService
 import org.mozilla.fenix.perf.StrictModeManager
 import org.mozilla.fenix.perf.lazyMonitored
 import org.mozilla.fenix.settings.SupportUtils
-import org.mozilla.fenix.settings.advanced.getSelectedLocale
 import org.mozilla.fenix.share.SaveToPDFMiddleware
 import org.mozilla.fenix.telemetry.TelemetryMiddleware
 import org.mozilla.fenix.utils.getUndoDelay
 import org.mozilla.geckoview.GeckoRuntime
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -121,7 +115,7 @@ class Core(
         val defaultSettings = DefaultSettings(
             requestInterceptor = requestInterceptor,
             remoteDebuggingEnabled = context.settings().isRemoteDebuggingEnabled &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M,
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.M,
             testingModeEnabled = false,
             trackingProtectionPolicy = trackingProtectionPolicyFactory.createTrackingProtectionPolicy(),
             historyTrackingDelegate = HistoryDelegate(lazyHistoryStorage),
@@ -294,7 +288,7 @@ class Core(
                 context,
                 engine,
                 icons,
-                R.drawable.ic_status_logo,
+                R.drawable.ic_freespoke,
                 permissionStorage.permissionsStorage,
                 IntentReceiverActivity::class.java,
             )
@@ -485,30 +479,32 @@ class Core(
                 } else {
                     defaultTopSites.add(
                         Pair(
-                            context.getString(R.string.default_top_site_google),
-                            SupportUtils.GOOGLE_URL,
+                            context.getString(R.string.default_top_site_freespoke),
+                            SupportUtils.getFreespokeURL(),
                         ),
                     )
-
-                    if (LocaleManager.getSelectedLocale(context).language == "en") {
-                        defaultTopSites.add(
-                            Pair(
-                                context.getString(R.string.pocket_pinned_top_articles),
-                                SupportUtils.POCKET_TRENDING_URL,
-                            ),
-                        )
-                    }
-
                     defaultTopSites.add(
                         Pair(
-                            context.getString(R.string.default_top_site_wikipedia),
-                            SupportUtils.WIKIPEDIA_URL,
+                            context.getString(R.string.default_top_site_freespoke_support),
+                            SupportUtils.getFreespokeSupportURLPage(SupportUtils.FreespokeSupportPage.CONTACT),
+                        ),
+                    )
+                    defaultTopSites.add(
+                        Pair(
+                            context.getString(R.string.default_top_site_freespoke_blog),
+                            SupportUtils.getFreespokeBlogURL(),
+                        ),
+                    )
+                    defaultTopSites.add(
+                        Pair(
+                            context.getString(R.string.default_top_site_freespoke_facebook),
+                            SupportUtils.getFreespokeFacebook(),
                         ),
                     )
                 }
-
-                context.settings().defaultTopSitesAdded = true
             }
+
+            context.settings().defaultTopSitesAdded = true
         }
 
         DefaultTopSitesStorage(

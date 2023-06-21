@@ -16,7 +16,6 @@ import mozilla.appservices.places.BookmarkRoot
 import mozilla.components.browser.menu.view.MenuButton
 import mozilla.components.service.glean.private.NoExtras
 import org.mozilla.fenix.BrowserDirection
-import org.mozilla.fenix.Config
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.HomeScreen
 import org.mozilla.fenix.HomeActivity
@@ -26,6 +25,7 @@ import org.mozilla.fenix.components.accounts.AccountState
 import org.mozilla.fenix.ext.nav
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.settings.SupportUtils
+import org.mozilla.fenix.settings.SupportUtils.getFreespokeSupportURLPage
 import org.mozilla.fenix.settings.deletebrowsingdata.deleteAndQuit
 import org.mozilla.fenix.theme.ThemeManager
 import org.mozilla.fenix.whatsnew.WhatsNew
@@ -147,10 +147,7 @@ class HomeMenuBuilder(
             }
             HomeMenu.Item.Help -> {
                 homeActivity.openToBrowserAndLoad(
-                    searchTermOrURL = SupportUtils.getSumoURLForTopic(
-                        context = context,
-                        topic = SupportUtils.SumoTopic.HELP,
-                    ),
+                    searchTermOrURL = getFreespokeSupportURLPage(SupportUtils.FreespokeSupportPage.HOME),
                     newTab = true,
                     from = BrowserDirection.FromHome,
                 )

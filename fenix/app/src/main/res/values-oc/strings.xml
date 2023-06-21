@@ -1562,9 +1562,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Plantatges</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Politica de confidencialitat</string>
+    <string name="about_privacy_policy">Politica de confidencialitat</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Vòstres dreches</string>
+    <string name="about_terms">Vòstres dreches</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Entresenhas sus la licéncia</string>
 

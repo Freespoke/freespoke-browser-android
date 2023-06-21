@@ -14,11 +14,9 @@ import androidx.core.content.pm.PackageInfoCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
-import mozilla.components.service.glean.private.NoExtras
 import mozilla.components.support.utils.ext.getPackageInfoCompat
 import org.mozilla.fenix.BrowserDirection
 import org.mozilla.fenix.BuildConfig
-import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.R
 import org.mozilla.fenix.crashes.CrashListActivity
@@ -26,13 +24,14 @@ import org.mozilla.fenix.databinding.FragmentAboutBinding
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.ext.showToolbar
 import org.mozilla.fenix.settings.SupportUtils
+import org.mozilla.fenix.settings.SupportUtils.getFreespokeGithubRepo
+import org.mozilla.fenix.settings.about.AboutItemType.ABOUT
+import org.mozilla.fenix.settings.about.AboutItemType.FREESPOKE_REPOSITORY
 import org.mozilla.fenix.settings.about.AboutItemType.LICENSING_INFO
-import org.mozilla.fenix.settings.about.AboutItemType.PRIVACY_NOTICE
-import org.mozilla.fenix.settings.about.AboutItemType.RIGHTS
+import org.mozilla.fenix.settings.about.AboutItemType.PRIVACY_POLICY
 import org.mozilla.fenix.settings.about.AboutItemType.SUPPORT
-import org.mozilla.fenix.settings.about.AboutItemType.WHATS_NEW
+import org.mozilla.fenix.settings.about.AboutItemType.TERMS
 import org.mozilla.fenix.utils.Do
-import org.mozilla.fenix.whatsnew.WhatsNew
 import org.mozilla.geckoview.BuildConfig as GeckoViewBuildConfig
 
 /**
@@ -129,48 +128,46 @@ class AboutFragment : Fragment(), AboutPageListener {
     }
 
     private fun populateAboutList(): List<AboutPageItem> {
-        val context = requireContext()
-
         return listOf(
             AboutPageItem(
                 AboutItem.ExternalLink(
-                    WHATS_NEW,
-                    SupportUtils.getWhatsNewUrl(context),
-                ),
-                getString(R.string.about_whats_new, getString(R.string.app_name)),
-            ),
-            AboutPageItem(
-                AboutItem.ExternalLink(
                     SUPPORT,
-                    SupportUtils.getSumoURLForTopic(context, SupportUtils.SumoTopic.HELP),
+                    SupportUtils.getFreespokeSupportURLPage(SupportUtils.FreespokeSupportPage.CONTACT),
                 ),
                 getString(R.string.about_support),
             ),
             AboutPageItem(
-                AboutItem.Crashes,
-                getString(R.string.about_crashes),
+                AboutItem.ExternalLink(
+                    ABOUT,
+                    SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.ABOUT),
+                ),
+                getString(R.string.about),
             ),
             AboutPageItem(
                 AboutItem.ExternalLink(
-                    PRIVACY_NOTICE,
-                    SupportUtils.getMozillaPageUrl(SupportUtils.MozillaPage.PRIVATE_NOTICE),
+                    TERMS,
+                    SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.TERMS),
                 ),
-                getString(R.string.about_privacy_notice),
+                getString(R.string.about_terms),
             ),
             AboutPageItem(
                 AboutItem.ExternalLink(
-                    RIGHTS,
-                    SupportUtils.getSumoURLForTopic(context, SupportUtils.SumoTopic.YOUR_RIGHTS),
+                    PRIVACY_POLICY,
+                    SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRIVACY_POLICY),
                 ),
-                getString(R.string.about_know_your_rights),
-            ),
-            AboutPageItem(
-                AboutItem.ExternalLink(LICENSING_INFO, ABOUT_LICENSE_URL),
-                getString(R.string.about_licensing_information),
+                getString(R.string.about_privacy_policy),
             ),
             AboutPageItem(
                 AboutItem.Libraries,
                 getString(R.string.about_other_open_source_libraries),
+            ),
+            AboutPageItem(
+                AboutItem.ExternalLink(FREESPOKE_REPOSITORY, getFreespokeGithubRepo()),
+                getString(R.string.freespoke_for_android),
+            ),
+            AboutPageItem(
+                AboutItem.Crashes,
+                getString(R.string.about_crashes),
             ),
         )
     }
@@ -192,11 +189,7 @@ class AboutFragment : Fragment(), AboutPageListener {
         Do exhaustive when (item) {
             is AboutItem.ExternalLink -> {
                 when (item.type) {
-                    WHATS_NEW -> {
-                        WhatsNew.userViewedWhatsNew(requireContext())
-                        Events.whatsNewTapped.record(NoExtras())
-                    }
-                    SUPPORT, PRIVACY_NOTICE, LICENSING_INFO, RIGHTS -> {} // no telemetry needed
+                    ABOUT, SUPPORT, PRIVACY_POLICY, LICENSING_INFO, TERMS, FREESPOKE_REPOSITORY -> {} // no telemetry needed
                 }
 
                 openLinkInNormalTab(item.url)

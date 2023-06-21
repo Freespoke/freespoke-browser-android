@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<resources xmlns:tools="http://schemas.android.com/tools"  xmlns:moz="http://mozac.org/tools">
+<resources xmlns:moz="http://mozac.org/tools" xmlns:tools="http://schemas.android.com/tools">
     <!-- App name for private browsing mode. The first parameter is the name of the app defined in app_name (for example: Fenix)-->
     <string name="app_name_private_5">Private %s</string>
     <!-- App name for private browsing mode. The first parameter is the name of the app defined in app_name (for example: Fenix)-->
@@ -256,13 +256,24 @@
     <!-- Onboarding home screen popup dialog, shown on top of the Jump back in section. -->
     <string name="onboarding_home_screen_jump_back_contextual_hint_2">Meet your personalized homepage. Recent tabs, bookmarks, and search results will appear here.</string>
     <!-- Home onboarding dialog welcome screen title text. -->
-    <string name="onboarding_home_welcome_title_2">Welcome to a more personal internet</string>
+    <string name="onboarding_home_welcome_title_2">Welcome to Freespoke</string>
     <!-- Home onboarding dialog welcome screen description text. -->
-    <string name="onboarding_home_welcome_description">More colors. Better privacy. Same commitment to people over profits.</string>
+    <string name="onboarding_home_welcome_description">Get Full-Perspective and Full Anonymity When You Search. \n \n Search you can trust.</string>
     <!-- Home onboarding dialog sign into sync screen title text. -->
     <string name="onboarding_home_sync_title_3">Switching screens is easier than ever</string>
+    <string name="newsfeed_onboarding">Newsfeed</string>
+    <string name="navigating_the_news_onboarding">Navigating the news is tough. We help you quickly get the full story by labeling media sources so you can see stories covered from different perspectives.</string>
     <!-- Home onboarding dialog sign into sync screen description text. -->
     <string name="onboarding_home_sync_description">Pick up where you left off with tabs from other devices now on your homepage.</string>
+    <string name="onboarding_shop_usa">Shop USA</string>
+    <string name="onboarding_shop_subtitle">We curate high-quality, American made brands and products for you to explore and shop.</string>
+    <string name="onboarding_search">Search</string>
+    <string name="onboarding_search_subtitle">We provide quality search so you can easily find results from all perspectives, while protecting your privacy with every search.</string>
+    <string name="onboarding_tabs">Tabs</string>
+    <string name="onboarding_tabs_subtitle">Save your favorite content all in once place. Making it quicker to pick up where you left off, or frequent your favorite websites and search results.</string>
+    <string name="onboarding_next_button">Next</string>
+    <string name="set_freespoke_as_your_default_browser">Set Freespoke as your default browser.</string>
+    <string name="search_better_browse_better">Search better, browse better:</string>
     <!-- Text for the button to continue the onboarding on the home onboarding dialog. -->
     <string name="onboarding_home_get_started_button">Get started</string>
     <!-- Text for the button to navigate to the sync sign in screen on the home onboarding dialog. -->
@@ -344,7 +355,7 @@
     <!-- Summary of cookie banner handling preference if the setting enabled is set to on -->
     <string name="reduce_cookie_banner_option_on">On</string>
     <!-- Summary for the preference for rejecting all cookies whenever possible. -->
-    <string name="reduce_cookie_banner_summary" moz:RemovedIn="110" tools:ignore="UnusedResources">Firefox automatically tries to reject cookie requests on cookie banners. If a reject option isn’t available, Firefox may accept all cookies to dismiss the banner.</string>
+    <string name="reduce_cookie_banner_summary" moz:RemovedIn="110" tools:ignore="UnusedResources">Freespoke automatically tries to reject cookie requests on cookie banners. If a reject option isn’t available, Freespoke may accept all cookies to dismiss the banner.</string>
     <!-- Summary for the preference for rejecting all cookies whenever possible. The first parameter is the application name -->
     <string name="reduce_cookie_banner_summary_1">%1$s automatically tries to reject cookie requests on cookie banners.</string>
     <!-- Text for indicating cookie banner handling is off this site, this is shown as part of the protections panel with the tracking protection toggle -->
@@ -362,7 +373,7 @@
     <!-- Long text for a detail explanation indicating what will happen if cookie banner handling is on for a site, this is shown as part of the cookie banner panel in the toolbar. The first and second parameter are the application name -->
     <string name="reduce_cookie_banner_details_panel_description_on_for_site" moz:RemovedIn="110" tools:ignore="UnusedResources">%1$s can try to automatically reject cookie requests. If a reject option isn’t available, %2$s may accept all cookies to dismiss the banner.</string>
     <!-- Long text for a detail explanation indicating what will happen if cookie banner handling is on for a site, this is shown as part of the cookie banner panel in the toolbar. The first parameter are the application name -->
-    <string name="reduce_cookie_banner_details_panel_description_on_for_site_1"  moz:RemovedIn="111" tools:ignore="UnusedResources">%1$s can try to automatically reject cookie requests.</string>
+    <string name="reduce_cookie_banner_details_panel_description_on_for_site_1" moz:RemovedIn="111" tools:ignore="UnusedResources">%1$s can try to automatically reject cookie requests.</string>
     <!-- Long text for a detail explanation indicating what will happen if cookie banner handling is on for a site, this is shown as part of the cookie banner panel in the toolbar. The first parameter is the application name -->
     <string name="reduce_cookie_banner_details_panel_description_on_for_site_2">%1$s tries to automatically reject all cookie requests on supported sites.</string>
     <!-- Title text for the dialog use on the control branch of the experiment to determine which context users engaged the most -->
@@ -420,12 +431,12 @@
     <string name="errorpage_httpsonly_message_summary">However, it’s also possible that an attacker is involved. If you continue to the website, you should not enter any sensitive info. If you continue, HTTPS-Only mode will be turned off temporarily for the site.</string>
     <!-- Preference for accessibility -->
     <string name="preferences_accessibility">Accessibility</string>
-    <!-- Preference to override the Firefox Account server -->
-    <string name="preferences_override_fxa_server">Custom Firefox Account server</string>
+    <!-- Preference to override the Freespoke Account server -->
+    <string name="preferences_override_fxa_server">Custom Freespoke Account server</string>
     <!-- Preference to override the Sync token server -->
     <string name="preferences_override_sync_tokenserver">Custom Sync server</string>
     <!-- Toast shown after updating the FxA/Sync server override preferences -->
-    <string name="toast_override_fxa_sync_server_done">Firefox Account/Sync server modified. Quitting the application to apply changes…</string>
+    <string name="toast_override_fxa_sync_server_done">Freespoke Account/Sync server modified. Quitting the application to apply changes…</string>
     <!-- Preference category for account information -->
     <string name="preferences_category_account">Account</string>
     <!-- Preference for changing where the toolbar is positioned -->
@@ -441,7 +452,7 @@
     <!-- Preference description for banner about signing in -->
     <string name="preferences_sign_in_description_2">Sign in to sync tabs, bookmarks, passwords, and more.</string>
     <!-- Preference shown instead of account display name while account profile information isn't available yet. -->
-    <string name="preferences_account_default_name">Firefox Account</string>
+    <string name="preferences_account_default_name">Freespoke Account</string>
     <!-- Preference text for account title when there was an error syncing FxA -->
     <string name="preferences_account_sync_error">Reconnect to resume syncing</string>
     <!-- Preference for language -->
@@ -539,7 +550,7 @@
     <string name="wallpaper_select_error_snackbar_message">Couldn’t change wallpaper</string>
     <!-- Text displayed that links to website containing documentation about the "Limited Edition" wallpapers. -->
     <string name="wallpaper_learn_more">Learn more</string>
-    <!-- Text for classic wallpapers title. The first parameter is the Firefox name. -->
+    <!-- Text for classic wallpapers title. The first parameter is the Freespoke name. -->
     <string name="wallpaper_classic_title">Classic %s</string>
     <!-- Text for limited edition wallpapers title. -->
     <string name="wallpaper_limited_edition_title">Limited Edition</string>
@@ -602,7 +613,7 @@
     <!-- Name of the "receive tabs" notification channel. Displayed in the "App notifications" system settings for the app -->
     <string name="fxa_received_tab_channel_name">Received tabs</string>
     <!-- Description of the "receive tabs" notification channel. Displayed in the "App notifications" system settings for the app -->
-    <string name="fxa_received_tab_channel_description">Notifications for tabs received from other Firefox devices.</string>
+    <string name="fxa_received_tab_channel_description">Notifications for tabs received from other Freespoke devices.</string>
     <!--  The body for these is the URL of the tab received  -->
     <string name="fxa_tab_received_notification_name">Tab Received</string>
     <!-- %s is the device name -->
@@ -641,7 +652,7 @@
 
     <!-- Pairing Feature strings -->
     <!-- Instructions on how to access pairing -->
-    <string name="pair_instructions_2"><![CDATA[Scan the QR code shown at <b>firefox.com/pair</b>]]></string>
+    <string name="pair_instructions_2"><![CDATA[Scan the QR code shown at <b>Freespoke.com/pair</b>]]></string>
 
     <!-- Toolbar Preferences -->
     <!-- Preference for using top toolbar -->
@@ -785,7 +796,7 @@
     <string name="studies_remove">Remove</string>
     <!-- Title of the active section on the studies list -->
     <string name="studies_active">Active</string>
-    <!-- Description for studies, it indicates why Firefox use studies. The first parameter is the name of the application. -->
+    <!-- Description for studies, it indicates why Freespoke use studies. The first parameter is the name of the application. -->
     <string name="studies_description_2">%1$s may install and run studies from time to time.</string>
     <!-- Learn more link for studies, links to an article for more information about studies. -->
     <string name="studies_learn_more">Learn more</string>
@@ -853,10 +864,10 @@
     <string name="collection_open_tabs">Open tabs</string>
     <!-- Hint for adding name of a collection -->
     <string name="collection_name_hint">Collection name</string>
-	<!-- Text for the menu button to rename a top site -->
-	<string name="rename_top_site">Rename</string>
-	<!-- Text for the menu button to remove a top site -->
-	<string name="remove_top_site">Remove</string>
+    <!-- Text for the menu button to rename a top site -->
+    <string name="rename_top_site">Rename</string>
+    <!-- Text for the menu button to remove a top site -->
+    <string name="remove_top_site">Remove</string>
     <!-- Text for the menu button to delete a top site from history -->
     <string name="delete_from_history">Delete from history</string>
     <!-- Postfix for private WebApp titles, placeholder is replaced with app name -->
@@ -1134,7 +1145,7 @@
     <string name="toast_copy_link_to_clipboard">Copied to clipboard</string>
     <!-- An option from the share dialog to sign into sync -->
     <string name="sync_sign_in">Sign in to Sync</string>
-     <!-- An option from the three dot menu to sync and save data -->
+    <!-- An option from the three dot menu to sync and save data -->
     <string name="sync_menu_sync_and_save_data">Sync and save data</string>
     <!-- An option from the share dialog to send link to all other sync devices -->
     <string name="sync_send_to_all">Send to all devices</string>
@@ -1145,7 +1156,7 @@
     <!-- An option to connect additional devices -->
     <string name="sync_connect_device">Connect another device</string>
     <!-- The dialog text shown when additional devices are not available -->
-    <string name="sync_connect_device_dialog">To send a tab, sign in to Firefox on at least one other device.</string>
+    <string name="sync_connect_device_dialog">To send a tab, sign in to Freespoke on at least one other device.</string>
     <!-- Confirmation dialog button -->
     <string name="sync_confirmation_button">Got it</string>
     <!-- Share error message -->
@@ -1166,10 +1177,10 @@
     <string name="notification_marketing_channel_name">Marketing</string>
     <!-- Title shown in the notification that pops up to remind the user to set fenix as default browser.
     The app name is in the text, due to limitations with localizing Nimbus experiments -->
-    <string name="nimbus_notification_default_browser_title" tools:ignore="UnusedResources">Firefox is fast and private</string>
+    <string name="nimbus_notification_default_browser_title" tools:ignore="UnusedResources">Freespoke is fast and private</string>
     <!-- Text shown in the notification that pops up to remind the user to set fenix as default browser.
     The app name is in the text, due to limitations with localizing Nimbus experiments -->
-    <string name="nimbus_notification_default_browser_text" tools:ignore="UnusedResources">Make Firefox your default browser</string>
+    <string name="nimbus_notification_default_browser_text" tools:ignore="UnusedResources">Make Freespoke your default browser</string>
     <!-- Title shown in the notification that pops up to re-engage the user -->
     <string name="notification_re_engagement_title">Try private browsing</string>
     <!-- Text shown in the notification that pops up to re-engage the user.
@@ -1300,11 +1311,11 @@
     <string name="onboarding_header_2">Welcome to a better internet</string>
     <!-- Text for the onboarding welcome message. -->
     <string name="onboarding_message">A browser built for people, not profits.</string>
-    <!-- Text for the Firefox account onboarding sign in card header. -->
+    <!-- Text for the Freespoke account onboarding sign in card header. -->
     <string name="onboarding_account_sign_in_header">Pick up where you left off</string>
-    <!-- Text for the button to learn more about signing in to your Firefox account. -->
+    <!-- Text for the button to learn more about signing in to your Freespoke account. -->
     <string name="onboarding_manual_sign_in_description">Sync tabs and passwords across devices for seamless screen-switching.</string>
-    <!-- Text for the button to manually sign into Firefox account. -->
+    <!-- Text for the button to manually sign into Freespoke account. -->
     <string name="onboarding_firefox_account_sign_in">Sign in</string>
     <!-- text to display in the snackbar once account is signed-in -->
     <string name="onboarding_firefox_account_sync_is_on">Sync is on</string>
@@ -1329,7 +1340,7 @@
     <!-- Text for the privacy notice onboarding card header -->
     <string name="onboarding_privacy_notice_header_1">You control your data</string>
     <!-- Text for the privacy notice onboarding card description. -->
-    <string name="onboarding_privacy_notice_description">Firefox gives you control over what you share online and what you share with us.</string>
+    <string name="onboarding_privacy_notice_description">Freespoke gives you control over what you share online and what you share with us.</string>
     <!-- Text for the button to read the privacy notice -->
     <string name="onboarding_privacy_notice_read_button">Read our privacy notice</string>
     <!-- Text for the conclusion onboarding message -->
@@ -1362,16 +1373,16 @@
     <!-- Title of QR Pairing Fragment -->
     <string name="sync_scan_code">Scan the code</string>
     <!-- Instructions on how to access pairing -->
-    <string name="sign_in_instructions"><![CDATA[On your computer open Firefox and go to <b>https://firefox.com/pair</b>]]></string>
+    <string name="sign_in_instructions"><![CDATA[On your computer open Freespoke and go to <b>https://Freespoke.com/pair</b>]]></string>
     <!-- Text shown for sign in pairing when ready -->
     <string name="sign_in_ready_for_scan">Ready to scan</string>
     <!-- Text shown for settings option for sign with pairing -->
     <string name="sign_in_with_camera">Sign in with your camera</string>
     <!-- Text shown for settings option for sign with email -->
     <string name="sign_in_with_email">Use email instead</string>
-    <!-- Text shown for settings option for create new account text.'Firefox' intentionally hardcoded here.-->
-    <string name="sign_in_create_account_text"><![CDATA[No account? <u>Create one</u> to sync Firefox between devices.]]></string>
-    <!-- Text shown in confirmation dialog to sign out of account. The first parameter is the name of the app (e.g. Firefox Preview) -->
+    <!-- Text shown for settings option for create new account text.'Freespoke' intentionally hardcoded here.-->
+    <string name="sign_in_create_account_text"><![CDATA[No account? <u>Create one</u> to sync Freespoke between devices.]]></string>
+    <!-- Text shown in confirmation dialog to sign out of account. The first parameter is the name of the app (e.g. Freespoke Preview) -->
     <string name="sign_out_confirmation_message_2">%s will stop syncing with your account, but won’t delete any of your browsing data on this device.</string>
     <!-- Option to continue signing out of account shown in confirmation dialog to sign out of account -->
     <string name="sign_out_disconnect">Disconnect</string>
@@ -1486,14 +1497,16 @@
     <!-- Text displayed that links to website about enhanced tracking protection SmartBlock -->
     <string name="preference_etp_smartblock_learn_more">Learn more</string>
 
+    <!-- About page link text to open About website link -->
+    <string name="about">About Freespoke</string>
     <!-- About page link text to open support link -->
-    <string name="about_support">Support</string>
+    <string name="about_support">Contact Us</string>
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Crashes</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Privacy notice</string>
+    <string name="about_privacy_policy">Privacy</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Know your rights</string>
+    <string name="about_terms">Terms</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Licensing information</string>
     <!-- About page link text to open a screen with libraries that are used -->
@@ -1534,9 +1547,9 @@
     <string name="preferences_passwords_save_logins_ask_to_save">Ask to save</string>
     <!-- Preference option for never saving passwords in Fenix -->
     <string name="preferences_passwords_save_logins_never_save">Never save</string>
-    <!-- Preference for autofilling saved logins in Firefox (in web content), %1$s will be replaced with the app name -->
+    <!-- Preference for autofilling saved logins in Freespoke (in web content), %1$s will be replaced with the app name -->
     <string name="preferences_passwords_autofill2">Autofill in %1$s</string>
-    <!-- Description for the preference for autofilling saved logins in Firefox (in web content), %1$s will be replaced with the app name -->
+    <!-- Description for the preference for autofilling saved logins in Freespoke (in web content), %1$s will be replaced with the app name -->
     <string name="preferences_passwords_autofill_description">Fill and save usernames and passwords in websites while using %1$s.</string>
     <!-- Preference for autofilling logins from Fenix in other apps (e.g. autofilling the Twitter app) -->
     <string name="preferences_android_autofill">Autofill in other apps</string>
@@ -1856,13 +1869,13 @@
     <string name="synced_tabs_connect_another_device">Connect another device.</string>
     <!-- Text displayed asking user to re-authenticate -->
     <string name="synced_tabs_reauth">Please re-authenticate.</string>
-    <!-- Text displayed when user has disabled tab syncing in Firefox Sync Account -->
+    <!-- Text displayed when user has disabled tab syncing in Freespoke Sync Account -->
     <string name="synced_tabs_enable_tab_syncing">Please enable tab syncing.</string>
     <!-- Text displayed when user has no tabs that have been synced -->
-    <string name="synced_tabs_no_tabs">You don’t have any tabs open in Firefox on your other devices.</string>
-    <!-- Text displayed in the synced tabs screen when a user is not signed in to Firefox Sync describing Synced Tabs -->
+    <string name="synced_tabs_no_tabs">You don’t have any tabs open in Freespoke on your other devices.</string>
+    <!-- Text displayed in the synced tabs screen when a user is not signed in to Freespoke Sync describing Synced Tabs -->
     <string name="synced_tabs_sign_in_message">View a list of tabs from your other devices.</string>
-    <!-- Text displayed on a button in the synced tabs screen to link users to sign in when a user is not signed in to Firefox Sync -->
+    <!-- Text displayed on a button in the synced tabs screen to link users to sign in when a user is not signed in to Freespoke Sync -->
     <string name="synced_tabs_sign_in_button">Sign in to sync</string>
     <!-- The text displayed when a synced device has no tabs to show in the list of Synced Tabs. -->
     <string name="synced_tabs_no_open_tabs">No open tabs</string>
@@ -1880,14 +1893,14 @@
     <string name="top_sites_max_limit_confirmation_button">OK, Got It</string>
     <!-- Label for the preference to show the shortcuts for the most visited top sites on the homepage -->
     <string name="top_sites_toggle_top_recent_sites_4">Shortcuts</string>
-	<!-- Title text displayed in the rename top site dialog. -->
-	<string name="top_sites_rename_dialog_title">Name</string>
+    <!-- Title text displayed in the rename top site dialog. -->
+    <string name="top_sites_rename_dialog_title">Name</string>
     <!-- Hint for renaming title of a shortcut -->
     <string name="shortcut_name_hint">Shortcut name</string>
-	<!-- Button caption to confirm the renaming of the top site. -->
-	<string name="top_sites_rename_dialog_ok">OK</string>
-	<!-- Dialog button text for canceling the rename top site prompt. -->
-	<string name="top_sites_rename_dialog_cancel">Cancel</string>
+    <!-- Button caption to confirm the renaming of the top site. -->
+    <string name="top_sites_rename_dialog_ok">OK</string>
+    <!-- Dialog button text for canceling the rename top site prompt. -->
+    <string name="top_sites_rename_dialog_cancel">Cancel</string>
     <!-- Text for the menu button to open the homepage settings. -->
     <string name="top_sites_menu_settings">Settings</string>
     <!-- Text for the menu button to navigate to sponsors and privacy support articles. '&amp;' is replaced with the ampersand symbol: & -->
@@ -1909,22 +1922,22 @@
     <!-- The header text of the auto-close message when the user is asked if they want to turn on the auto-closing of inactive tabs. -->
     <string name="inactive_tabs_auto_close_message_header" tools:ignore="UnusedResources">Auto-close after one month?</string>
     <!-- A description below the header to notify the user what the inactive tabs auto-close feature is. -->
-    <string name="inactive_tabs_auto_close_message_description" tools:ignore="UnusedResources">Firefox can close tabs you haven’t viewed over the past month.</string>
+    <string name="inactive_tabs_auto_close_message_description" tools:ignore="UnusedResources">Freespoke can close tabs you haven’t viewed over the past month.</string>
     <!-- A call to action below the description to allow the user to turn on the auto closing of inactive tabs. -->
     <string name="inactive_tabs_auto_close_message_action" tools:ignore="UnusedResources">TURN ON AUTO CLOSE</string>
     <!-- Text for the snackbar to confirm auto-close is enabled for inactive tabs -->
     <string name="inactive_tabs_auto_close_message_snackbar">Auto-close enabled</string>
 
     <!-- Awesome bar suggestion's headers -->
-    <!-- Search suggestions title for Firefox Suggest. -->
-    <string name="firefox_suggest_header">Firefox Suggest</string>
+    <!-- Search suggestions title for Freespoke Suggest. -->
+    <string name="firefox_suggest_header">Freespoke Suggest</string>
     <!-- Title for search suggestions when Google is the default search suggestion engine. -->
     <string name="google_search_engine_suggestion_header">Google Search</string>
     <!-- Title for search suggestions when the default search suggestion engine is anything other than Google. The first parameter is default search engine name. -->
     <string name="other_default_search_engine_suggestion_header">%s search</string>
 
     <!-- Default browser experiment -->
-    <string name="default_browser_experiment_card_text">Set links from websites, emails, and messages to open automatically in Firefox.</string>
+    <string name="default_browser_experiment_card_text">Set links from websites, emails, and messages to open automatically in Freespoke.</string>
 
     <!-- Content description for close button in collection placeholder. -->
     <string name="remove_home_collection_placeholder_content_description">Remove</string>
@@ -1948,7 +1961,7 @@
     <!-- Title of an app feature. Smaller than a heading. The first parameter is product name Pocket -->
     <string name="pocket_stories_feature_title_2">Powered by %s.</string>
     <!-- Caption for describing a certain feature. The placeholder is for a clickable text (eg: Learn more) which will load an url in a new tab when clicked.  -->
-    <string name="pocket_stories_feature_caption">Part of the Firefox family. %s</string>
+    <string name="pocket_stories_feature_caption">Part of the Freespoke family. %s</string>
     <!-- Clickable text for opening an external link for more information about Pocket. -->
     <string name="pocket_stories_feature_learn_more">Learn more</string>
     <!-- Text indicating that the Pocket story that also displays this text is a sponsored story by other 3rd party entity. -->
@@ -1968,6 +1981,24 @@
     <string name="a11y_action_label_wallpaper_collection_learn_more">open link to learn more about this collection</string>
     <!-- Action label for links that point to an article. Talkback will append this to say "Double tap to read the article". -->
     <string name="a11y_action_label_read_article">read the article</string>
-    <!-- Action label for links to the Firefox Pocket website. Talkback will append this to say "Double tap to open link to learn more". -->
+    <!-- Action label for links to the Freespoke Pocket website. Talkback will append this to say "Double tap to open link to learn more". -->
     <string name="a11y_action_label_pocket_learn_more">open link to learn more</string>
+
+    <!-- Bottom Navigation -->
+    <string name="news">News</string>
+    <string name="shop">Shop</string>
+    <string name="search">Search</string>
+    <string name="tabs">Tabs</string>
+
+    <!-- Navigation Drawer -->
+    <string name="add_as_default">Add as Default</string>
+    <string name="share_freespoke">Share Freespoke</string>
+    <string name="our_newsletters">Our Newsletters</string>
+    <string name="freespoke_blog">Freespoke Blog</string>
+    <string name="get_in_touch">Get in Touch</string>
+    <string name="app_settings">App Settings</string>
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close Drawer</string>
+    <string name="home">Home</string>
+    <string name="freespoke_for_android">Freespoke for Android</string>
 </resources>

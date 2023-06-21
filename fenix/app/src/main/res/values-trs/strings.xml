@@ -896,10 +896,10 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Nej sa gahui a\'nan\'</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Nuguan\' huì huin si dūkuan</string>
+    <string name="about_privacy_policy">Nuguan\' huì huin si dūkuan</string>
 
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Gīni\'in nej nuguan\' tna\'uēj rayi\'ît</string>
+    <string name="about_terms">Gīni\'in nej nuguan\' tna\'uēj rayi\'ît</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Si nùguàn\' līsênsia</string>
     <!-- About page link text to open a screen with libraries that are used -->

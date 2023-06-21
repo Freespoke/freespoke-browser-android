@@ -7,6 +7,7 @@ package org.mozilla.fenix.ext
 import android.app.Activity
 import android.app.role.RoleManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.view.View
@@ -134,6 +135,10 @@ fun Activity.setNavigationIcon(
         it.setHomeAsUpIndicator(icon)
         it.setHomeActionContentDescription(R.string.action_bar_up_description)
     }
+}
+
+fun Activity.openSocialApplication(url: String) {
+    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 }
 
 const val REQUEST_CODE_BROWSER_ROLE = 1

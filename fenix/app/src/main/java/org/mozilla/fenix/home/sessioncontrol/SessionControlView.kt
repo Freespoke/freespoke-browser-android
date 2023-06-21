@@ -20,7 +20,6 @@ import org.mozilla.fenix.ext.shouldShowRecentSyncedTabs
 import org.mozilla.fenix.ext.shouldShowRecentTabs
 import org.mozilla.fenix.gleanplumb.Message
 import org.mozilla.fenix.home.Mode
-import org.mozilla.fenix.home.OnboardingState
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
 import org.mozilla.fenix.home.recentvisits.RecentlyVisitedItem
 import org.mozilla.fenix.nimbus.MessageSurfaceId
@@ -48,7 +47,6 @@ internal fun normalModeAdapterItems(
     firstFrameDrawn: Boolean = false,
 ): List<AdapterItem> {
     val items = mutableListOf<AdapterItem>()
-    var shouldShowCustomizeHome = false
 
     // Add a synchronous, unconditional and invisible placeholder so home is anchored to the top when created.
     items.add(AdapterItem.TopPlaceholderItem)
@@ -62,7 +60,6 @@ internal fun normalModeAdapterItems(
     }
 
     if (showRecentTab) {
-        shouldShowCustomizeHome = true
         items.add(AdapterItem.RecentTabsHeader)
         items.add(AdapterItem.RecentTabItem)
         if (showRecentSyncedTab) {
@@ -71,13 +68,11 @@ internal fun normalModeAdapterItems(
     }
 
     if (settings.showRecentBookmarksFeature && recentBookmarks.isNotEmpty()) {
-        shouldShowCustomizeHome = true
         items.add(AdapterItem.RecentBookmarksHeader)
         items.add(AdapterItem.RecentBookmarks)
     }
 
     if (settings.historyMetadataUIFeature && recentVisits.isNotEmpty()) {
-        shouldShowCustomizeHome = true
         items.add(AdapterItem.RecentVisitsHeader)
         items.add(AdapterItem.RecentVisitsItems)
     }
@@ -95,14 +90,9 @@ internal fun normalModeAdapterItems(
     // This is only useful while we have a RecyclerView + Compose implementation. We can remove this
     // when we switch to a Compose-only home screen.
     if (firstFrameDrawn && settings.showPocketRecommendationsFeature && pocketStories.isNotEmpty()) {
-        shouldShowCustomizeHome = true
         items.add(AdapterItem.PocketStoriesItem)
         items.add(AdapterItem.PocketCategoriesItem)
         items.add(AdapterItem.PocketRecommendationsFooterItem)
-    }
-
-    if (shouldShowCustomizeHome) {
-        items.add(AdapterItem.CustomizeHomeButton)
     }
 
     items.add(AdapterItem.BottomSpacer)
@@ -129,22 +119,18 @@ private fun showCollections(
 
 private fun privateModeAdapterItems() = listOf(AdapterItem.PrivateBrowsingDescription)
 
-private fun onboardingAdapterItems(
-    onboardingState: OnboardingState,
-    onboardingConfig: OnboardingConfig,
-): List<AdapterItem> {
+private fun onboardingAdapterItems(onboardingConfig: OnboardingConfig): List<AdapterItem> {
     val items: MutableList<AdapterItem> = mutableListOf(AdapterItem.OnboardingHeader)
 
     onboardingConfig.order.forEach {
         when (it) {
             OnboardingPanel.THEMES -> items.add(AdapterItem.OnboardingThemePicker)
-            OnboardingPanel.TOOLBAR_PLACEMENT -> items.add(AdapterItem.OnboardingToolbarPositionPicker)
-            // Customize FxA items based on where we are with the account state:
-            OnboardingPanel.SYNC -> if (onboardingState == OnboardingState.SignedOutNoAutoSignIn) {
-                items.add(AdapterItem.OnboardingManualSignIn)
-            }
             OnboardingPanel.TCP -> items.add(AdapterItem.OnboardingTrackingProtection)
             OnboardingPanel.PRIVACY_NOTICE -> items.add(AdapterItem.OnboardingPrivacyNotice)
+            OnboardingPanel.TOOLBAR_PLACEMENT -> items.add(AdapterItem.OnboardingToolbarPositionPicker)
+            else -> {
+
+            }
         }
     }
     items.addAll(
@@ -173,7 +159,7 @@ private fun AppState.toAdapterList(settings: Settings): List<AdapterItem> = when
         firstFrameDrawn,
     )
     is Mode.Private -> privateModeAdapterItems()
-    is Mode.Onboarding -> onboardingAdapterItems(mode.state, mode.config)
+    is Mode.Onboarding -> onboardingAdapterItems(mode.config)
 }
 
 private fun collectionTabItems(collection: TabCollection) =

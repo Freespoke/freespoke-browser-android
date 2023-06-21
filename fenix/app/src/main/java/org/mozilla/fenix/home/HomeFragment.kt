@@ -23,9 +23,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.constraintlayout.widget.ConstraintSet.BOTTOM
-import androidx.constraintlayout.widget.ConstraintSet.PARENT_ID
-import androidx.constraintlayout.widget.ConstraintSet.TOP
+import androidx.constraintlayout.widget.ConstraintSet.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -92,15 +90,7 @@ import org.mozilla.fenix.components.TabCollectionStorage
 import org.mozilla.fenix.components.appstate.AppAction
 import org.mozilla.fenix.components.toolbar.ToolbarPosition
 import org.mozilla.fenix.databinding.FragmentHomeBinding
-import org.mozilla.fenix.ext.components
-import org.mozilla.fenix.ext.containsQueryParameters
-import org.mozilla.fenix.ext.hideToolbar
-import org.mozilla.fenix.ext.increaseTapArea
-import org.mozilla.fenix.ext.nav
-import org.mozilla.fenix.ext.requireComponents
-import org.mozilla.fenix.ext.runIfFragmentIsAttached
-import org.mozilla.fenix.ext.scaleToBottomOfView
-import org.mozilla.fenix.ext.settings
+import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.gleanplumb.DefaultMessageController
 import org.mozilla.fenix.gleanplumb.MessagingFeature
 import org.mozilla.fenix.gleanplumb.NimbusMessagingController
@@ -525,7 +515,7 @@ class HomeFragment : Fragment() {
 
                 binding.bottomBar.background = AppCompatResources.getDrawable(
                     view.context,
-                    view.context.theme.resolveAttribute(R.attr.bottomBarBackgroundTop),
+                    view.context.theme.resolveAttribute(R.attr.navigationBottomBar),
                 )
 
                 binding.homeAppBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -559,13 +549,6 @@ class HomeFragment : Fragment() {
             navController = findNavController(),
             menuButton = WeakReference(binding.menuButton),
             hideOnboardingIfNeeded = ::hideOnboardingIfNeeded,
-        ).build()
-
-        TabCounterBuilder(
-            context = requireContext(),
-            browsingModeManager = browsingModeManager,
-            navController = findNavController(),
-            tabCounter = binding.tabButton,
         ).build()
 
         binding.toolbar.compoundDrawablePadding =
@@ -946,7 +929,7 @@ class HomeFragment : Fragment() {
     private fun hideOnboardingAndOpenSearch() {
         hideOnboardingIfNeeded()
         appBarLayout?.setExpanded(true, true)
-        navigateToSearch()
+        (activity as HomeActivity).binding.bottomNavigation.selectedItemId = R.id.action_home
     }
 
     @VisibleForTesting
@@ -1004,7 +987,6 @@ class HomeFragment : Fragment() {
             browserState.normalTabs.size
         }
 
-        binding.tabButton.setCountWithAnimation(tabCount)
         // The add_tabs_to_collections_button is added at runtime. We need to search for it in the same way.
         sessionControlView?.view?.findViewById<MaterialButton>(R.id.add_tabs_to_collections_button)
             ?.isVisible = tabCount > 0

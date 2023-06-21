@@ -973,9 +973,9 @@
     <!-- About page link text to open support link -->
     <string name="about_support">આધાર</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">ગોપનીયતા સૂચના</string>
+    <string name="about_privacy_policy">ગોપનીયતા સૂચના</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">તમારા અધિકારો જાણો</string>
+    <string name="about_terms">તમારા અધિકારો જાણો</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">પરવાના માહિતી</string>
     <!-- About page link text to open a screen with libraries that are used -->

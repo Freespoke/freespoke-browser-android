@@ -520,7 +520,7 @@ class DefaultSessionControlController(
         activity.startActivity(
             SupportUtils.createCustomTabIntent(
                 activity,
-                SupportUtils.getMozillaPageUrl(SupportUtils.MozillaPage.PRIVATE_NOTICE),
+                SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRIVACY_POLICY),
             ),
         )
     }

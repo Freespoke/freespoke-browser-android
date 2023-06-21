@@ -136,7 +136,7 @@ private fun DownloadState.toAndroidRequest(cookie: String): SystemRequest {
     }
 
     with(request) {
-        addRequestHeaderSafely(USER_AGENT, userAgent)
+        addRequestHeaderSafely(USER_AGENT, "Freespoke/2.0.0 $userAgent")
         addRequestHeaderSafely(COOKIE, cookie)
         addRequestHeaderSafely(REFERRER, referrerUrl)
     }

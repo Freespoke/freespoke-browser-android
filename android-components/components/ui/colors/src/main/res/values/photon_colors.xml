@@ -208,4 +208,7 @@
 
 	<!-- Black -->
 	<color name="photonBlack">#000000</color>
+
+	<color name="photonMenu">#606671</color>
+
 </resources>

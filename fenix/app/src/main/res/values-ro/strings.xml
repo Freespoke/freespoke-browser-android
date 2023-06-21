@@ -949,9 +949,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Defecțiuni</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Notificare privind confidențialitatea</string>
+    <string name="about_privacy_policy">Notificare privind confidențialitatea</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Cunoaște-ți drepturile</string>
+    <string name="about_terms">Cunoaște-ți drepturile</string>
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Informații despre licențiere</string>
     <!-- About page link text to open a screen with libraries that are used -->

@@ -1548,9 +1548,9 @@
     <!-- About page link text to list of past crashes (like about:crashes on desktop) -->
     <string name="about_crashes">Sesutja</string>
     <!-- About page link text to open privacy notice link -->
-    <string name="about_privacy_notice">Obvestilo o zasebnosti</string>
+    <string name="about_privacy_policy">Obvestilo o zasebnosti</string>
     <!-- About page link text to open know your rights link -->
-    <string name="about_know_your_rights">Spoznajte svoje pravice</string>
+    <string name="about_terms">Spoznajte svoje pravice</string>
 
     <!-- About page link text to open licensing information link -->
     <string name="about_licensing_information">Podatki o dovoljenjih</string>
