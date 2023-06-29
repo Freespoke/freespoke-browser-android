@@ -108,7 +108,6 @@ import org.mozilla.fenix.perf.*
 import org.mozilla.fenix.search.SearchDialogFragmentDirections
 import org.mozilla.fenix.session.PrivateNotificationService
 import org.mozilla.fenix.settings.*
-import org.mozilla.fenix.settings.SupportUtils.getFreespokeGithubRepo
 import org.mozilla.fenix.settings.about.AboutFragmentDirections
 import org.mozilla.fenix.settings.logins.fragment.LoginDetailFragmentDirections
 import org.mozilla.fenix.settings.logins.fragment.SavedLoginsAuthFragmentDirections
@@ -358,7 +357,9 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             }
         }
 
-        importDataFromSQLite()
+        if (onboarding.userHasBeenOnboarded().not()) {
+            importDataFromSQLite()
+        }
     }
 
     private fun observeViewModel() {
