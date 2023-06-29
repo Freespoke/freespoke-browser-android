@@ -14,17 +14,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="85dp"
         android:layout_marginBottom="2dp"
         android:clickable="false"
-        app:lineHeight="24.sp"
         android:text="@string/preferences_https_only_title"
         android:textAppearance="@style/ListItemTextStyle"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/https_only_summary"
         app:layout_constraintEnd_toStartOf="@id/https_only_switch"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:lineHeight="24.sp"
         tools:targetApi="p" />
 
     <TextView
