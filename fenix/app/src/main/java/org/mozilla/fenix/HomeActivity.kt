@@ -252,7 +252,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         // Unless the activity is recreated, navigate to home first (without rendering it)
         // to add it to the back stack.
         if (savedInstanceState == null) {
-            navigateToHome()
+            navigateToFreespokeHome()
         }
 
         if (!shouldStartOnHome() && shouldNavigateToBrowserOnColdStart(savedInstanceState)) {
@@ -416,7 +416,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     )
                 }
                 R.id.action_home -> {
-                    navigateToHome()
+                    navigateToFreespokeHome()
                 }
                 R.id.action_tabs -> {
                     navHost.navController.navigate(NavGraphDirections.actionGlobalTabsTrayFragment())
@@ -1199,6 +1199,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
     open fun navigateToHome() {
         navHost.navController.navigate(NavGraphDirections.actionStartupHome())
+    }
+
+    open fun navigateToFreespokeHome() {
+        navHost.navController.navigate(NavGraphDirections.actionGlobalHomeFreespokeHome())
     }
 
     override fun attachBaseContext(base: Context) {
