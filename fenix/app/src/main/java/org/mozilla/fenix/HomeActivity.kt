@@ -95,6 +95,7 @@ import org.mozilla.fenix.components.metrics.BreadcrumbsRecorder
 import org.mozilla.fenix.databinding.ActivityHomeBinding
 import org.mozilla.fenix.exceptions.trackingprotection.TrackingProtectionExceptionsFragmentDirections
 import org.mozilla.fenix.ext.*
+import org.mozilla.fenix.freespokehome.FreespokeHomeFragmentDirections
 import org.mozilla.fenix.gleanplumb.MessageNotificationWorker
 import org.mozilla.fenix.home.HomeFragmentDirections
 import org.mozilla.fenix.home.intent.*
@@ -489,6 +490,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             val directionsFromBrowser =
                 BrowserFragmentDirections.actionBrowserFragmentToSettingsFragment()
             navHost.navController.nav(R.id.browserFragment, directionsFromBrowser)
+
+            val directionsFromFreespokeHome =
+                FreespokeHomeFragmentDirections.actionGlobalSettingsFragment()
+            navHost.navController.nav(R.id.freespokeHomeFragment, directionsFromFreespokeHome)
         }
 
         binding.twitterIcon.setOnClickListener {
