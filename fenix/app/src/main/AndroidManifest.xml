@@ -354,6 +354,12 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+
+        <!-- Branch init -->
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_fh0ZarV2dz3xfRdw0Ri2FhfoDAcPpiw6" />
+        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_bc00gvR1bt7zoHcw0Qk4LgkmvBgGflPk" />
+        <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />     <!-- Set to true to use Branch_Test_Key (useful when simulating installs and/or switching between debug and production flavors) -->
+
     </application>
 
 </manifest>

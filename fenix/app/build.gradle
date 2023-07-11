@@ -686,6 +686,15 @@ dependencies {
     // OneSingnal SDK
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
 
+    // required for all Android apps
+    implementation 'io.branch.sdk.android:library:5.6.1'
+    // required if your app is in the Google Play Store (tip: avoid using bundled play services libs)
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    // alternatively, use the following lib for getting the AAID
+    // implementation 'com.google.android.gms:play-services-ads:17.2.0'
+    // optional
+    // Chrome Tab matching (enables 100% guaranteed matching based on cookies)
+    implementation 'androidx.browser:browser:1.5.0'
 }
 
 protobuf {

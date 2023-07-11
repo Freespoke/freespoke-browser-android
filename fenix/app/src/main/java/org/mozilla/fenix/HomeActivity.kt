@@ -18,6 +18,7 @@ import android.os.SystemClock
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.activity.viewModels
@@ -38,6 +39,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.onesignal.OSNotificationAction
 import com.onesignal.OneSignal
+import io.branch.referral.Branch
+import io.branch.referral.validators.IntegrationValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
@@ -614,6 +617,23 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             startProfilerTime,
             "HomeActivity.onStart",
         ) // DO NOT MOVE ANYTHING BELOW THIS addMarker CALL.
+
+        Branch.sessionBuilder(this).withCallback { branchUniversalObject, linkProperties, error ->
+            if (error != null) {
+                Log.e("BranchSDK_Tester", "branch init failed. Caused by -" + error.message)
+            } else {
+                Log.i("BranchSDK_Tester", "branch init complete!")
+                if (branchUniversalObject != null) {
+                    Log.i("BranchSDK_Tester", "title " + branchUniversalObject.title)
+                    Log.i("BranchSDK_Tester", "CanonicalIdentifier " + branchUniversalObject.canonicalIdentifier)
+                    Log.i("BranchSDK_Tester", "metadata " + branchUniversalObject.contentMetadata.convertToJson())
+                }
+                if (linkProperties != null) {
+                    Log.i("BranchSDK_Tester", "Channel " + linkProperties.channel)
+                    Log.i("BranchSDK_Tester", "control params " + linkProperties.controlParams)
+                }
+            }
+        }.withData(this.intent.data).init()
     }
 
     override fun onStop() {
@@ -740,6 +760,14 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             handleNewIntent(it)
         }
         startupPathProvider.onIntentReceived(intent)
+
+        Branch.sessionBuilder(this).withCallback { referringParams, error ->
+            if (error != null) {
+                Log.e("BranchSDK_Tester", error.message)
+            } else if (referringParams != null) {
+                Log.i("BranchSDK_Tester", referringParams.toString())
+            }
+        }.reInit()
     }
 
     open fun handleNewIntent(intent: Intent) {
