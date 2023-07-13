@@ -383,7 +383,8 @@
             android:background="?attr/navigationBottomBar"
             app:itemIconTint="@drawable/nav_menu_bg"
             app:itemTextColor="@drawable/nav_menu_bg"
-            app:labelVisibilityMode="unlabeled"
+            app:labelVisibilityMode="labeled"
+            android:theme="@style/BottomNavigationViewStyle"
             app:menu="@menu/menu_navigation_items" />
 
     </RelativeLayout>

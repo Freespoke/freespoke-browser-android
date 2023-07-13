@@ -409,14 +409,14 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     openToBrowserAndLoad(
                         searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.NEWS),
                         newTab = false,
-                        from = BrowserDirection.FromHome,
+                        from = BrowserDirection.FromGlobal,
                     )
                 }
                 R.id.action_shop -> {
                     openToBrowserAndLoad(
                         searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRODUCTS),
                         newTab = false,
-                        from = BrowserDirection.FromHome,
+                        from = BrowserDirection.FromGlobal,
                     )
                 }
                 R.id.action_home -> {

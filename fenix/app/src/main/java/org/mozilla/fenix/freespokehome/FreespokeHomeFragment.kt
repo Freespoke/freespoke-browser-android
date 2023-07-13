@@ -34,7 +34,6 @@ class FreespokeHomeFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentFreespokeHomeBinding.inflate(inflater, container, false)
 
-
         binding.searchView.setOnClickListener {
             val directions = NavGraphDirections.actionGlobalHome(true)
             findNavController().navigate(directions)

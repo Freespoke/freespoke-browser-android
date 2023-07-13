@@ -17,7 +17,7 @@ import androidx.annotation.DrawableRes
  * @param onRecordImpressionEvent Callback for recording impression event.
  */
 data class OnboardingPageState(
-    @DrawableRes val image: Int,
+    @DrawableRes val image: Int? = null,
     val title: String,
     val description: String,
     val primaryButtonText: String,
