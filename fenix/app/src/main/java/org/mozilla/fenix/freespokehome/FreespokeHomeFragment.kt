@@ -18,6 +18,7 @@ import org.mozilla.fenix.R
 import org.mozilla.fenix.databinding.FragmentFreespokeHomeBinding
 import org.mozilla.fenix.ext.openSetDefaultBrowserOption
 import org.mozilla.fenix.settings.SupportUtils
+import org.mozilla.fenix.utils.BrowsersCache
 
 class FreespokeHomeFragment : Fragment() {
 
@@ -32,7 +33,6 @@ class FreespokeHomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentFreespokeHomeBinding.inflate(inflater, container, false)
-
 
         binding.searchView.setOnClickListener {
             val directions = NavGraphDirections.actionGlobalHome(true)
@@ -57,8 +57,15 @@ class FreespokeHomeFragment : Fragment() {
             )
         }
 
-        binding.setDefaultBrowserButton.setOnClickListener {
-            (activity as HomeActivity).openSetDefaultBrowserOption()
+        val browsers = BrowsersCache.all(requireContext())
+        val isDefaultBrowser = browsers.isDefaultBrowser
+        if (isDefaultBrowser) {
+            binding.setDefaultBrowserButton.visibility = View.GONE
+        } else {
+            binding.setDefaultBrowserButton.visibility = View.VISIBLE
+            binding.setDefaultBrowserButton.setOnClickListener {
+                (activity as HomeActivity).openSetDefaultBrowserOption()
+            }
         }
 
         return binding.root

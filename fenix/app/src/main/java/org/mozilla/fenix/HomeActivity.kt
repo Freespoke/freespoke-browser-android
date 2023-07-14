@@ -18,6 +18,7 @@ import android.os.SystemClock
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.activity.viewModels
@@ -38,6 +39,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.onesignal.OSNotificationAction
 import com.onesignal.OneSignal
+import io.branch.referral.Branch
+import io.branch.referral.validators.IntegrationValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
@@ -92,6 +95,7 @@ import org.mozilla.fenix.components.metrics.BreadcrumbsRecorder
 import org.mozilla.fenix.databinding.ActivityHomeBinding
 import org.mozilla.fenix.exceptions.trackingprotection.TrackingProtectionExceptionsFragmentDirections
 import org.mozilla.fenix.ext.*
+import org.mozilla.fenix.freespokehome.FreespokeHomeFragmentDirections
 import org.mozilla.fenix.gleanplumb.MessageNotificationWorker
 import org.mozilla.fenix.home.HomeFragmentDirections
 import org.mozilla.fenix.home.intent.*
@@ -405,14 +409,14 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     openToBrowserAndLoad(
                         searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.NEWS),
                         newTab = false,
-                        from = BrowserDirection.FromHome,
+                        from = BrowserDirection.FromGlobal,
                     )
                 }
                 R.id.action_shop -> {
                     openToBrowserAndLoad(
                         searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRODUCTS),
                         newTab = false,
-                        from = BrowserDirection.FromHome,
+                        from = BrowserDirection.FromGlobal,
                     )
                 }
                 R.id.action_home -> {
@@ -486,6 +490,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             val directionsFromBrowser =
                 BrowserFragmentDirections.actionBrowserFragmentToSettingsFragment()
             navHost.navController.nav(R.id.browserFragment, directionsFromBrowser)
+
+            val directionsFromFreespokeHome =
+                FreespokeHomeFragmentDirections.actionGlobalSettingsFragment()
+            navHost.navController.nav(R.id.freespokeHomeFragment, directionsFromFreespokeHome)
         }
 
         binding.twitterIcon.setOnClickListener {
@@ -614,6 +622,23 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             startProfilerTime,
             "HomeActivity.onStart",
         ) // DO NOT MOVE ANYTHING BELOW THIS addMarker CALL.
+
+        Branch.sessionBuilder(this).withCallback { branchUniversalObject, linkProperties, error ->
+            if (error != null) {
+                Log.e("BranchSDK_Tester", "branch init failed. Caused by -" + error.message)
+            } else {
+                Log.i("BranchSDK_Tester", "branch init complete!")
+                if (branchUniversalObject != null) {
+                    Log.i("BranchSDK_Tester", "title " + branchUniversalObject.title)
+                    Log.i("BranchSDK_Tester", "CanonicalIdentifier " + branchUniversalObject.canonicalIdentifier)
+                    Log.i("BranchSDK_Tester", "metadata " + branchUniversalObject.contentMetadata.convertToJson())
+                }
+                if (linkProperties != null) {
+                    Log.i("BranchSDK_Tester", "Channel " + linkProperties.channel)
+                    Log.i("BranchSDK_Tester", "control params " + linkProperties.controlParams)
+                }
+            }
+        }.withData(this.intent.data).init()
     }
 
     override fun onStop() {
@@ -740,6 +765,14 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             handleNewIntent(it)
         }
         startupPathProvider.onIntentReceived(intent)
+
+        Branch.sessionBuilder(this).withCallback { referringParams, error ->
+            if (error != null) {
+                Log.e("BranchSDK_Tester", error.message)
+            } else if (referringParams != null) {
+                Log.i("BranchSDK_Tester", referringParams.toString())
+            }
+        }.reInit()
     }
 
     open fun handleNewIntent(intent: Intent) {
