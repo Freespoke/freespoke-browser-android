@@ -226,6 +226,7 @@ class DefaultTabsTrayController(
         val startTime = profiler?.getProfilerTime()
         browsingModeManager.mode = BrowsingMode.fromBoolean(isPrivate)
         activity.binding.bottomNavigation.selectedItemId = R.id.action_home
+        activity.navigateToHome()
         navigationInteractor.onTabTrayDismissed()
         profiler?.addMarker(
             "DefaultTabTrayController.onNewTabTapped",

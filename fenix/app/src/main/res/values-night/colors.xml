@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This Source Code Form is subject to the terms of the Mozilla Public
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -30,21 +29,37 @@
     <!-- Secondary button -->
     <color name="fx_mobile_action_color_secondary">@color/photonLightGrey30</color>
     <!-- Filter -->
-    <color name="fx_mobile_action_color_tertiary" tools:ignore="UnusedResources">@color/photonDarkGrey10</color>
+    <color name="fx_mobile_action_color_tertiary" tools:ignore="UnusedResources">
+        @color/photonDarkGrey10
+    </color>
     <!-- Chip -->
-    <color name="fx_mobile_action_quarternary" tools:ignore="UnusedResources">@color/photonDarkGrey80</color>
+    <color name="fx_mobile_action_quarternary" tools:ignore="UnusedResources">
+        @color/photonDarkGrey80
+    </color>
     <!-- Checkbox default, Radio button default -->
-    <color name="fx_mobile_action_color_form_default" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
+    <color name="fx_mobile_action_color_form_default" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
     <!-- Checkbox selected, Radio button selected -->
-    <color name="fx_mobile_action_color_form_selected" tools:ignore="UnusedResources">@color/photonViolet40</color>
+    <color name="fx_mobile_action_color_form_selected" tools:ignore="UnusedResources">
+        @color/photonViolet40
+    </color>
     <!-- Switch background OFF, Switch background ON -->
-    <color name="fx_mobile_action_color_form_surface" tools:ignore="UnusedResources">@color/photonDarkGrey05</color>
+    <color name="fx_mobile_action_color_form_surface" tools:ignore="UnusedResources">
+        @color/photonDarkGrey05
+    </color>
     <!-- Checkbox disabled, Radio disabled -->
-    <color name="fx_mobile_action_color_form_disabled" tools:ignore="UnusedResources">@color/photonDarkGrey05</color>
+    <color name="fx_mobile_action_color_form_disabled" tools:ignore="UnusedResources">
+        @color/photonDarkGrey05
+    </color>
     <!-- Switch thumb ON -->
-    <color name="fx_mobile_action_color_form_on" tools:ignore="UnusedResources">@color/photonViolet40</color>
+    <color name="fx_mobile_action_color_form_on" tools:ignore="UnusedResources">
+        @color/photonViolet40
+    </color>
     <!-- Switch thumb OFF -->
-    <color name="fx_mobile_action_color_form_off" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
+    <color name="fx_mobile_action_color_form_off" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
     <!-- Scroll indicator active -->
     <color name="fx_mobile_action_color_indicator_active">@color/photonLightGrey90</color>
     <!-- Scroll indicator inactive -->
@@ -64,7 +79,9 @@
     <!-- Small heading, Text link -->
     <color name="fx_mobile_text_color_accent">@color/photonViolet20</color>
     <!-- Small heading, Text link -->
-    <color name="fx_mobile_text_color_accent_disabled" tools:ignore="UnusedResources">@color/photonViolet20A60</color>
+    <color name="fx_mobile_text_color_accent_disabled" tools:ignore="UnusedResources">
+        @color/photonViolet20A60
+    </color>
     <!-- Text Inverted/On Color -->
     <color name="fx_mobile_text_color_oncolor_primary">@color/photonLightGrey05</color>
     <!-- Text Inverted/On Color -->
@@ -74,9 +91,13 @@
     <!-- Action Secondary text -->
     <color name="fx_mobile_text_color_action_secondary">@color/photonDarkGrey90</color>
     <!-- Action Tertiary text -->
-    <color name="fx_mobile_text_color_action_tertiary" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
+    <color name="fx_mobile_text_color_action_tertiary" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
     <!-- Action Tertiary Active text -->
-    <color name="fx_mobile_text_color_action_tertiary_active" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
+    <color name="fx_mobile_text_color_action_tertiary_active" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
 
     <!-- Icon -->
     <!-- Primary icon -->
@@ -88,14 +109,19 @@
     <!-- Active tab -->
     <color name="fx_mobile_icon_color_active">@color/photonViolet40</color>
     <!-- Disabled icon -->
-    <color name="fx_mobile_icon_color_disabled" tools:ignore="UnusedResources">@color/photonLightGrey05A40</color>
+    <color name="fx_mobile_icon_color_disabled" tools:ignore="UnusedResources">
+        @color/photonLightGrey05A40
+    </color>
     <!-- Icon inverted (on color) -->
     <color name="fx_mobile_icon_color_oncolor">@color/photonLightGrey05</color>
     <!-- Information -->
     <color name="fx_mobile_icon_color_information">@color/photonBlue30</color>
     <!-- Icon button -->
-    <color name="fx_mobile_icon_color_button" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
-    <color name="fx_mobile_icon_color_warning" tools:ignore="UnusedResources">@color/photonRed20</color>
+    <color name="fx_mobile_icon_color_button" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
+    <color name="fx_mobile_icon_color_warning" tools:ignore="UnusedResources">@color/photonRed20
+    </color>
     <!-- Warning icon on Secondary button -->
     <color name="fx_mobile_icon_color_warning_button">@color/photonRed70</color>
     <color name="fx_mobile_icon_color_accent_violet">@color/photonViolet20</color>
@@ -104,11 +130,15 @@
     <color name="fx_mobile_icon_color_accent_green">@color/photonGreen20</color>
     <color name="fx_mobile_icon_color_accent_yellow">@color/photonYellow20</color>
     <!-- Action Primary Icon -->
-    <color name="fx_mobile_icon_color_action_primary" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
+    <color name="fx_mobile_icon_color_action_primary" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
     <!-- Action Secondary Icon -->
     <color name="fx_mobile_icon_color_action_secondary">@color/photonDarkGrey90</color>
     <!-- Action Tertiary Icon -->
-    <color name="fx_mobile_icon_color_action_tertiary" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
+    <color name="fx_mobile_icon_color_action_tertiary" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
     <!-- Reader, ETP Shield -->
     <color name="fx_mobile_icon_color_gradient_start">@color/photonViolet20</color>
     <!-- Reader, ETP Shield -->
@@ -118,15 +148,22 @@
     <!-- Default, Divider, Dotted -->
     <color name="fx_mobile_border_color_primary">@color/photonDarkGrey05</color>
     <!-- Onboarding -->
-    <color name="fx_mobile_border_color_inverted" tools:ignore="UnusedResources">@color/photonLightGrey30</color>
+    <color name="fx_mobile_border_color_inverted" tools:ignore="UnusedResources">
+        @color/photonLightGrey30
+    </color>
     <!-- Form parts -->
-    <color name="fx_mobile_border_color_form_default" tools:ignore="UnusedResources">@color/photonLightGrey05</color>
+    <color name="fx_mobile_border_color_form_default" tools:ignore="UnusedResources">
+        @color/photonLightGrey05
+    </color>
     <!-- Active tab (Nav), Selected tab, Active form -->
     <color name="fx_mobile_border_color_accent">@color/photonViolet40</color>
     <!-- Form parts -->
-    <color name="fx_mobile_border_color_disabled" tools:ignore="UnusedResources">@color/photonLightGrey05A40</color>
+    <color name="fx_mobile_border_color_disabled" tools:ignore="UnusedResources">
+        @color/photonLightGrey05A40
+    </color>
     <!-- Form parts -->
-    <color name="fx_mobile_border_color_warning" tools:ignore="UnusedResources">@color/photonRed40</color>
+    <color name="fx_mobile_border_color_warning" tools:ignore="UnusedResources">@color/photonRed40
+    </color>
 
     <!-- Normal theme colors for dark mode -->
     <color name="accent_normal_theme">@color/photonViolet50</color>
@@ -140,17 +177,24 @@
     <color name="sync_disconnected_background_normal_theme">#5B5846</color>
     <color name="onboarding_illustration_selected_normal_theme">@color/accent_normal_theme</color>
     <color name="onboarding_illustration_deselected_normal_theme">#99FBFBFE</color>
-    <color name="add_on_private_browsing_exterior_circle_background_normal_theme">@color/accent_normal_theme</color>
+    <color name="add_on_private_browsing_exterior_circle_background_normal_theme">
+        @color/accent_normal_theme
+    </color>
     <color name="prompt_login_edit_text_cursor_color_normal_theme">@color/photonViolet50</color>
     <color name="search_suggestion_indicator_icon_color_normal_theme">@color/photonGreen60</color>
-    <color name="search_suggestion_indicator_icon_bookmark_color_normal_theme">@color/photonBlue40</color>
+    <color name="search_suggestion_indicator_icon_bookmark_color_normal_theme">@color/photonBlue40
+    </color>
 
     <!-- Reader View colors -->
     <color name="mozac_feature_readerview_text_color">@color/fx_mobile_text_color_primary</color>
 
     <!-- Tab Counter colors -->
-    <color name="mozac_ui_tabcounter_default_tint" tools:ignore="UnusedResources">@color/fx_mobile_icon_color_primary</color>
-    <color name="mozac_ui_tabcounter_default_text" tools:ignore="UnusedResources">@color/fx_mobile_text_color_primary</color>
+    <color name="mozac_ui_tabcounter_default_tint" tools:ignore="UnusedResources">
+        @color/fx_mobile_icon_color_primary
+    </color>
+    <color name="mozac_ui_tabcounter_default_text" tools:ignore="UnusedResources">
+        @color/fx_mobile_text_color_primary
+    </color>
 
     <!-- Bottom Navigation colors -->
     <color name="bottom_navigation_background_color">#1D1D1D</color>
@@ -158,9 +202,18 @@
     <color name="bottom_navigation_item">#9AA2B3</color>
 
     <!-- Drawer colors -->
-    <color name="drawer_font_color">#FFFF</color>
+    <color name="freespoke_font_color">#FFFF</color>
+    <color name="freespoke_font_color_custom_home">#FFFF</color>
     <color name="drawer_background_margin">#2F3644</color>
     <color name="drawer_icon">#606671</color>
     <color name="drawer_background_social_icons">#2F3644</color>
+
+    <color name="custom_home_background_color">#1D1D1D</color>
+    <color name="custom_home_search_color">#292929</color>
+    <color name="custom_home_search_border_color">#303644</color>
+    <color name="website_chip_background_color">#1D1D1D</color>
+    <color name="website_chip_border_color">#303644</color>
+    <color name="website_chip_font_color">#FFFF</color>
+    <color name="default_browser_button_color">#C43351</color>
 
 </resources>

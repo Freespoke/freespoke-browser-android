@@ -21,7 +21,7 @@
         android:layout_marginStart="14dp"
         android:layout_toEndOf="@id/icon"
         android:text="@string/add_as_default"
-        android:textColor="@color/drawer_font_color"
+        android:textColor="@color/freespoke_font_color"
         android:textSize="16sp"
         android:textStyle="bold" />
 

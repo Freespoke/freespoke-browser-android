@@ -108,7 +108,6 @@ import org.mozilla.fenix.perf.*
 import org.mozilla.fenix.search.SearchDialogFragmentDirections
 import org.mozilla.fenix.session.PrivateNotificationService
 import org.mozilla.fenix.settings.*
-import org.mozilla.fenix.settings.SupportUtils.getFreespokeGithubRepo
 import org.mozilla.fenix.settings.about.AboutFragmentDirections
 import org.mozilla.fenix.settings.logins.fragment.LoginDetailFragmentDirections
 import org.mozilla.fenix.settings.logins.fragment.SavedLoginsAuthFragmentDirections
@@ -253,7 +252,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         // Unless the activity is recreated, navigate to home first (without rendering it)
         // to add it to the back stack.
         if (savedInstanceState == null) {
-            navigateToHome()
+            navigateToFreespokeHome()
         }
 
         if (!shouldStartOnHome() && shouldNavigateToBrowserOnColdStart(savedInstanceState)) {
@@ -358,7 +357,9 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             }
         }
 
-        importDataFromSQLite()
+        if (onboarding.userHasBeenOnboarded().not()) {
+            importDataFromSQLite()
+        }
     }
 
     private fun observeViewModel() {
@@ -415,7 +416,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     )
                 }
                 R.id.action_home -> {
-                    navigateToHome()
+                    navigateToFreespokeHome()
                 }
                 R.id.action_tabs -> {
                     navHost.navController.navigate(NavGraphDirections.actionGlobalTabsTrayFragment())
@@ -1198,6 +1199,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
     open fun navigateToHome() {
         navHost.navController.navigate(NavGraphDirections.actionStartupHome())
+    }
+
+    open fun navigateToFreespokeHome() {
+        navHost.navController.navigate(NavGraphDirections.actionGlobalHomeFreespokeHome())
     }
 
     override fun attachBaseContext(base: Context) {
