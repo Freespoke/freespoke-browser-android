@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import com.google.accompanist.insets.ProvideWindowInsets
 import mozilla.components.lib.state.ext.observeAsComposableState
+import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.R
 import org.mozilla.fenix.components.components
 import org.mozilla.fenix.ext.settings
@@ -61,6 +62,7 @@ class HomeOnboardingDialogFragment : DialogFragment() {
 
     private fun onDismiss() {
         context?.settings()?.showHomeOnboardingDialog = false
+        (activity as HomeActivity).binding.bottomNavigation.selectedItemId = R.id.action_home
         dismiss()
     }
 }

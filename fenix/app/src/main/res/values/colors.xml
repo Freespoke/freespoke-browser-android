@@ -347,11 +347,19 @@
     <color name="bottom_navigation_item">#606671</color>
 
     <!-- Drawer colors -->
-    <color name="drawer_font_color">#2F3644</color>
+    <color name="freespoke_font_color">#2F3644</color>
+    <color name="freespoke_font_color_custom_home">#081A33</color>
     <color name="drawer_background_margin">#E1E5EB</color>
     <color name="drawer_icon">#9AA2B2</color>
     <color name="drawer_background_social_icons">#EDF0F5</color>
-
     <color name="white_grey_transparent">#CCA3A3A3</color>
+
+    <color name="custom_home_background_color">#FFFFFF</color>
+    <color name="custom_home_search_color">#F8F9FB</color>
+    <color name="custom_home_search_border_color">#E1E5EB</color>
+    <color name="website_chip_background_color">#FFFF</color>
+    <color name="website_chip_border_color">#E1E5EB</color>
+    <color name="website_chip_font_color">#303644</color>
+    <color name="default_browser_button_color">#081A33</color>
 
 </resources>

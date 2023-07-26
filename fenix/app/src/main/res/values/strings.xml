@@ -2001,4 +2001,9 @@
     <string name="close_drawer">Close Drawer</string>
     <string name="home">Home</string>
     <string name="freespoke_for_android">Freespoke for Android</string>
+    <string name="search_for_everything">Search for anything...</string>
+    <string name="get_the_full_story_with_freespoke">Get the full story with Freespoke.</string>
+    <string name="freespoke_news"><u>Freespoke News</u></string>
+    <string name="shop_usa_store"><u>Shop USA Store</u></string>
+    <string name="set_as_default_browser">Set as default browser</string>
 </resources>

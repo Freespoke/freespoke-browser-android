@@ -101,19 +101,21 @@ fun OnboardingPage(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Image(
-                        painter = painterResource(id = pageState.image),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxWidth(),
-                        contentScale = ContentScale.Crop
-                    )
+                    if (pageState.image != null) {
+                        Image(
+                            painter = painterResource(id = pageState.image),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxWidth(),
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
 
                 }
             }
 
             if (isVisible.not()) {
                 Image(
-                    painter = painterResource(id = pageState.image),
+                    painter = painterResource(id = pageState.image!!),
                     contentDescription = null,
                     modifier = Modifier.fillMaxWidth(),
                     contentScale = ContentScale.Crop
@@ -165,7 +167,7 @@ private fun OnboardingPagePreview() {
     FirefoxTheme {
         OnboardingPage(
             pageState = OnboardingPageState(
-                image = R.drawable.ic_notification_permission,
+                image = null,
                 title = stringResource(
                     id = R.string.onboarding_home_enable_notifications_title,
                     formatArgs = arrayOf(stringResource(R.string.app_name)),

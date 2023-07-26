@@ -734,4 +734,11 @@
         <item name="elevation">0dp</item>
         <item name="cornerSize">2dp</item>
     </style>
+
+    <style name="BottomNavigationViewStyle">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+
 </resources>

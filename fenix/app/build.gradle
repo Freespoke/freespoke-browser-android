@@ -262,7 +262,7 @@ android.applicationVariants.all { variant ->
         // same version code. Therefore we need to have different version codes for our ARM and x86
         // builds.
 
-        def versionName = "2.0.0"
+        def versionName = "2.1.1"
         println("versionName override: $versionName")
 
         variant.outputs.each { output ->
@@ -272,7 +272,7 @@ android.applicationVariants.all { variant ->
             def arch = (isMozillaOnline) ? "armeabi-v7a" : abi
             // We use the same version code generator, that we inherited from Fennec, across all channels - even on
             // channels that never shipped a Fennec build.
-            def versionCodeOverride = 211
+            def versionCodeOverride = 215
 
             println("versionCode for $abi = $versionCodeOverride, isMozillaOnline = $isMozillaOnline")
 
@@ -686,6 +686,15 @@ dependencies {
     // OneSingnal SDK
     implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
 
+    // required for all Android apps
+    implementation 'io.branch.sdk.android:library:5.6.1'
+    // required if your app is in the Google Play Store (tip: avoid using bundled play services libs)
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    // alternatively, use the following lib for getting the AAID
+    // implementation 'com.google.android.gms:play-services-ads:17.2.0'
+    // optional
+    // Chrome Tab matching (enables 100% guaranteed matching based on cookies)
+    implementation 'androidx.browser:browser:1.5.0'
 }
 
 protobuf {
