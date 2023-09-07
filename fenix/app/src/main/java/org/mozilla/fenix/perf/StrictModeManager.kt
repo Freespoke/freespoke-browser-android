@@ -83,7 +83,17 @@ open class StrictModeManager(
                 builder.detectNonSdkApiUsage()
             }
             StrictMode.setVmPolicy(builder.build())
+            StrictMode.allowThreadDiskReads()
         }
+    }
+
+    fun allowDiskReads() {
+        var oldThreadPolicy: StrictMode.ThreadPolicy? = null
+        if (isEnabledByBuildConfig) {
+            oldThreadPolicy = StrictMode.getThreadPolicy();
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder(oldThreadPolicy).permitDiskReads().build());
+        }
+        if (oldThreadPolicy != null) StrictMode.setThreadPolicy(oldThreadPolicy);
     }
 
     /**

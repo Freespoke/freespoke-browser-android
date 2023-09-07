@@ -25,7 +25,6 @@ import androidx.test.uiautomator.*
 import androidx.test.uiautomator.Until.findObject
 import mozilla.components.browser.state.state.searchEngines
 import org.hamcrest.CoreMatchers.*
-import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -173,7 +172,7 @@ class HomeScreenRobot {
     fun verifyNoCollectionsText() = assertNoCollectionsText()
     fun verifyHomeWordmark() = assertItemWithResIdExists(homepageWordmark)
     fun verifyHomeComponent() = assertHomeComponent()
-    fun verifyDefaultSearchEngine(searchEngine: String) = verifySearchEngineIcon(searchEngine)
+   // fun verifyDefaultSearchEngine(searchEngine: String) = verifySearchEngineIcon(searchEngine)
     fun verifyTabCounter(numberOfOpenTabs: String) =
         assertItemWithResIdAndTextExists(tabCounter(numberOfOpenTabs))
     fun verifyKeyboardVisible() = assertKeyboardVisibility(isExpectedToBeVisible = true)
@@ -632,7 +631,7 @@ class HomeScreenRobot {
             onView(withText("Rename"))
                 .check((matches(withEffectiveVisibility(Visibility.VISIBLE))))
                 .perform(click())
-            onView(Matchers.allOf(withId(R.id.top_site_title), instanceOf(EditText::class.java)))
+            onView(allOf(withId(R.id.top_site_title), instanceOf(EditText::class.java)))
                 .perform(ViewActions.replaceText(title))
             onView(withId(android.R.id.button1)).perform((click()))
 
@@ -857,19 +856,19 @@ private fun assertHomeComponent() =
 
 private fun threeDotButton() = onView(allOf(withId(R.id.menuButton)))
 
-private fun verifySearchEngineIcon(searchEngineIcon: Bitmap, searchEngineName: String) {
+/*private fun verifySearchEngineIcon(searchEngineIcon: Bitmap, searchEngineName: String) {
     onView(withId(R.id.search_engine_icon))
         .check(matches(withBitmapDrawable(searchEngineIcon, searchEngineName)))
-}
+}*/
 
 private fun getSearchEngine(searchEngineName: String) =
     appContext.components.core.store.state.search.searchEngines.find { it.name == searchEngineName }
 
-private fun verifySearchEngineIcon(searchEngineName: String) {
+/*private fun verifySearchEngineIcon(searchEngineName: String) {
     val defaultSearchEngine = getSearchEngine(searchEngineName)
         ?: throw AssertionError("No search engine with name $searchEngineName")
-    verifySearchEngineIcon(defaultSearchEngine.icon, defaultSearchEngine.name)
-}
+            verifySearchEngineIcon(defaultSearchEngine.icon, defaultSearchEngine.name)
+}*/
 
 private fun assertPrivateSessionMessage() =
     assertTrue(

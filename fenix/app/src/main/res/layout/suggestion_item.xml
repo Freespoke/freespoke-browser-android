@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/searchItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_search"
+        android:drawableTint="@color/freespoke_font_color"
+        android:textColor="@color/freespoke_font_color" />
+
+</FrameLayout>

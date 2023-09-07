@@ -741,4 +741,19 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="FreespokeHomeEditTextStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/freespoke_font_color</item>
+    </style>
+
+    <style name="RoundCornerImageStyle">
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="RoundImageStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="strokeColor">@color/freespoke_font_color</item>
+    </style>
+
 </resources>

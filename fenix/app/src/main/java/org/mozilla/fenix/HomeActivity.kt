@@ -28,8 +28,10 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.Companion.PROTECTED
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDestination
@@ -37,16 +39,18 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.onesignal.OSNotificationAction
 import com.onesignal.OneSignal
 import io.branch.referral.Branch
-import io.branch.referral.validators.IntegrationValidator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import mozilla.appservices.places.BookmarkRoot
+import mozilla.components.browser.menu.view.MenuButton
 import mozilla.components.browser.state.action.ContentAction
 import mozilla.components.browser.state.action.SearchAction
 import mozilla.components.browser.state.search.SearchEngine
@@ -85,6 +89,7 @@ import org.mozilla.fenix.GleanMetrics.Metrics
 import org.mozilla.fenix.GleanMetrics.StartOnHome
 import org.mozilla.fenix.addons.AddonDetailsFragmentDirections
 import org.mozilla.fenix.addons.AddonPermissionsDetailsFragmentDirections
+import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.browser.BrowserFragment
 import org.mozilla.fenix.browser.BrowserFragmentDirections
 import org.mozilla.fenix.browser.browsingmode.BrowsingMode
@@ -96,6 +101,7 @@ import org.mozilla.fenix.databinding.ActivityHomeBinding
 import org.mozilla.fenix.exceptions.trackingprotection.TrackingProtectionExceptionsFragmentDirections
 import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.freespokehome.FreespokeHomeFragmentDirections
+import org.mozilla.fenix.freespokehome.FreespokeHomeMenuBuilder
 import org.mozilla.fenix.gleanplumb.MessageNotificationWorker
 import org.mozilla.fenix.home.HomeFragmentDirections
 import org.mozilla.fenix.home.intent.*
@@ -131,6 +137,8 @@ import org.mozilla.fenix.utils.BrowsersCache
 import org.mozilla.fenix.utils.Settings
 import java.lang.ref.WeakReference
 import java.util.*
+import kotlin.collections.set
+
 
 /**
  * The main activity of the application. The application is primarily a single Activity (this one)
@@ -214,6 +222,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             super.onCreate(savedInstanceState)
         }
 
+        components.strictMode.allowDiskReads()
         // Checks if Activity is currently in PiP mode if launched from external intents, then exits it
         checkAndExitPiP()
 
@@ -253,6 +262,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             it.start()
         }
 
+        setupMenuButton()
         // Unless the activity is recreated, navigate to home first (without rendering it)
         // to add it to the back stack.
         if (savedInstanceState == null) {
@@ -366,6 +376,41 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         }
     }
 
+    private fun setupMenuButton() {
+        val mbottomNavigationView = binding.bottomNavigation
+
+        val mbottomNavigationMenuView =
+            mbottomNavigationView.getChildAt(0) as BottomNavigationMenuView
+
+        val view = mbottomNavigationMenuView.getChildAt(4)
+
+        val itemView = view as BottomNavigationItemView
+
+        val menuButton = LayoutInflater.from(this)
+            .inflate(
+                R.layout.menu_settings_item,
+                mbottomNavigationMenuView, false,
+            ) as MenuButton
+
+        menuButton.findViewById<AppCompatImageView>(R.id.icon).setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_menu_freespoke))
+        itemView.addView(menuButton)
+
+        getRootView()?.let {
+            FreespokeHomeMenuBuilder(
+                view = it,
+                context = this,
+                lifecycleOwner = this,
+                homeActivity = this,
+                navController = navHost.navController,
+                menuButton = WeakReference(menuButton),
+                hideOnboardingIfNeeded = ::hide,
+            ).build()
+        }
+    }
+
+    private fun hide() {
+    }
+
     private fun observeViewModel() {
         with(viewModel) {
 
@@ -378,7 +423,6 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     binding.drawerLayout.visibility = View.GONE
                 }
             }
-
         }
     }
 
@@ -411,6 +455,9 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                         newTab = false,
                         from = BrowserDirection.FromGlobal,
                     )
+                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.TAB_MENU_NEWS_CLICKED,
+                        MatomoAnalytics.CLICK)
                 }
                 R.id.action_shop -> {
                     openToBrowserAndLoad(
@@ -418,19 +465,27 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                         newTab = false,
                         from = BrowserDirection.FromGlobal,
                     )
+                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.TAB_MENU_SHOP_CLICKED,
+                        MatomoAnalytics.CLICK)
                 }
                 R.id.action_home -> {
                     navigateToFreespokeHome()
+                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.TAB_MENU_HOME_CLICKED,
+                        MatomoAnalytics.CLICK)
                 }
                 R.id.action_tabs -> {
                     navHost.navController.navigate(NavGraphDirections.actionGlobalTabsTrayFragment())
+                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.TAB_MENU_TABS_CLICKED,
+                        MatomoAnalytics.CLICK)
                 }
                 R.id.action_settings -> {
-                    val isDrawerShowing = viewModel.showHomeDrawer.value
-                    if (isDrawerShowing == true) {
-                        binding.bottomNavigation.selectedItemId = R.id.action_home
-                    }
-                    viewModel.showHomeDrawer.value = isDrawerShowing?.not()
+                    binding.bottomNavigation.selectedItemId = R.id.action_home
+                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.TAB_MENU_SETTINGS_CLICKED,
+                        MatomoAnalytics.CLICK)
                 }
             }
             true
@@ -1090,7 +1145,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         BrowserDirection.FromWallpaper ->
             WallpaperSettingsFragmentDirections.actionGlobalBrowser(customTabSessionId)
         BrowserDirection.FromSearchDialog ->
-            SearchDialogFragmentDirections.actionGlobalBrowser(customTabSessionId)
+            FreespokeHomeFragmentDirections.actionGlobalBrowser(customTabSessionId)
         BrowserDirection.FromSettings ->
             SettingsFragmentDirections.actionGlobalBrowser(customTabSessionId)
         BrowserDirection.FromBookmarks ->

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/icon"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="6dp"
+        android:scaleType="centerCrop"
+        android:background="@color/bookmark_default_color"
+        app:shapeAppearanceOverlay="@style/RoundCornerImageStyle"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:textSize="10sp"
+        android:textColor="@color/freespoke_font_color"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="Some long labek"
+        android:layout_marginBottom="6dp" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

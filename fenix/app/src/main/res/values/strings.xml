@@ -2006,4 +2006,30 @@
     <string name="freespoke_news"><u>Freespoke News</u></string>
     <string name="shop_usa_store"><u>Shop USA Store</u></string>
     <string name="set_as_default_browser">Set as default browser</string>
+    <string name="view_summary">View Summary</string>
+    <string name="recently_viewed">Recently Viewed</string>
+    <string name="about_freespoke">About Freespoke</string>
+    <string name="get_support">Get Support</string>
+    <string name="make_default_browser">Make Default Browser\n</string>
+    <string name="manage_notifications">Manage Notificfations</string>
+    <string name="get_freespoke_premium">Get Freespoke Premium</string>
+    <string name="about_freespoke_url">https://freespoke.com/about</string>
+    <string name="freespoke_blog_url">https://about.freespoke.com/SignUp</string>
+    <string name="support_url">https://freespoke-support.freshdesk.com/support/tickets/new</string>
+    <string name="get_premium_url">https://subscriptions.freespoke.com/signup</string>
+    <string name="matomo_event_name_pattern">$1%s - \"$2%s\"</string>
+    <string name="update_at_news">Updated: %d Day Ago</string>
+    <string name="source_news_count">Sources: %d</string>
+    <string name="left_count">Left (%d)</string>
+    <string name="middle_count">Middle (%d)</string>
+    <string name="right_count">Right (%d)</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="my_bookmarks">My Bookmarks</string>
+    <string name="view_all">View all</string>
+    <string name="view_more">View More</string>
+    <string name="editor_pick">Editor’s Pick</string>
+    <string name="shop_usa_store_title">Shop USA Store</string>
+    <string name="attribution">photo: %s</string>
+    <string name="icon_count">+%d</string>
+
 </resources>

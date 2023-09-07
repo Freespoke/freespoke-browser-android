@@ -5,6 +5,7 @@
 package org.mozilla.fenix.home
 
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.Companion.PRIVATE
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import mozilla.appservices.fxaclient.Config
 import mozilla.appservices.places.BookmarkRoot
 import mozilla.components.browser.menu.view.MenuButton
 import mozilla.components.service.glean.private.NoExtras
@@ -23,6 +25,7 @@ import org.mozilla.fenix.R
 import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.components.accounts.AccountState
 import org.mozilla.fenix.ext.nav
+import org.mozilla.fenix.ext.openSetDefaultBrowserOption
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.settings.SupportUtils
 import org.mozilla.fenix.settings.SupportUtils.getFreespokeSupportURLPage
@@ -51,7 +54,7 @@ class HomeMenuBuilder(
     private val lifecycleOwner: LifecycleOwner,
     private val homeActivity: HomeActivity,
     private val navController: NavController,
-    private val menuButton: WeakReference<MenuButton>,
+    private val menuButton: WeakReference<MenuButton>? = null,
     private val hideOnboardingIfNeeded: () -> Unit,
 ) {
 
@@ -63,11 +66,11 @@ class HomeMenuBuilder(
             lifecycleOwner = lifecycleOwner,
             context = context,
             onItemTapped = ::onItemTapped,
-            onHighlightPresent = { menuButton.get()?.setHighlight(it) },
-            onMenuBuilderChanged = { menuButton.get()?.menuBuilder = it },
+            onHighlightPresent = { menuButton?.get()?.setHighlight(it) },
+            onMenuBuilderChanged = { menuButton?.get()?.menuBuilder = it },
         )
 
-        menuButton.get()?.setColorFilter(
+        menuButton?.get()?.setColorFilter(
             ContextCompat.getColor(
                 context,
                 ThemeManager.resolveAttribute(R.attr.textPrimary, context),
@@ -119,9 +122,9 @@ class HomeMenuBuilder(
                 homeActivity.openToBrowserAndLoad(
                     searchTermOrURL =
                     if (context.settings().allowDomesticChinaFxaServer) {
-                        mozilla.appservices.fxaclient.Config.Server.CHINA.contentUrl + "/settings"
+                        Config.Server.CHINA.contentUrl + "/settings"
                     } else {
-                        mozilla.appservices.fxaclient.Config.Server.RELEASE.contentUrl + "/settings"
+                        Config.Server.RELEASE.contentUrl + "/settings"
                     },
                     newTab = true,
                     from = BrowserDirection.FromHome,
@@ -189,6 +192,50 @@ class HomeMenuBuilder(
             }
             is HomeMenu.Item.DesktopMode -> {
                 context.settings().openNextTabInDesktopMode = item.checked
+            }
+            HomeMenu.Item.AboutFreespoke -> {
+                homeActivity.openToBrowserAndLoad(
+                    searchTermOrURL = context.getString(R.string.about_freespoke_url),
+                    newTab = true,
+                    from = BrowserDirection.FromHome,
+                )
+            }
+            HomeMenu.Item.FreespokeBlog -> {
+                homeActivity.openToBrowserAndLoad(
+                    searchTermOrURL = context.getString(R.string.freespoke_blog_url),
+                    newTab = true,
+                    from = BrowserDirection.FromHome,
+                )
+            }
+            HomeMenu.Item.FreespokePremium -> {
+                homeActivity.openToBrowserAndLoad(
+                    searchTermOrURL = context.getString(R.string.get_premium_url),
+                    newTab = true,
+                    from = BrowserDirection.FromHome,
+                )
+            }
+            HomeMenu.Item.GetSupport -> {
+                homeActivity.openToBrowserAndLoad(
+                    searchTermOrURL = context.getString(R.string.support_url),
+                    newTab = true,
+                    from = BrowserDirection.FromHome,
+                )
+            }
+            HomeMenu.Item.MakeDefaultFreespoke -> {
+                (context as HomeActivity).openSetDefaultBrowserOption()
+            }
+            HomeMenu.Item.Notifications -> {
+
+            }
+            HomeMenu.Item.ShareFreespoke -> {
+                val sendIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT, "https://freespoke.com/")
+                    type = "text/plain"
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, null)
+                context.startActivity(shareIntent)
             }
         }
     }

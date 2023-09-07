@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="4dp"
+        android:elevation="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:background="@drawable/website_chip_background">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/iceberg_hompage_background" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/sourcesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/freespoke_font_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image"
+                tools:text="Sources: 8" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/leftCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:textColor="@color/freespoke_font_color"
+                app:layout_constraintTop_toTopOf="@id/sourcesCount"
+                app:layout_constraintBottom_toBottomOf="@id/sourcesCount"
+                app:layout_constraintEnd_toStartOf="@id/middleCount"
+                app:layout_constraintHorizontal_bias="1.0"
+                android:drawableStart="@drawable/ic_left"
+                android:drawableTint="@color/font_secondary_color"
+                android:drawablePadding="2dp"
+                tools:text="LEFT (2)" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/middleCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:textColor="@color/font_secondary_color"
+                app:layout_constraintTop_toTopOf="@id/sourcesCount"
+                app:layout_constraintBottom_toBottomOf="@id/sourcesCount"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@id/rightCount"
+                tools:text="MIddle (3)"
+                android:layout_marginEnd="12dp"/>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/rightCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:textColor="@color/font_secondary_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/sourcesCount"
+                app:layout_constraintBottom_toBottomOf="@id/sourcesCount"
+                app:layout_constraintHorizontal_bias="1.0"
+                android:drawableStart="@drawable/ic_right"
+                android:drawableTint="@color/font_secondary_color"
+                android:drawablePadding="2dp"
+                tools:text="RIGHT (3)" />
+
+            <org.mozilla.fenix.views.StackOverlappedView
+                android:id="@+id/iconsStack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/image"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                android:layout_margin="12dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/newsTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/freespoke_font_color"
+        tools:text = "Russian Forces Seize Ukrainian Nuclear Plant, NATO Set to Meet"
+        app:layout_constraintTop_toBottomOf="@id/cardView"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/updatedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/newsTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="12dp"
+        android:textSize="14sp"
+        android:textColor="@color/font_secondary_color"
+        tools:text = "Updated: 1 Day Ago"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/photoSource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/newsTitle"
+        app:layout_constraintStart_toEndOf="@id/updatedDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:textColor="@color/font_secondary_color"
+        tools:text = "photo: nationalreview.com" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
