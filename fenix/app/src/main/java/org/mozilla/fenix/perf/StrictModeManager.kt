@@ -83,7 +83,6 @@ open class StrictModeManager(
                 builder.detectNonSdkApiUsage()
             }
             StrictMode.setVmPolicy(builder.build())
-            StrictMode.allowThreadDiskReads()
         }
     }
 

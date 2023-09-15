@@ -85,8 +85,10 @@ import org.mozilla.fenix.utils.BrowsersCache
 import org.mozilla.fenix.utils.Settings
 import org.mozilla.fenix.utils.Settings.Companion.TOP_SITES_PROVIDER_MAX_THRESHOLD
 import org.mozilla.fenix.wallpapers.Wallpaper
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 /**
  *The main application class for Fenix. Records data to measure initialization performance.
@@ -108,10 +110,12 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
     @Synchronized
     open fun getTracker(): Tracker? {
         if (tracker == null) {
-            tracker = TrackerBuilder.createDefault("https://matomo.freespoke.com/", MatomoAnalytics.STAGING_ID)
+            Timber.plant(Timber.DebugTree())
+
+            tracker = TrackerBuilder.createDefault("https://matomo.freespoke.com/matomo.php", MatomoAnalytics.getTrackerId())
                 .build(Matomo.getInstance(this))
             tracker?.addTrackingCallback { event ->
-                android.util.Log.i("Matomo", event.toMap().toString())
+                Timber.i("Matomo", event.toMap());
                 return@addTrackingCallback event
             }
         }
@@ -952,6 +956,8 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
     }
 
     fun trackEvent(category: String, action: String, name: String) {
-        TrackHelper.track().event(category, action).name(name).with(getTracker())
+        components.strictMode.resetAfter(StrictMode.allowThreadDiskReads()) {
+            TrackHelper.track().event(category, action).name(name).with(getTracker())
+        }
     }
 }

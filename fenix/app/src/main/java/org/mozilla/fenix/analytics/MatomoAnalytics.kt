@@ -1,5 +1,7 @@
 package org.mozilla.fenix.analytics
 
+import org.mozilla.fenix.BuildConfig
+
 class MatomoAnalytics {
 
     companion object {
@@ -40,7 +42,11 @@ class MatomoAnalytics {
         const val SEARCH = "search"
 
         fun getTrackerId(): Int {
-            return STAGING_ID
+            return if (BuildConfig.FLAVOR == "staging") {
+                STAGING_ID
+            } else {
+                PROD_ID
+            }
         }
     }
 }

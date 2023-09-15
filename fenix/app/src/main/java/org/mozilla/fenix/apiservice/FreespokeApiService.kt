@@ -22,10 +22,10 @@ private val moshi = Moshi.Builder()
 val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).setLevel(HttpLoggingInterceptor.Level.BODY)
 val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
-val apiUrl = if (BuildConfig.FLAVOR == "staging") {
+val apiUrl = if (BuildConfig.DEBUG) {
     "https://api.staging.freespoke.com"
 } else {
-    "https://api.staging.freespoke.com"
+    "https://api.freespoke.com"
 }
 
 private val retrofit = Retrofit.Builder()

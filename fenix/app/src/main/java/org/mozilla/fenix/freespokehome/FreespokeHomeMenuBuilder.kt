@@ -2,6 +2,7 @@ package org.mozilla.fenix.freespokehome
 
 import android.content.Context
 import android.content.Intent
+import android.os.StrictMode
 import android.provider.Settings
 import android.view.View
 import androidx.annotation.VisibleForTesting
@@ -25,6 +26,7 @@ import org.mozilla.fenix.R
 import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.components.accounts.AccountState
+import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.nav
 import org.mozilla.fenix.ext.navigateToNotificationAppsSettings
 import org.mozilla.fenix.ext.openSetDefaultBrowserOption
@@ -36,6 +38,7 @@ import org.mozilla.fenix.settings.deletebrowsingdata.deleteAndQuit
 import org.mozilla.fenix.theme.ThemeManager
 import org.mozilla.fenix.whatsnew.WhatsNew
 import java.lang.ref.WeakReference
+import kotlin.math.acos
 
 
 class FreespokeHomeMenuBuilder (
@@ -215,7 +218,9 @@ class FreespokeHomeMenuBuilder (
                     (context as HomeActivity).openSetDefaultBrowserOption()
                 }
                 HomeMenu.Item.Notifications -> {
-                    (context as HomeActivity).navigateToNotificationAppsSettings()
+                    homeActivity.components.strictMode.resetAfter(StrictMode.allowThreadDiskReads()) {
+                        (context as HomeActivity).navigateToNotificationAppsSettings()
+                    }
                 }
                 HomeMenu.Item.ShareFreespoke -> {
                     (homeActivity.application as FenixApplication).trackEvent(MatomoAnalytics.SHARE,

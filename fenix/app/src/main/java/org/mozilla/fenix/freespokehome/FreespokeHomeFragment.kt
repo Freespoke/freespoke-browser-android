@@ -67,6 +67,10 @@ class FreespokeHomeFragment : Fragment() {
 
             viewModel.bookmarkData.observe(viewLifecycleOwner) { data ->
                 val adapter = FreespokeBookmarksAdapter(data, viewLifecycleOwner) {
+                    (requireActivity().application as FenixApplication).trackEvent(
+                        MatomoAnalytics.HOME,
+                        MatomoAnalytics.HOME_BOOKMARKS,
+                        MatomoAnalytics.CLICK)
                     it.url?.let { url -> openItem(url) }
                 }
                 bookmarkList.adapter = adapter
@@ -130,6 +134,10 @@ class FreespokeHomeFragment : Fragment() {
 
             viewModel.historyData.observe(viewLifecycleOwner) { data ->
                 val adapter = FreespokeHistoryAdapter(data) {
+                    (requireActivity().application as FenixApplication).trackEvent(
+                        MatomoAnalytics.HOME,
+                        MatomoAnalytics.HOME_RECENTLY_ITEMS,
+                        MatomoAnalytics.CLICK)
                     openItem(it)
                 }
                 recentlyViewedList.layoutManager = GridLayoutManager(requireContext(), 5)
@@ -141,10 +149,6 @@ class FreespokeHomeFragment : Fragment() {
                 }
             }
             viewMoreBookmarksBtn.setOnClickListener {
-                (requireActivity().application as FenixApplication).trackEvent(
-                    MatomoAnalytics.HOME,
-                    MatomoAnalytics.HOME_BOOKMARKS,
-                    MatomoAnalytics.CLICK)
                 RecentBookmarks.showAllBookmarks.add()
                 findNavController().navigate(
                     FreespokeHomeFragmentDirections.actionGlobalBookmarkFragment(BookmarkRoot.Mobile.id),
@@ -152,10 +156,6 @@ class FreespokeHomeFragment : Fragment() {
             }
 
             viewMoreRecentlyViewsBtn.setOnClickListener {
-                (requireActivity().application as FenixApplication).trackEvent(
-                    MatomoAnalytics.HOME,
-                    MatomoAnalytics.HOME_RECENTLY_ITEMS,
-                    MatomoAnalytics.CLICK)
                 findNavController().navigate(
                     FreespokeHomeFragmentDirections.actionGlobalHistoryFragment(),
                 )
