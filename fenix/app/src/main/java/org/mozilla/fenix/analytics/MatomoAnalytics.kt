@@ -42,7 +42,7 @@ class MatomoAnalytics {
         const val SEARCH = "search"
 
         fun getTrackerId(): Int {
-            return if (BuildConfig.FLAVOR == "staging") {
+            return if (BuildConfig.DEBUG) {
                 STAGING_ID
             } else {
                 PROD_ID
