@@ -25,8 +25,8 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiSelector
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.not
-import org.hamcrest.Matchers.allOf
-import org.hamcrest.Matchers.endsWith
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.endsWith
 import org.junit.Assert.assertTrue
 import org.mozilla.fenix.R
 import org.mozilla.fenix.helpers.TestAssetHelper.waitingTime

@@ -178,29 +178,10 @@ class ToolbarView(
             else ->
                 context.getString(R.string.search_hint)
         }
-
-        if (!settings.showUnifiedSearchFeature && searchEngine != null) {
-            val iconSize =
-                context.resources.getDimensionPixelSize(R.dimen.preference_icon_drawable_size)
-
-            val scaledIcon = Bitmap.createScaledBitmap(
-                searchEngine.icon,
-                iconSize,
-                iconSize,
-                true,
-            )
-
-            val icon = BitmapDrawable(context.resources, scaledIcon)
-
-            view.edit.setIcon(icon, searchEngine.name)
-        }
     }
 
     private fun configureAutocomplete(searchEngineSource: SearchEngineSource) {
-        when (settings.showUnifiedSearchFeature) {
-            true -> configureAutocompleteWithUnifiedSearch(searchEngineSource)
-            else -> configureAutocompleteWithoutUnifiedSearch(searchEngineSource)
-        }
+        configureAutocompleteWithoutUnifiedSearch(searchEngineSource)
     }
 
     private fun configureAutocompleteWithoutUnifiedSearch(searchEngineSource: SearchEngineSource) {
@@ -213,47 +194,6 @@ class ToolbarView(
                             false -> null
                         },
                         components.core.domainsAutocompleteProvider,
-                    ),
-                )
-            }
-            else -> {
-                autocompleteFeature.updateAutocompleteProviders(emptyList())
-            }
-        }
-    }
-
-    private fun configureAutocompleteWithUnifiedSearch(searchEngineSource: SearchEngineSource) {
-        when (searchEngineSource) {
-            is SearchEngineSource.Default -> {
-                autocompleteFeature.updateAutocompleteProviders(
-                    listOfNotNull(
-                        when (settings.shouldShowHistorySuggestions) {
-                            true -> components.core.historyStorage
-                            false -> null
-                        },
-                        components.core.domainsAutocompleteProvider,
-                    ),
-                )
-            }
-            is SearchEngineSource.Tabs -> {
-                autocompleteFeature.updateAutocompleteProviders(
-                    listOf(
-                        components.core.sessionAutocompleteProvider,
-                        components.backgroundServices.syncedTabsAutocompleteProvider,
-                    ),
-                )
-            }
-            is SearchEngineSource.Bookmarks -> {
-                autocompleteFeature.updateAutocompleteProviders(
-                    listOf(
-                        components.core.bookmarksStorage,
-                    ),
-                )
-            }
-            is SearchEngineSource.History -> {
-                autocompleteFeature.updateAutocompleteProviders(
-                    listOf(
-                        components.core.historyStorage,
                     ),
                 )
             }

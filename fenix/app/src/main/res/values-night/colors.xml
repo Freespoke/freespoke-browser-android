@@ -197,9 +197,9 @@
     </color>
 
     <!-- Bottom Navigation colors -->
-    <color name="bottom_navigation_background_color">#1D1D1D</color>
-    <color name="bottom_navigation_item_selected">#FFFF</color>
-    <color name="bottom_navigation_item">#9AA2B3</color>
+    <color name="bottom_navigation_background_color">#161616</color>
+    <color name="bottom_navigation_item_selected">#FFF</color>
+    <color name="bottom_navigation_item">#9AA2B2</color>
 
     <!-- Drawer colors -->
     <color name="freespoke_font_color">#FFFF</color>
@@ -208,7 +208,7 @@
     <color name="drawer_icon">#606671</color>
     <color name="drawer_background_social_icons">#2F3644</color>
 
-    <color name="custom_home_background_color">#1D1D1D</color>
+    <color name="custom_home_background_color">#161616</color>
     <color name="custom_home_search_color">#292929</color>
     <color name="custom_home_search_border_color">#303644</color>
     <color name="website_chip_background_color">#1D1D1D</color>
@@ -216,4 +216,8 @@
     <color name="website_chip_font_color">#FFFF</color>
     <color name="default_browser_button_color">#C43351</color>
 
+    <color name="button_background_color">#0DFFFFFF</color>
+    <color name="font_secondary_color">#B5BCC9</color>
+    <color name="red_bg_color">#C43351</color>
+    <color name="bookmark_default_color">#2B2A33</color>
 </resources>

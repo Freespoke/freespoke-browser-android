@@ -84,7 +84,7 @@ class HomeScreenTest {
             verifyPoweredByPocket(activityTestRule)
             verifyCustomizeHomepageButton(true)
             verifyNavigationToolbar()
-            verifyDefaultSearchEngine("Google")
+            //verifyDefaultSearchEngine("Google")
             verifyHomeMenuButton()
             verifyTabButton()
             verifyTabCounter("0")

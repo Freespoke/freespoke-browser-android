@@ -35,7 +35,7 @@ import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert.assertTrue
 import org.mozilla.fenix.R
 import org.mozilla.fenix.helpers.Constants.LISTS_MAXSWIPES

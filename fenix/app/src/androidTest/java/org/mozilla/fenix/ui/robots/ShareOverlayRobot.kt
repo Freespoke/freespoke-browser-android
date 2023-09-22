@@ -18,7 +18,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.CoreMatchers.allOf
 import org.mozilla.fenix.R
 import org.mozilla.fenix.helpers.MatcherHelper.itemContainingText
 import org.mozilla.fenix.helpers.TestHelper.mDevice
