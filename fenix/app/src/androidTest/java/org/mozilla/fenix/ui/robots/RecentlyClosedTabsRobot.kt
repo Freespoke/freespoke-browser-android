@@ -13,8 +13,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.uiautomator.UiSelector
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.containsString
 import org.mozilla.fenix.R
 import org.mozilla.fenix.helpers.TestAssetHelper
 import org.mozilla.fenix.helpers.TestHelper.mDevice
@@ -86,7 +86,7 @@ private fun assertPageUrl(expectedUrl: Uri) = onView(
     ),
 )
     .check(
-        matches(withText(Matchers.containsString(expectedUrl.toString()))),
+        matches(withText(containsString(expectedUrl.toString()))),
     )
 
 private fun recentlyClosedTabsPageTitle(title: String) = onView(

@@ -32,10 +32,12 @@ import mozilla.components.feature.downloads.ui.DownloadCancelDialogFragment
 import mozilla.components.feature.tabs.tabstray.TabsFeature
 import mozilla.components.support.base.feature.ViewBoundFeatureWrapper
 import mozilla.telemetry.glean.private.NoExtras
+import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.GleanMetrics.TabsTray
 import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.NavGraphDirections
 import org.mozilla.fenix.R
+import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.components.StoreProvider
 import org.mozilla.fenix.databinding.ComponentTabstray2Binding
@@ -305,6 +307,7 @@ class TabsTrayFragment : AppCompatDialogFragment() {
                     interactor = tabsTrayInteractor,
                     browsingModeManager = activity.browsingModeManager,
                     tabsTrayStore = tabsTrayStore,
+                    activity = activity
                 ),
                 owner = this,
                 view = view,
@@ -575,6 +578,8 @@ class TabsTrayFragment : AppCompatDialogFragment() {
 
     @VisibleForTesting
     internal fun dismissTabsTray() {
+        (requireActivity().application as FenixApplication).trackEvent(MatomoAnalytics.TABS,
+            MatomoAnalytics.APP_TABS_CLOSE_MENU, MatomoAnalytics.CLICK)
         // This should always be the last thing we do because nothing (e.g. telemetry)
         // is guaranteed after that.
         dismissAllowingStateLoss()

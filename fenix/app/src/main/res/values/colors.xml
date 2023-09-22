@@ -361,5 +361,8 @@
     <color name="website_chip_border_color">#E1E5EB</color>
     <color name="website_chip_font_color">#303644</color>
     <color name="default_browser_button_color">#081A33</color>
-
+    <color name="button_background_color">#0DFFFFFF</color>
+    <color name="font_secondary_color">#606671</color>
+    <color name="red_bg_color">#C43351</color>
+    <color name="bookmark_default_color">#E0E0E6</color>
 </resources>

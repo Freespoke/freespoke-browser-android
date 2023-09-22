@@ -19,7 +19,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withClassName
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Matchers.endsWith
+import org.hamcrest.CoreMatchers.endsWith
 import org.mozilla.fenix.R
 import org.mozilla.fenix.helpers.TestHelper.getStringResource
 import org.mozilla.fenix.helpers.TestHelper.hasCousin

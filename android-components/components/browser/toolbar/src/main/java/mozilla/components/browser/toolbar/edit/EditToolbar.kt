@@ -127,6 +127,9 @@ class EditToolbar internal constructor(
                 false
             }
         },
+        search = rootView.findViewById<ImageView>(R.id.search_button).apply {
+            setOnClickListener { search() }
+        }
     )
 
     /**
@@ -319,6 +322,10 @@ class EditToolbar internal constructor(
         views.url.setText("")
     }
 
+    private fun search() {
+        toolbar.onUrlEntered(views.url.text.toString())
+    }
+
     private fun setUrlGoneMargin(anchor: Int, dimen: Int) {
         val set = ConstraintSet()
         val container = rootView.findViewById<ConstraintLayout>(
@@ -361,4 +368,5 @@ internal class EditToolbarViews(
     val editActionsEnd: ActionContainer,
     val clear: ImageView,
     val url: InlineAutocompleteEditText,
+    val search: ImageView
 )

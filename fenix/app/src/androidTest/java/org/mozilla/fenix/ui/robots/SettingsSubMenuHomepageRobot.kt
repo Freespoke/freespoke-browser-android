@@ -19,7 +19,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.uiautomator.UiSelector
 import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Matchers
+import org.hamcrest.CoreMatchers.endsWith
 import org.junit.Assert.assertTrue
 import org.mozilla.fenix.R
 import org.mozilla.fenix.helpers.TestAssetHelper.waitingTimeShort
@@ -195,8 +195,8 @@ fun assertShortcutsSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isChecked(),
                         ),
                     ),
@@ -207,8 +207,8 @@ fun assertShortcutsSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isNotChecked(),
                         ),
                     ),
@@ -255,8 +255,8 @@ fun assertJumpBackInSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isChecked(),
                         ),
                     ),
@@ -267,8 +267,8 @@ fun assertJumpBackInSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isNotChecked(),
                         ),
                     ),
@@ -283,8 +283,8 @@ fun assertRecentBookmarksSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isChecked(),
                         ),
                     ),
@@ -295,8 +295,8 @@ fun assertRecentBookmarksSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isNotChecked(),
                         ),
                     ),
@@ -311,8 +311,8 @@ fun assertRecentlyVisitedSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isChecked(),
                         ),
                     ),
@@ -323,8 +323,8 @@ fun assertRecentlyVisitedSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isNotChecked(),
                         ),
                     ),
@@ -339,8 +339,8 @@ fun assertPocketSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isChecked(),
                         ),
                     ),
@@ -351,8 +351,8 @@ fun assertPocketSwitchState(enabled: Boolean) {
             .check(
                 matches(
                     TestHelper.hasCousin(
-                        Matchers.allOf(
-                            withClassName(Matchers.endsWith("Switch")),
+                        allOf(
+                            withClassName(endsWith("Switch")),
                             isNotChecked(),
                         ),
                     ),
@@ -369,7 +369,7 @@ fun assertSponsoredStoriesCheckBox(checked: Boolean) {
                     hasSibling(
                         ViewMatchers.withChild(
                             allOf(
-                                withClassName(CoreMatchers.endsWith("CheckBox")),
+                                withClassName(endsWith("CheckBox")),
                                 isChecked(),
                             ),
                         ),
@@ -383,7 +383,7 @@ fun assertSponsoredStoriesCheckBox(checked: Boolean) {
                     hasSibling(
                         ViewMatchers.withChild(
                             allOf(
-                                withClassName(CoreMatchers.endsWith("CheckBox")),
+                                withClassName(endsWith("CheckBox")),
                                 isNotChecked(),
                             ),
                         ),

@@ -56,6 +56,13 @@ class HomeMenu(
         object Settings : Item()
         object Quit : Item()
         object ReconnectSync : Item()
+        object AboutFreespoke: Item()
+        object FreespokeBlog: Item()
+        object ShareFreespoke: Item()
+        object GetSupport: Item()
+        object MakeDefaultFreespoke: Item()
+        object Notifications: Item()
+        object FreespokePremium: Item()
         data class DesktopMode(val checked: Boolean) : Item()
     }
 
@@ -162,6 +169,62 @@ class HomeMenu(
             onItemTapped.invoke(Item.Settings)
         }
 
+        val aboutItem = BrowserMenuImageText(
+            context.getString(R.string.about),
+            R.drawable.ic_about,
+            primaryTextColor
+        ) {
+            onItemTapped.invoke(Item.AboutFreespoke)
+        }
+
+        val freespokeBlog = BrowserMenuImageText(
+            context.getString(R.string.freespoke_blog),
+            R.drawable.ic_freespoke,
+            primaryTextColor
+        ) {
+            onItemTapped.invoke(Item.FreespokeBlog)
+        }
+
+        val shareFreespoke = BrowserMenuImageText(
+            context.getString(R.string.share_freespoke),
+            R.drawable.ic_share,
+            primaryTextColor
+        ) {
+            onItemTapped.invoke(Item.ShareFreespoke)
+        }
+
+        val getSupportItem = BrowserMenuImageText(
+            context.getString(R.string.get_support),
+            R.drawable.ic_support,
+            primaryTextColor
+        ) {
+            onItemTapped.invoke(Item.GetSupport)
+        }
+
+        val makeDefaultBrowser = BrowserMenuImageText(
+            context.getString(R.string.make_default_browser),
+            R.drawable.ic_add_default,
+            primaryTextColor
+        ) {
+            onItemTapped.invoke(Item.MakeDefaultFreespoke)
+        }
+
+        val notificationsItem = BrowserMenuImageText(
+            context.getString(R.string.manage_notifications),
+            R.drawable.ic_add_notifications,
+            primaryTextColor
+        ) {
+            onItemTapped.invoke(Item.Notifications)
+        }
+
+        val premiumItem = BrowserMenuImageText(
+            context.getString(R.string.get_freespoke_premium),
+            R.drawable.ic_person,
+            primaryTextColor
+        ) {
+            onItemTapped.invoke(Item.FreespokePremium)
+        }
+
         val menuItems = listOfNotNull(
             bookmarksItem,
             historyItem,
@@ -171,6 +234,16 @@ class HomeMenu(
             desktopItem,
             BrowserMenuDivider(),
             helpItem,
+            BrowserMenuDivider(),
+            aboutItem,
+            freespokeBlog,
+            shareFreespoke,
+            getSupportItem,
+            BrowserMenuDivider(),
+            makeDefaultBrowser,
+            notificationsItem,
+            premiumItem,
+            BrowserMenuDivider(),
             settingsItem,
             if (settings.shouldDeleteBrowsingDataOnQuit) quitItem else null,
         ).also { items ->

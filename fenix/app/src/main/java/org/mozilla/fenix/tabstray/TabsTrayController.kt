@@ -22,11 +22,13 @@ import mozilla.components.feature.tabs.TabsUseCases
 import mozilla.components.lib.state.DelicateAction
 import mozilla.telemetry.glean.private.NoExtras
 import org.mozilla.fenix.BrowserDirection
+import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.GleanMetrics.Collections
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.TabsTray
 import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.R
+import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.browser.browsingmode.BrowsingMode
 import org.mozilla.fenix.browser.browsingmode.BrowsingModeManager
 import org.mozilla.fenix.components.AppStore
@@ -232,6 +234,7 @@ class DefaultTabsTrayController(
             "DefaultTabTrayController.onNewTabTapped",
             startTime,
         )
+        (activity.application as FenixApplication).trackEvent(MatomoAnalytics.TABS, MatomoAnalytics.APP_TABS_NEW_TAB, MatomoAnalytics.CLICK)
     }
 
     override fun handleTrayScrollingToPosition(position: Int, smoothScroll: Boolean) {
@@ -477,6 +480,8 @@ class DefaultTabsTrayController(
 
     override fun handleDeleteAllInactiveTabsClicked() {
         TabsTray.closeAllInactiveTabs.record(NoExtras())
+        (activity.application as FenixApplication).trackEvent(MatomoAnalytics.TABS,
+            MatomoAnalytics.APP_TABS_CLOSE_ALL, MatomoAnalytics.CLICK)
         browserStore.state.potentialInactiveTabs.map { it.id }.let {
             tabsUseCases.removeTabs(it)
         }

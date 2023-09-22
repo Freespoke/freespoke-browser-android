@@ -57,8 +57,13 @@ import mozilla.components.support.rusthttp.RustHttpConfig
 import mozilla.components.support.rustlog.RustLog
 import mozilla.components.support.utils.logElapsedTime
 import mozilla.components.support.webextensions.WebExtensionSupport
+import org.matomo.sdk.Matomo
+import org.matomo.sdk.Tracker
+import org.matomo.sdk.TrackerBuilder
+import org.matomo.sdk.extra.TrackHelper
 import org.mozilla.fenix.GleanMetrics.*
 import org.mozilla.fenix.GleanMetrics.Events.marketingNotificationAllowed
+import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.Components
 import org.mozilla.fenix.components.Core
 import org.mozilla.fenix.components.appstate.AppAction
@@ -80,8 +85,10 @@ import org.mozilla.fenix.utils.BrowsersCache
 import org.mozilla.fenix.utils.Settings
 import org.mozilla.fenix.utils.Settings.Companion.TOP_SITES_PROVIDER_MAX_THRESHOLD
 import org.mozilla.fenix.wallpapers.Wallpaper
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 /**
  *The main application class for Fenix. Records data to measure initialization performance.
@@ -97,6 +104,22 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         BuildConfig.ONESIGNAL_APP_ID_DEBUG
     } else {
         BuildConfig.ONESIGNAL_APP_ID
+    }
+
+    private var tracker: Tracker? = null
+    @Synchronized
+    open fun getTracker(): Tracker? {
+        if (tracker == null) {
+            Timber.plant(Timber.DebugTree())
+
+            tracker = TrackerBuilder.createDefault("https://matomo.freespoke.com/matomo.php", MatomoAnalytics.getTrackerId())
+                .build(Matomo.getInstance(this))
+            tracker?.addTrackingCallback { event ->
+                Timber.i("Matomo", event.toMap());
+                return@addTrackingCallback event
+            }
+        }
+        return tracker
     }
 
     private val logger = Logger("FenixApplication")
@@ -152,6 +175,8 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         GlobalScope.launch(Dispatchers.IO) {
             PerfStartup.applicationOnCreate.accumulateSamples(listOf(durationMillis))
         }
+
+        trackEvent(MatomoAnalytics.ENTRY, MatomoAnalytics.ACTION_ENTRY, MatomoAnalytics.OPEN)
     }
 
     @OptIn(DelicateCoroutinesApi::class) // GlobalScope usage
@@ -927,6 +952,12 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
     open fun downloadWallpapers() {
         GlobalScope.launch {
             components.useCases.wallpaperUseCases.initialize()
+        }
+    }
+
+    fun trackEvent(category: String, action: String, name: String) {
+        components.strictMode.resetAfter(StrictMode.allowThreadDiskReads()) {
+            TrackHelper.track().event(category, action).name(name).with(getTracker())
         }
     }
 }

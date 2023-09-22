@@ -24,7 +24,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.mozilla.fenix.R

@@ -86,6 +86,15 @@ open class StrictModeManager(
         }
     }
 
+    fun allowDiskReads() {
+        var oldThreadPolicy: StrictMode.ThreadPolicy? = null
+        if (isEnabledByBuildConfig) {
+            oldThreadPolicy = StrictMode.getThreadPolicy();
+            StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder(oldThreadPolicy).permitDiskReads().build());
+        }
+        if (oldThreadPolicy != null) StrictMode.setThreadPolicy(oldThreadPolicy);
+    }
+
     /**
      * Revert strict mode to disable penalty based on fragment lifecycle since strict mode
      * needs to switch to penalty logs. Using the fragment life cycle allows decoupling from any

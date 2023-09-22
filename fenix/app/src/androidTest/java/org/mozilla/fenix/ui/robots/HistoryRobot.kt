@@ -19,8 +19,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.Until
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.mozilla.fenix.R
@@ -194,7 +194,7 @@ private fun assertDeleteConfirmationMessage() {
 private fun assertCopySnackBarText() = snackBarText().check(matches(withText("URL copied")))
 
 private fun assertSnackBarText(text: String) =
-    snackBarText().check(matches(withText(Matchers.containsString(text))))
+    snackBarText().check(matches(withText(CoreMatchers.containsString(text))))
 
 private fun snackBarUndoButton() = onView(withId(R.id.snackbar_btn))
 
