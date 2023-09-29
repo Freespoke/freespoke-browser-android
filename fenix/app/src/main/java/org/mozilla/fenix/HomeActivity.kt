@@ -269,12 +269,6 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             navigateToFreespokeHome()
         }
 
-        if (!shouldStartOnHome() && shouldNavigateToBrowserOnColdStart(savedInstanceState)) {
-            navigateToBrowserOnColdStart()
-        } else {
-            StartOnHome.enterHomeScreen.record(NoExtras())
-        }
-
         if (settings().showHomeOnboardingDialog) {
             navHost.navController.navigate(NavGraphDirections.actionGlobalHomeOnboardingDialog())
         }
@@ -302,11 +296,6 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         supportActionBar?.hide()
 
         lifecycle.addObservers(webExtensionPopupFeature, serviceWorkerSupport)
-
-        if (shouldAddToRecentsScreen(intent)) {
-            intent.removeExtra(START_IN_RECENTS_SCREEN)
-            moveTaskToBack(true)
-        }
 
         captureSnapshotTelemetryMetrics()
 
@@ -369,6 +358,17 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     from = BrowserDirection.FromHome,
                 )
             }
+        }
+
+        if (!shouldStartOnHome() && shouldNavigateToBrowserOnColdStart(savedInstanceState)) {
+            navigateToBrowserOnColdStart()
+        } else {
+            StartOnHome.enterHomeScreen.record(NoExtras())
+        }
+
+        if (shouldAddToRecentsScreen(intent)) {
+            intent.removeExtra(START_IN_RECENTS_SCREEN)
+            moveTaskToBack(true)
         }
 
         if (onboarding.userHasBeenOnboarded().not()) {
