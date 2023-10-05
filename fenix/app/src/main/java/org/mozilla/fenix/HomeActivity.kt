@@ -37,6 +37,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
@@ -1405,6 +1406,11 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
     private fun shouldNavigateToBrowserOnColdStart(savedInstanceState: Bundle?): Boolean {
         return isActivityColdStarted(intent, savedInstanceState) &&
             !processIntent(intent)
+    }
+
+    fun getFragmentId(): Int? {
+        val navFragment = supportFragmentManager.findFragmentById(R.id.freespokeHomeFragment)
+        return navFragment?.findNavController()?.currentDestination?.id
     }
 
     companion object {

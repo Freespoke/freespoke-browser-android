@@ -22,6 +22,7 @@ import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.HomeScreen
 import org.mozilla.fenix.HomeActivity
+import org.mozilla.fenix.NavGraphDirections
 import org.mozilla.fenix.R
 import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.FenixSnackbar
@@ -86,7 +87,7 @@ class FreespokeHomeMenuBuilder (
                     org.mozilla.fenix.GleanMetrics.HomeMenu.settingsItemClicked.record(NoExtras())
 
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalSettingsFragment(),
                     )
                 }
@@ -94,13 +95,13 @@ class FreespokeHomeMenuBuilder (
                     HomeScreen.customizeHomeClicked.record(NoExtras())
 
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalHomeSettingsFragment(),
                     )
                 }
                 is HomeMenu.Item.SyncAccount -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         when (item.accountState) {
                             AccountState.AUTHENTICATED ->
                                 FreespokeHomeFragmentDirections.actionGlobalAccountSettingsFragment()
@@ -125,20 +126,20 @@ class FreespokeHomeMenuBuilder (
                 }
                 HomeMenu.Item.Bookmarks -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
-                        FreespokeHomeFragmentDirections.actionGlobalBookmarkFragment(BookmarkRoot.Mobile.id),
+                        getFragmentId(),
+                        NavGraphDirections.actionGlobalBookmarkFragment(BookmarkRoot.Mobile.id),
                     )
                 }
                 HomeMenu.Item.History -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalHistoryFragment(),
                     )
                 }
                 HomeMenu.Item.Downloads -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
-                        FreespokeHomeFragmentDirections.actionGlobalDownloadsFragment(),
+                        getFragmentId(),
+                        NavGraphDirections.actionGlobalDownloadsFragment(),
                     )
                 }
                 HomeMenu.Item.Help -> {
@@ -173,13 +174,13 @@ class FreespokeHomeMenuBuilder (
                 }
                 HomeMenu.Item.ReconnectSync -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalAccountProblemFragment(),
                     )
                 }
                 HomeMenu.Item.Extensions -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalAddonsManagementFragment(),
                     )
                 }
@@ -236,4 +237,8 @@ class FreespokeHomeMenuBuilder (
                 }
             }
         }
+
+    private fun getFragmentId(): Int? {
+        return homeActivity.getFragmentId()
     }
+}

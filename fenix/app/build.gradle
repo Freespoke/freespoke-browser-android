@@ -88,8 +88,8 @@ android {
     def releaseTemplate = {
         // We allow disabling optimization by passing `-PdisableOptimization` to gradle. This is used
         // in automation for UI testing non-debug builds.
-        shrinkResources !project.hasProperty("disableOptimization")
-        minifyEnabled !project.hasProperty("disableOptimization")
+        shrinkResources false
+        minifyEnabled false
         proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         matchingFallbacks = ['release'] // Use on the "release" build type in dependencies (AARs)
 
