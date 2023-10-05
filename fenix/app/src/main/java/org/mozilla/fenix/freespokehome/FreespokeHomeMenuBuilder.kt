@@ -3,13 +3,10 @@ package org.mozilla.fenix.freespokehome
 import android.content.Context
 import android.content.Intent
 import android.os.StrictMode
-import android.provider.Settings
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.Companion.PRIVATE
-import androidx.browser.customtabs.CustomTabsClient.getPackageName
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -22,10 +19,7 @@ import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.HomeScreen
 import org.mozilla.fenix.HomeActivity
-<<<<<<< HEAD
 import org.mozilla.fenix.NavGraphDirections
-=======
->>>>>>> staging
 import org.mozilla.fenix.R
 import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.FenixSnackbar
@@ -42,7 +36,6 @@ import org.mozilla.fenix.settings.deletebrowsingdata.deleteAndQuit
 import org.mozilla.fenix.theme.ThemeManager
 import org.mozilla.fenix.whatsnew.WhatsNew
 import java.lang.ref.WeakReference
-import kotlin.math.acos
 
 
 class FreespokeHomeMenuBuilder (
@@ -90,11 +83,7 @@ class FreespokeHomeMenuBuilder (
                     org.mozilla.fenix.GleanMetrics.HomeMenu.settingsItemClicked.record(NoExtras())
 
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-=======
-                        R.id.freespokeHomeFragment,
->>>>>>> staging
                         FreespokeHomeFragmentDirections.actionGlobalSettingsFragment(),
                     )
                 }
@@ -102,21 +91,13 @@ class FreespokeHomeMenuBuilder (
                     HomeScreen.customizeHomeClicked.record(NoExtras())
 
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-=======
-                        R.id.freespokeHomeFragment,
->>>>>>> staging
                         FreespokeHomeFragmentDirections.actionGlobalHomeSettingsFragment(),
                     )
                 }
                 is HomeMenu.Item.SyncAccount -> {
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-=======
-                        R.id.freespokeHomeFragment,
->>>>>>> staging
                         when (item.accountState) {
                             AccountState.AUTHENTICATED ->
                                 FreespokeHomeFragmentDirections.actionGlobalAccountSettingsFragment()
@@ -141,34 +122,20 @@ class FreespokeHomeMenuBuilder (
                 }
                 HomeMenu.Item.Bookmarks -> {
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-                        NavGraphDirections.actionGlobalBookmarkFragment(BookmarkRoot.Mobile.id),
-=======
-                        R.id.freespokeHomeFragment,
                         FreespokeHomeFragmentDirections.actionGlobalBookmarkFragment(BookmarkRoot.Mobile.id),
->>>>>>> staging
                     )
                 }
                 HomeMenu.Item.History -> {
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-=======
-                        R.id.freespokeHomeFragment,
->>>>>>> staging
                         FreespokeHomeFragmentDirections.actionGlobalHistoryFragment(),
                     )
                 }
                 HomeMenu.Item.Downloads -> {
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-                        NavGraphDirections.actionGlobalDownloadsFragment(),
-=======
-                        R.id.freespokeHomeFragment,
-                        FreespokeHomeFragmentDirections.actionGlobalDownloadsFragment(),
->>>>>>> staging
+                        NavGraphDirections.actionGlobalDownloadsFragment()
                     )
                 }
                 HomeMenu.Item.Help -> {
@@ -203,21 +170,13 @@ class FreespokeHomeMenuBuilder (
                 }
                 HomeMenu.Item.ReconnectSync -> {
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-=======
-                        R.id.freespokeHomeFragment,
->>>>>>> staging
                         FreespokeHomeFragmentDirections.actionGlobalAccountProblemFragment(),
                     )
                 }
                 HomeMenu.Item.Extensions -> {
                     navController.nav(
-<<<<<<< HEAD
                         getFragmentId(),
-=======
-                        R.id.freespokeHomeFragment,
->>>>>>> staging
                         FreespokeHomeFragmentDirections.actionGlobalAddonsManagementFragment(),
                     )
                 }
@@ -274,12 +233,8 @@ class FreespokeHomeMenuBuilder (
                 }
             }
         }
-<<<<<<< HEAD
 
     private fun getFragmentId(): Int? {
         return homeActivity.getFragmentId()
     }
 }
-=======
-    }
->>>>>>> staging
