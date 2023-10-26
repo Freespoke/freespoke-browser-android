@@ -16,7 +16,7 @@ import retrofit2.http.Query
 
 private val moshi = Moshi.Builder()
     .add(DateJsonAdapter())
-    .add(KotlinJsonAdapterFactory())
+    .addLast(KotlinJsonAdapterFactory())
     .build()
 
 val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).setLevel(HttpLoggingInterceptor.Level.BODY)
