@@ -16,7 +16,19 @@
 #
 # If Sentry ever mysteriously stops working after we upgrade it, this could be why.
 -keep class io.sentry.event.Event { *; }
+-keepclassmembers class org.mozilla.fenix.apiservice.** { <fields>; }
+# Retrofit2
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
+-keepclassmembernames interface * {
+    @retrofit2.http.* <methods>;
+}
 
+# GSON Annotations
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
 ####################################################################################################
 # Android and GeckoView built-ins
 ####################################################################################################
