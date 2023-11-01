@@ -6,6 +6,7 @@ package org.mozilla.fenix.freespokehome
 
 import android.content.Context
 import android.os.Bundle
+import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,19 +16,15 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import mozilla.appservices.places.BookmarkRoot
 import org.mozilla.fenix.BrowserDirection
 import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.GleanMetrics.RecentBookmarks
 import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.NavGraphDirections
-import org.mozilla.fenix.R
 import org.mozilla.fenix.analytics.MatomoAnalytics
-import org.mozilla.fenix.browser.browsingmode.BrowsingMode
-import org.mozilla.fenix.components.appstate.AppAction
+import org.mozilla.fenix.components.components
 import org.mozilla.fenix.databinding.FragmentFreespokeHomeBinding
-import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.hideToolbar
 import org.mozilla.fenix.ext.requireComponents
 import org.mozilla.fenix.freespokehome.adapters.FreespokeBookmarksAdapter
@@ -35,7 +32,6 @@ import org.mozilla.fenix.freespokehome.adapters.FreespokeHistoryAdapter
 import org.mozilla.fenix.freespokehome.adapters.FreespokeShopListAdapter
 import org.mozilla.fenix.freespokehome.adapters.QuickLinksAdapter
 import org.mozilla.fenix.freespokehome.adapters.TrendingNewsAdapter
-import org.mozilla.fenix.home.HomeFragmentDirections
 import org.mozilla.fenix.settings.SupportUtils
 
 class FreespokeHomeFragment : Fragment() {
@@ -127,10 +123,11 @@ class FreespokeHomeFragment : Fragment() {
                 quickLinksList.adapter = adapter
             }
 
-            viewModel.getBookmarks(requireActivity().getPreferences(Context.MODE_PRIVATE))
+            StrictMode.allowThreadDiskReads()
             viewModel.getNews()
             viewModel.getShopCollections()
             viewModel.getQuickLinks()
+            viewModel.getBookmarks(requireActivity().getPreferences(Context.MODE_PRIVATE))
 
             viewModel.historyData.observe(viewLifecycleOwner) { data ->
                 val adapter = FreespokeHistoryAdapter(data) {
