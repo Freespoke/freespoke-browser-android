@@ -15,9 +15,12 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
 import com.google.accompanist.insets.ProvideWindowInsets
 import mozilla.components.lib.state.ext.observeAsComposableState
+import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.R
+import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.components
+import org.mozilla.fenix.ext.openSetDefaultBrowserOption
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.onboarding.view.UpgradeOnboarding
 import org.mozilla.fenix.theme.FirefoxTheme
@@ -54,6 +57,9 @@ class HomeOnboardingDialogFragment : DialogFragment() {
                     UpgradeOnboarding(
                         isSyncSignIn = account.value != null,
                         onDismiss = ::onDismiss,
+                        onDefaultBrowserSetupClick = {
+                            (context as HomeActivity).openSetDefaultBrowserOption()
+                        }
                     )
                 }
             }

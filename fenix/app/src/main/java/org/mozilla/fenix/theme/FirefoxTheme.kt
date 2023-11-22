@@ -145,7 +145,9 @@ private val darkColorPalette = FirefoxColors(
     borderAccent = PhotonColors.Violet40,
     borderDisabled = PhotonColors.LightGrey05A40,
     borderWarning = PhotonColors.Red40,
-    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor
+    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor,
+    onboardingTextColor = PhotonColors.White,
+    freespokeDescriptionColor = PhotonColors.DarkGreyO4
 )
 
 private val lightColorPalette = FirefoxColors(
@@ -213,7 +215,9 @@ private val lightColorPalette = FirefoxColors(
     borderAccent = PhotonColors.Ink20,
     borderDisabled = PhotonColors.DarkGrey90A40,
     borderWarning = PhotonColors.Red70,
-    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor
+    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor,
+    onboardingTextColor = PhotonColors.FreeSpokeNavyTextColor,
+    freespokeDescriptionColor = PhotonColors.LightGrey02,
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -293,6 +297,8 @@ class FirefoxColors(
     borderAccent: Color,
     borderDisabled: Color,
     borderWarning: Color,
+    onboardingTextColor: Color,
+    freespokeDescriptionColor: Color
 ) {
     // Layers
 
@@ -550,6 +556,13 @@ class FirefoxColors(
     var onboardingButtonColor by mutableStateOf(onboardingButtonColor)
         private set
 
+    // Onboarding title
+    var onboardingTextColor by mutableStateOf(onboardingTextColor)
+        private set
+
+    var freespokeDescriptionColor by mutableStateOf(freespokeDescriptionColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -685,7 +698,9 @@ class FirefoxColors(
         borderAccent: Color = this.borderAccent,
         borderDisabled: Color = this.borderDisabled,
         borderWarning: Color = this.borderWarning,
-        buttonOnboarding: Color = this.onboardingButtonColor
+        buttonOnboarding: Color = this.onboardingButtonColor,
+        onboardingTextColor: Color = this.onboardingTextColor,
+        freespokeDescriptionColor: Color = this.freespokeDescriptionColor
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -751,7 +766,9 @@ class FirefoxColors(
         borderAccent = borderAccent,
         borderDisabled = borderDisabled,
         borderWarning = borderWarning,
-        onboardingButtonColor = buttonOnboarding
+        onboardingButtonColor = buttonOnboarding,
+        onboardingTextColor = onboardingTextColor,
+        freespokeDescriptionColor = freespokeDescriptionColor,
     )
 }
 

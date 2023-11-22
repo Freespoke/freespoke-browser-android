@@ -42,7 +42,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import com.onesignal.OSNotificationAction
 import com.onesignal.OneSignal
 import io.branch.referral.Branch
 import kotlinx.coroutines.CoroutineScope
@@ -349,7 +348,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         setBottomNavigationListener()
         setDrawerClickListeners()
 
-        OneSignal.setNotificationOpenedHandler { result ->
+    /*    OneSignal.setNotificationOpenedHandler { result ->
             val type = result.action.type // "ActionTaken" | "Opened"
             val url = result.notification.launchURL
             if (type == OSNotificationAction.ActionType.Opened) {
@@ -359,7 +358,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     from = BrowserDirection.FromHome,
                 )
             }
-        }
+        }*/
 
         if (!shouldStartOnHome() && shouldNavigateToBrowserOnColdStart(savedInstanceState)) {
             navigateToBrowserOnColdStart()
@@ -441,6 +440,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             }
 
         }
+    }
+
+    fun showNews() {
+        binding.bottomNavigation.selectedItemId = R.id.action_news
     }
 
     private fun setBottomNavigationListener() {

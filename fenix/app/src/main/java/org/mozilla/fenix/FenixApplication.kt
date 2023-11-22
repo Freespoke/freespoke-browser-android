@@ -5,6 +5,7 @@
 package org.mozilla.fenix
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
@@ -20,6 +21,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration.Builder
 import androidx.work.Configuration.Provider
 import com.onesignal.OneSignal
+import com.onesignal.debug.LogLevel
 import io.branch.referral.Branch
 import kotlinx.coroutines.*
 import mozilla.appservices.Megazord
@@ -136,15 +138,20 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         super.onCreate()
 
         //todo Logging set to help debug issues, remove before releasing your app.
-        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+        OneSignal.Debug.logLevel = LogLevel.VERBOSE
 
         // OneSignal Initialization
-        OneSignal.initWithContext(this)
-        OneSignal.setAppId(ONESIGNAL_APP_ID)
+        OneSignal.initWithContext(this, ONESIGNAL_APP_ID)
 
         // promptForPushNotifications will show the native Android notification permission prompt.
         // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 7)
-        OneSignal.promptForPushNotifications()
+        CoroutineScope(Dispatchers.IO).launch {
+            OneSignal.Notifications.requestPermission(true)
+        }
+
+        //login user for getting subscriptions
+        val userId = getOneSignalUserId()
+        OneSignal.login(userId)
 
         // Branch logging for debugging
         Branch.enableTestMode()
@@ -175,8 +182,19 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         GlobalScope.launch(Dispatchers.IO) {
             PerfStartup.applicationOnCreate.accumulateSamples(listOf(durationMillis))
         }
+    }
 
-        trackEvent(MatomoAnalytics.ENTRY, MatomoAnalytics.ACTION_ENTRY, MatomoAnalytics.OPEN)
+    private fun getOneSignalUserId(): String {
+        val sharedPreferences = getSharedPreferences(BuildConfig.APPLICATION_ID, MODE_PRIVATE)
+        var userId = sharedPreferences.getString(USER_ID_KEY, "")
+        if (userId.isNullOrEmpty()) {
+            userId = UUID.randomUUID().toString()
+            with(sharedPreferences.edit()) {
+                putString(USER_ID_KEY, userId)
+                apply()
+            }
+        }
+        return userId
     }
 
     @OptIn(DelicateCoroutinesApi::class) // GlobalScope usage
@@ -959,5 +977,9 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         components.strictMode.resetAfter(StrictMode.allowThreadDiskReads()) {
             TrackHelper.track().event(category, action).name(name).with(getTracker())
         }
+    }
+
+    companion object {
+        const val USER_ID_KEY = "one_signal_user_id"
     }
 }

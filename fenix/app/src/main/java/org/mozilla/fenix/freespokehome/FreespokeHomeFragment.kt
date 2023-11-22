@@ -118,7 +118,19 @@ class FreespokeHomeFragment : Fragment() {
                         MatomoAnalytics.HOME,
                         MatomoAnalytics.HOME_FREESPOKEWAY_CLICK + it.title,
                         MatomoAnalytics.CLICK)
-                    openItem(it.url)
+                    when (it.category) {
+                        "Search" -> {
+                            val directions = NavGraphDirections.actionGlobalHome(true)
+                            findNavController().navigate(directions)
+                        }
+                        "News" -> {
+                            (activity as HomeActivity).showNews()
+                        }
+                        else -> {
+                            openItem(it.url)
+                        }
+
+                    }
                 }
                 quickLinksList.adapter = adapter
             }
@@ -161,12 +173,16 @@ class FreespokeHomeFragment : Fragment() {
             viewMoreShopsBtn.setOnClickListener {
                 (requireActivity().application as FenixApplication).trackEvent(
                     MatomoAnalytics.HOME,
-                    MatomoAnalytics.HOME_SHOP,
+                    MatomoAnalytics.HOME_SHOP_VIEW_MORE,
                     MatomoAnalytics.CLICK)
                 openItem(SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRODUCTS))
             }
 
             viewMoreNewsBtn.setOnClickListener {
+                (requireActivity().application as FenixApplication).trackEvent(
+                    MatomoAnalytics.HOME,
+                    MatomoAnalytics.HOME_TRENDING_NEWS_MORE_CLICKED,
+                    MatomoAnalytics.CLICK)
                 openItem(SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.NEWS))
             }
         }
