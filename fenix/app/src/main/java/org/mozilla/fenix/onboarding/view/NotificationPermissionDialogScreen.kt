@@ -39,8 +39,7 @@ fun NotificationPermissionDialogScreen(
             ),
             primaryButtonText = stringResource(id = R.string.onboarding_home_enable_notifications_positive_button),
             secondaryButtonText = stringResource(id = R.string.onboarding_home_enable_notifications_negative_button),
-            onRecordImpressionEvent = { Onboarding.notifPppImpression.record(NoExtras()) },
-        ),
+        ) { Onboarding.notifPppImpression.record(NoExtras()) },
         onDismiss = {
             onDismiss()
             Onboarding.notifPppCloseClick.record(NoExtras())
