@@ -269,9 +269,9 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             navigateToFreespokeHome()
         }
 
-            //     if (settings().showHomeOnboardingDialog) {
+        if (settings().showHomeOnboardingDialog) {
             navHost.navController.navigate(NavGraphDirections.actionGlobalHomeOnboardingDialog())
-        //}
+        }
 
         Performance.processIntentIfPerformanceTest(intent, this)
 
