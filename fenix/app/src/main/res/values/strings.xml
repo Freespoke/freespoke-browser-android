@@ -2051,6 +2051,7 @@
     <string name="shop_deals_frequency">Maximum of 1 notification per day</string>
     <string name="general_alerts">General Alerts</string>
     <string name="general_alerts_frequency">1 per month</string>
+    <string name="election">election</string>
 
 
 </resources>

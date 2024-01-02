@@ -82,7 +82,7 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
 
         buildConfigField "String", "ONESIGNAL_APP_ID", "\"${properties.getProperty("ONESIGNAL_APP_ID")}\""
-        buildConfigField "String", "ONESIGNAL_APP_ID_DEBUG", "\"${properties.getProperty("ONESIGNAL_APP_ID_DEBUG")}\""
+        buildConfigField "String", "ONESIGNAL_APP_ID_DEBUG", "\"de8ebc15-f8ef-427a-b1c1-f312ce831eea\""
     }
 
     def releaseTemplate = {

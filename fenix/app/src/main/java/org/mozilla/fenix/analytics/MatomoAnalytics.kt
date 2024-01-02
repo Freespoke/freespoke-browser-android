@@ -32,6 +32,7 @@ class MatomoAnalytics {
         const val HOME_SHOP_VIEW_MORE = "app home shop usa view more click "
         const val HOME_FREESPOKEWAY_CLICK = "app home the freespoke way click - "
         const val APP_SHARE_FROM_MENU = "app share from menu"
+        const val APP_SHARE_FROM_BROWSER = "app web wrapper share"
         const val APP_TABS_CLOSE_MENU = "app tabs close tabs menu"
         const val APP_TABS_NEW_TAB = "app tabs new tab click"
         const val APP_TABS_CLOSE_ALL = "app tabs close all tabs click"
