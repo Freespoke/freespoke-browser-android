@@ -7,7 +7,7 @@
         android:title="@string/news" />
 
     <item
-        android:id="@+id/action_shop"
+        android:id="@+id/action_election"
         android:icon="@drawable/ic_election"
         android:title="@string/election" />
 
