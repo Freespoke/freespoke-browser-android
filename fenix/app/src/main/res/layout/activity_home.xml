@@ -381,10 +381,10 @@
             android:layout_height="56dp"
             android:layout_alignParentBottom="true"
             android:background="?attr/navigationBottomBar"
+            android:theme="@style/BottomNavigationViewStyle"
             app:itemIconTint="@drawable/nav_menu_bg"
             app:itemTextColor="@drawable/nav_menu_bg"
             app:labelVisibilityMode="labeled"
-            android:theme="@style/BottomNavigationViewStyle"
             app:menu="@menu/menu_navigation_items" />
 
     </RelativeLayout>

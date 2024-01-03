@@ -42,8 +42,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
-import com.onesignal.OSNotificationAction
-import com.onesignal.OneSignal
 import io.branch.referral.Branch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -349,7 +347,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         setBottomNavigationListener()
         setDrawerClickListeners()
 
-        OneSignal.setNotificationOpenedHandler { result ->
+    /*    OneSignal.setNotificationOpenedHandler { result ->
             val type = result.action.type // "ActionTaken" | "Opened"
             val url = result.notification.launchURL
             if (type == OSNotificationAction.ActionType.Opened) {
@@ -359,7 +357,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                     from = BrowserDirection.FromHome,
                 )
             }
-        }
+        }*/
 
         if (!shouldStartOnHome() && shouldNavigateToBrowserOnColdStart(savedInstanceState)) {
             navigateToBrowserOnColdStart()
@@ -443,6 +441,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         }
     }
 
+    fun showNews() {
+        binding.bottomNavigation.selectedItemId = R.id.action_news
+    }
+
     private fun setBottomNavigationListener() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             if (viewModel.showHomeDrawer.value == true) {
@@ -460,14 +462,14 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                         MatomoAnalytics.TAB_MENU_NEWS_CLICKED,
                         MatomoAnalytics.CLICK)
                 }
-                R.id.action_shop -> {
+                R.id.action_election -> {
                     openToBrowserAndLoad(
-                        searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRODUCTS),
+                        searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.ELECTION),
                         newTab = false,
                         from = BrowserDirection.FromGlobal,
                     )
                     (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
-                        MatomoAnalytics.TAB_MENU_SHOP_CLICKED,
+                        MatomoAnalytics.TAB_MENU_ELECTION_CLICKED,
                         MatomoAnalytics.CLICK)
                 }
                 R.id.action_home -> {

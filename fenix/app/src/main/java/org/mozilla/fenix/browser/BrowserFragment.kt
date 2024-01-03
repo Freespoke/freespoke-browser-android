@@ -36,8 +36,10 @@ import mozilla.components.service.glean.private.NoExtras
 import mozilla.components.support.base.feature.UserInteractionHandler
 import mozilla.components.support.base.feature.ViewBoundFeatureWrapper
 import mozilla.components.support.ktx.kotlinx.coroutines.flow.ifAnyChanged
+import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.GleanMetrics.ReaderMode
 import org.mozilla.fenix.R
+import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.FenixSnackbar
 import org.mozilla.fenix.components.TabCollectionStorage
 import org.mozilla.fenix.components.toolbar.BrowserToolbarView
@@ -117,6 +119,10 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
                 )!!,
                 contentDescription = context.getString(R.string.browser_menu_share),
                 listener = {
+                    (requireActivity().application as FenixApplication).trackEvent(
+                        MatomoAnalytics.SHARE,
+                        MatomoAnalytics.APP_SHARE_FROM_BROWSER,
+                        MatomoAnalytics.CLICK)
                     browserToolbarInteractor.onBrowserToolbarMenuItemTapped(ToolbarMenu.Item.Share)
                 },
             )

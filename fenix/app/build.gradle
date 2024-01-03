@@ -82,7 +82,7 @@ android {
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
 
         buildConfigField "String", "ONESIGNAL_APP_ID", "\"${properties.getProperty("ONESIGNAL_APP_ID")}\""
-        buildConfigField "String", "ONESIGNAL_APP_ID_DEBUG", "\"${properties.getProperty("ONESIGNAL_APP_ID_DEBUG")}\""
+        buildConfigField "String", "ONESIGNAL_APP_ID_DEBUG", "\"de8ebc15-f8ef-427a-b1c1-f312ce831eea\""
     }
 
     def releaseTemplate = {
@@ -686,7 +686,7 @@ dependencies {
 
     implementation 'com.github.matomo-org:matomo-sdk-android:4.2-beta1'
     // OneSingnal SDK
-    implementation 'com.onesignal:OneSignal:[4.0.0, 4.99.99]'
+    implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 
     // required for all Android apps
     implementation 'io.branch.sdk.android:library:5.6.1'

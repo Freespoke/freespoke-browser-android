@@ -60,6 +60,7 @@ object SupportUtils {
         ABOUT("about"),
         PRODUCTS("products"),
         NEWS("news"),
+        ELECTION("election/2024")
     }
 
     enum class MozillaPage(internal val path: String) {
