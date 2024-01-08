@@ -262,7 +262,7 @@ android.applicationVariants.all { variant ->
         // same version code. Therefore we need to have different version codes for our ARM and x86
         // builds.
 
-        def versionName = "2.1.2"
+        def versionName = "2.1.4"
         println("versionName override: $versionName")
 
         variant.outputs.each { output ->
@@ -272,7 +272,7 @@ android.applicationVariants.all { variant ->
             def arch = (isMozillaOnline) ? "armeabi-v7a" : abi
             // We use the same version code generator, that we inherited from Fennec, across all channels - even on
             // channels that never shipped a Fennec build.
-            def versionCodeOverride = 221
+            def versionCodeOverride = 331
 
             println("versionCode for $abi = $versionCodeOverride, isMozillaOnline = $isMozillaOnline")
 
@@ -703,7 +703,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     // Retrofit with Scalar Converter
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
-    implementation 'com.squareup.moshi:moshi-kotlin:1.13.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.14.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
     implementation 'com.jakewharton.timber:timber:5.0.1'
 }

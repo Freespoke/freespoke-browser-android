@@ -3,13 +3,10 @@ package org.mozilla.fenix.freespokehome
 import android.content.Context
 import android.content.Intent
 import android.os.StrictMode
-import android.provider.Settings
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.Companion.PRIVATE
-import androidx.browser.customtabs.CustomTabsClient.getPackageName
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -22,6 +19,7 @@ import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.HomeScreen
 import org.mozilla.fenix.HomeActivity
+import org.mozilla.fenix.NavGraphDirections
 import org.mozilla.fenix.R
 import org.mozilla.fenix.analytics.MatomoAnalytics
 import org.mozilla.fenix.components.FenixSnackbar
@@ -38,7 +36,6 @@ import org.mozilla.fenix.settings.deletebrowsingdata.deleteAndQuit
 import org.mozilla.fenix.theme.ThemeManager
 import org.mozilla.fenix.whatsnew.WhatsNew
 import java.lang.ref.WeakReference
-import kotlin.math.acos
 
 
 class FreespokeHomeMenuBuilder (
@@ -86,7 +83,7 @@ class FreespokeHomeMenuBuilder (
                     org.mozilla.fenix.GleanMetrics.HomeMenu.settingsItemClicked.record(NoExtras())
 
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalSettingsFragment(),
                     )
                 }
@@ -94,13 +91,13 @@ class FreespokeHomeMenuBuilder (
                     HomeScreen.customizeHomeClicked.record(NoExtras())
 
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalHomeSettingsFragment(),
                     )
                 }
                 is HomeMenu.Item.SyncAccount -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         when (item.accountState) {
                             AccountState.AUTHENTICATED ->
                                 FreespokeHomeFragmentDirections.actionGlobalAccountSettingsFragment()
@@ -125,20 +122,20 @@ class FreespokeHomeMenuBuilder (
                 }
                 HomeMenu.Item.Bookmarks -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalBookmarkFragment(BookmarkRoot.Mobile.id),
                     )
                 }
                 HomeMenu.Item.History -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalHistoryFragment(),
                     )
                 }
                 HomeMenu.Item.Downloads -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
-                        FreespokeHomeFragmentDirections.actionGlobalDownloadsFragment(),
+                        getFragmentId(),
+                        NavGraphDirections.actionGlobalDownloadsFragment()
                     )
                 }
                 HomeMenu.Item.Help -> {
@@ -173,13 +170,13 @@ class FreespokeHomeMenuBuilder (
                 }
                 HomeMenu.Item.ReconnectSync -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalAccountProblemFragment(),
                     )
                 }
                 HomeMenu.Item.Extensions -> {
                     navController.nav(
-                        R.id.freespokeHomeFragment,
+                        getFragmentId(),
                         FreespokeHomeFragmentDirections.actionGlobalAddonsManagementFragment(),
                     )
                 }
@@ -236,4 +233,8 @@ class FreespokeHomeMenuBuilder (
                 }
             }
         }
+
+    private fun getFragmentId(): Int? {
+        return homeActivity.getFragmentId()
     }
+}
