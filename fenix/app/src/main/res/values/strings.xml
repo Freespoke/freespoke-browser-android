@@ -2031,5 +2031,6 @@
     <string name="shop_usa_store_title">Shop USA Store</string>
     <string name="attribution">photo: %s</string>
     <string name="icon_count">+%d</string>
+    <string name="election">Election</string>
 
 </resources>

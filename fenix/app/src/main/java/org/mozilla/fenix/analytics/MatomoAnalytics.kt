@@ -18,11 +18,12 @@ class MatomoAnalytics {
 
         //Actions
         const val ACTION_ENTRY = "app entry"
-        const val TAB_MENU_NEWS_CLICKED = "app menu tab click - \"news\""
-        const val TAB_MENU_SHOP_CLICKED = "app menu tab click - \"shop\""
-        const val TAB_MENU_HOME_CLICKED = "app menu tab click - \"home\""
-        const val TAB_MENU_TABS_CLICKED = "app menu tab click - \"tabs\""
-        const val TAB_MENU_SETTINGS_CLICKED = "app menu tab click - \"settings\""
+        const val TAB_MENU_NEWS_CLICKED = "app menu tab click - news"
+        const val TAB_MENU_SHOP_CLICKED = "app menu tab click - shop"
+        const val TAB_MENU_HOME_CLICKED = "app menu tab click - home"
+        const val TAB_MENU_TABS_CLICKED = "app menu tab click - tabs"
+        const val TAB_MENU_ELECTION_CLICKED = "app menu tab click - election"
+        const val TAB_MENU_SETTINGS_CLICKED = "app menu tab click - settings"
         const val HOME_SEARCH = "app home search"
         const val HOME_BOOKMARKS = "app home my bookmarks click"
         const val HOME_TRENDING_NEWS = "app home trending news story view summary click"

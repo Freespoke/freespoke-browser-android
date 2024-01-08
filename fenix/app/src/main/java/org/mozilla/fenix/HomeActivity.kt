@@ -460,14 +460,14 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                         MatomoAnalytics.TAB_MENU_NEWS_CLICKED,
                         MatomoAnalytics.CLICK)
                 }
-                R.id.action_shop -> {
+                R.id.action_election -> {
                     openToBrowserAndLoad(
-                        searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.PRODUCTS),
+                        searchTermOrURL = SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.ELECTION),
                         newTab = false,
                         from = BrowserDirection.FromGlobal,
                     )
                     (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
-                        MatomoAnalytics.TAB_MENU_SHOP_CLICKED,
+                        MatomoAnalytics.TAB_MENU_ELECTION_CLICKED,
                         MatomoAnalytics.CLICK)
                 }
                 R.id.action_home -> {
