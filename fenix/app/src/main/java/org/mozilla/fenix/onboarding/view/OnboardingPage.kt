@@ -48,6 +48,7 @@ fun OnboardingPage(
     onDismiss: () -> Unit,
     onPrimaryButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Crop
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -106,7 +107,7 @@ fun OnboardingPage(
                             painter = painterResource(id = pageState.image),
                             contentDescription = null,
                             modifier = Modifier.fillMaxWidth(),
-                            contentScale = ContentScale.Crop,
+                            contentScale = contentScale,
                         )
                     }
 
