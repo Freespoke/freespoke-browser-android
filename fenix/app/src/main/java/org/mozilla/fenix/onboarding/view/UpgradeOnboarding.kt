@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
@@ -30,7 +31,8 @@ import org.mozilla.fenix.GleanMetrics.Onboarding as OnboardingMetrics
 private enum class UpgradeOnboardingState {
     Welcome,
     Newsfeed,
-    Shop,
+    Election,
+    //Shop,
     Search,
     Tabs,
 }
@@ -91,7 +93,17 @@ private fun UpgradeOnboardingContent(
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
                 )
-                UpgradeOnboardingState.Shop -> OnboardingPageState(
+                UpgradeOnboardingState.Election -> OnboardingPageState(
+                    image = R.drawable.ic_onboarding_elections,
+                    title = stringResource(id = R.string.onboarding_elections),
+                    description = stringResource(id = R.string.onboarding_election_subtitle),
+                    primaryButtonText = stringResource(id = R.string.onboarding_home_sign_in_button),
+                    secondaryButtonText = stringResource(id = R.string.onboarding_home_skip_button),
+                    onRecordImpressionEvent = {
+                        OnboardingMetrics.syncCardImpression.record(NoExtras())
+                    },
+                )
+              /*  UpgradeOnboardingState.Shop -> OnboardingPageState(
                     image = R.drawable.ic_onboarding_shop,
                     title = stringResource(id = R.string.onboarding_shop_usa),
                     description = stringResource(id = R.string.onboarding_shop_subtitle),
@@ -100,7 +112,7 @@ private fun UpgradeOnboardingContent(
                     onRecordImpressionEvent = {
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
-                )
+                )*/
                 UpgradeOnboardingState.Search -> OnboardingPageState(
                     image = R.drawable.ic_onboarding_search,
                     title = stringResource(id = R.string.onboarding_search),
@@ -131,9 +143,9 @@ private fun UpgradeOnboardingContent(
                         onboardingState = UpgradeOnboardingState.Newsfeed
                     }
                     UpgradeOnboardingState.Newsfeed -> {
-                        onboardingState = UpgradeOnboardingState.Shop
+                        onboardingState = UpgradeOnboardingState.Election
                     }
-                    UpgradeOnboardingState.Shop -> {
+                    UpgradeOnboardingState.Election -> {
                         onboardingState = UpgradeOnboardingState.Search
                     }
                     UpgradeOnboardingState.Search -> {
@@ -145,6 +157,11 @@ private fun UpgradeOnboardingContent(
                 }
             },
             modifier = Modifier.weight(1f),
+            contentScale = if (onboardingState == UpgradeOnboardingState.Election) {
+                ContentScale.Inside
+            } else {
+                ContentScale.Crop
+            }
         )
 
         if (isSyncSignIn) {
@@ -184,7 +201,7 @@ private fun Indicators(
         Spacer(modifier = Modifier.width(28.dp))
 
         Indicator(
-            color = if (onboardingState == UpgradeOnboardingState.Shop) {
+            color = if (onboardingState == UpgradeOnboardingState.Election) {
                 FirefoxTheme.colors.indicatorActive
             } else {
                 FirefoxTheme.colors.indicatorInactive

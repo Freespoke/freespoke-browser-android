@@ -2032,5 +2032,7 @@
     <string name="attribution">photo: %s</string>
     <string name="icon_count">+%d</string>
     <string name="election">Election</string>
+    <string name="onboarding_elections">Elections</string>
+    <string name="onboarding_election_subtitle">Explore the Freespoke election portal featuring the latest voting information, breaking news, and elections results.</string>
 
 </resources>
