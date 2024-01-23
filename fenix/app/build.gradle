@@ -80,9 +80,6 @@ android {
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
-
-        buildConfigField "String", "ONESIGNAL_APP_ID", "\"${properties.getProperty("ONESIGNAL_APP_ID")}\""
-        buildConfigField "String", "ONESIGNAL_APP_ID_DEBUG", "\"de8ebc15-f8ef-427a-b1c1-f312ce831eea\""
     }
 
     def releaseTemplate = {
@@ -113,6 +110,10 @@ android {
             applicationIdSuffix ".debug"
             resValue "bool", "IS_DEBUG", "true"
             pseudoLocalesEnabled true
+            buildConfigField "String","ONE_SIGNAL_APP_ID",'"de8ebc15-f8ef-427a-b1c1-f312ce831eea"'
+            buildConfigField "Integer","MATOMO_APP_ID",'7'
+            buildConfigField "String","BASE_URL",'"https://api.staging.freespoke.com"'
+            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
         }
         nightly releaseTemplate >> {
             buildConfigField "boolean", "USE_RELEASE_VERSIONING", "true"
@@ -149,6 +150,10 @@ android {
                     //  - https://issuetracker.google.com/issues/36905922
                     "deepLinkScheme": deepLinkSchemeValue
             ]
+            buildConfigField "String","ONE_SIGNAL_APP_ID",'" "'
+            buildConfigField "Integer","MATOMO_APP_ID",'6'
+            buildConfigField "String","BASE_URL",'"https://api.freespoke.com"'
+            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
         }
     }
 

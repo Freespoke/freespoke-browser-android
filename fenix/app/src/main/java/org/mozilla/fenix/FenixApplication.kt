@@ -102,19 +102,13 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         recordOnInit() // DO NOT MOVE ANYTHING ABOVE HERE: the timing of this measurement is critical.
     }
 
-    private val ONESIGNAL_APP_ID = if (BuildConfig.DEBUG) {
-        BuildConfig.ONESIGNAL_APP_ID_DEBUG
-    } else {
-        BuildConfig.ONESIGNAL_APP_ID
-    }
-
     private var tracker: Tracker? = null
     @Synchronized
     open fun getTracker(): Tracker? {
         if (tracker == null) {
             Timber.plant(Timber.DebugTree())
 
-            tracker = TrackerBuilder.createDefault("https://matomo.freespoke.com/matomo.php", MatomoAnalytics.getTrackerId())
+            tracker = TrackerBuilder.createDefault(BuildConfig.MATOMO_URL, BuildConfig.MATOMO_APP_ID)
                 .build(Matomo.getInstance(this))
             tracker?.addTrackingCallback { event ->
                 Timber.i("Matomo", event.toMap());
@@ -138,10 +132,12 @@ open class FenixApplication : LocaleAwareApplication(), Provider {
         super.onCreate()
 
         //todo Logging set to help debug issues, remove before releasing your app.
-        OneSignal.Debug.logLevel = LogLevel.VERBOSE
+        if (BuildConfig.DEBUG) {
+            OneSignal.Debug.logLevel = LogLevel.VERBOSE
+        }
 
         // OneSignal Initialization
-        OneSignal.initWithContext(this, ONESIGNAL_APP_ID)
+        OneSignal.initWithContext(this, BuildConfig.ONE_SIGNAL_APP_ID)
 
         // promptForPushNotifications will show the native Android notification permission prompt.
         // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 7)

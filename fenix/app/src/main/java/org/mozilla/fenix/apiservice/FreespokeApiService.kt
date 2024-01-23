@@ -19,19 +19,14 @@ private val moshi = Moshi.Builder()
     .addLast(KotlinJsonAdapterFactory())
     .build()
 
-val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).setLevel(HttpLoggingInterceptor.Level.BODY)
+val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).setLevel(
+    if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE)
 val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
-
-val apiUrl = if (BuildConfig.DEBUG) {
-    "https://api.staging.freespoke.com"
-} else {
-    "https://api.freespoke.com"
-}
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .client(client)
-    .baseUrl(apiUrl)
+    .baseUrl(BuildConfig.BASE_URL)
     .build()
 interface FreespokeApiService {
 

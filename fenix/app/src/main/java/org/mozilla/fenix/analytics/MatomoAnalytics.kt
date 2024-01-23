@@ -6,9 +6,6 @@ class MatomoAnalytics {
 
     companion object {
 
-        const val PROD_ID = 6
-        const val STAGING_ID = 7
-
         //Categories
         const val ENTRY = "app entry"
         const val MENU = "app menu"
@@ -47,13 +44,5 @@ class MatomoAnalytics {
         const val OPEN = "open"
         const val CLICK = "click"
         const val SEARCH = "search"
-
-        fun getTrackerId(): Int {
-            return if (BuildConfig.DEBUG) {
-                STAGING_ID
-            } else {
-                PROD_ID
-            }
-        }
     }
 }
