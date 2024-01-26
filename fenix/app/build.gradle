@@ -107,13 +107,8 @@ android {
         debug {
             shrinkResources false
             minifyEnabled false
-            applicationIdSuffix ".debug"
             resValue "bool", "IS_DEBUG", "true"
             pseudoLocalesEnabled true
-            buildConfigField "String","ONE_SIGNAL_APP_ID",'"de8ebc15-f8ef-427a-b1c1-f312ce831eea"'
-            buildConfigField "Integer","MATOMO_APP_ID",'7'
-            buildConfigField "String","BASE_URL",'"https://api.staging.freespoke.com"'
-            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
         }
         nightly releaseTemplate >> {
             buildConfigField "boolean", "USE_RELEASE_VERSIONING", "true"
@@ -150,10 +145,6 @@ android {
                     //  - https://issuetracker.google.com/issues/36905922
                     "deepLinkScheme": deepLinkSchemeValue
             ]
-            buildConfigField "String","ONE_SIGNAL_APP_ID",'" "'
-            buildConfigField "Integer","MATOMO_APP_ID",'6'
-            buildConfigField "String","BASE_URL",'"https://api.freespoke.com"'
-            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
         }
     }
 
@@ -179,13 +170,33 @@ android {
         animationsDisabled = true
     }
 
-    flavorDimensions "engine"
-
-    flavorDimensions "product"
+    flavorDimensions "developer"
 
     productFlavors {
-        fenix {
-            dimension "product"
+        staging {
+            dimension "developer"
+            applicationIdSuffix ".debug"
+            buildConfigField "String","ONE_SIGNAL_APP_ID",'"de8ebc15-f8ef-427a-b1c1-f312ce831eea"'
+            buildConfigField "Integer","MATOMO_APP_ID",'7'
+            buildConfigField "String","BASE_URL",'"https://api.staging.freespoke.com"'
+            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
+            resValue "string", "app_name", "Freespoke (Staging)"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round"
+            ]
+        }
+        production {
+            dimension "developer"
+            buildConfigField "String","ONE_SIGNAL_APP_ID",'" "'
+            buildConfigField "Integer","MATOMO_APP_ID",'6'
+            buildConfigField "String","BASE_URL",'"https://api.freespoke.com"'
+            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
+            resValue "string", "app_name", "Freespoke"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round"
+            ]
         }
     }
 

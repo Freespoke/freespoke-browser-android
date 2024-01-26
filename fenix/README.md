@@ -244,3 +244,21 @@ See notes on building successfully in the `android-components` auto-publication 
     file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 [sec issue]: https://bugzilla.mozilla.org/enter_bug.cgi?assigned_to=nobody%40mozilla.org&bug_ignored=0&bug_severity=normal&bug_status=NEW&cf_fx_iteration=---&cf_fx_points=---&component=Security%3A%20Android&contenttypemethod=list&contenttypeselection=text%2Fplain&defined_groups=1&flag_type-4=X&flag_type-607=X&flag_type-791=X&flag_type-800=X&flag_type-803=X&flag_type-936=X&flag_type-937=X&form_name=enter_bug&groups=mobile-core-security&maketemplate=Remember%20values%20as%20bookmarkable%20template&op_sys=Unspecified&priority=--&product=Fenix&rep_platform=Unspecified&target_milestone=---&version=unspecified
+
+
+## Fenix Build Flavors configuration
+
+There are two available build flavors Staging and Production with different build types: debug, release, nightly, demo.
+Release, nightly and demo are release versions that need to be assigned.
+
+For using different resources need to specify its inside productFlavors block at build.gradle(app)
+APP_NAME - 
+  resValue "string", "app_name", "Freespoke (Staging)"
+APP_LOGO - change this value:
+  manifestPlaceholders = [
+    appIcon: "@mipmap/ic_launcher",
+    appIconRound: "@mipmap/ic_launcher_round"
+  ]
+MATOMO_URL, MATOMO_ID, ONE_SIGNAL_ID, API_BASE_URL  - also specify inside each flavor
+
+

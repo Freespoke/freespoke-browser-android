@@ -4,7 +4,6 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
     <!-- Name of the application -->
-    <string name="app_name" translatable="false">Freespoke</string>
     <string name="freespoke" translatable="false">Freespoke</string>
 
     <!-- Preference for developers -->

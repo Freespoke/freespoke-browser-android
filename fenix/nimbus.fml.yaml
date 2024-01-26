@@ -9,6 +9,14 @@ channels:
   - beta
   - nightly
   - developer
+  - stagingDebug
+  - stagingBeta
+  - stagingRelease
+  - stagingNightly
+  - productionDebug
+  - productionBeta
+  - productionRelease
+  - productionNightly
 includes:
   - ./messaging.fml.yaml
 features:
