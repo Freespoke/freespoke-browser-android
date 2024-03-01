@@ -7,6 +7,9 @@ package org.mozilla.fenix.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
+import androidx.datastore.preferences.preferencesDataStore
+import mozilla.components.support.ktx.android.content.stringPreference
+import org.mozilla.fenix.apiservice.model.UserData
 
 /**
  * Application / process unique [DataStore] for IO operations related to Pocket recommended stories selected categories.
@@ -14,4 +17,10 @@ import androidx.datastore.dataStore
 internal val Context.pocketStoriesSelectedCategoriesDataStore: DataStore<SelectedPocketStoriesCategories> by dataStore(
     fileName = "pocket_recommendations_selected_categories.pb",
     serializer = SelectedPocketStoriesCategorySerializer,
+)
+
+private const val USER_PREFERENCES_NAME = "user_preferences"
+
+private val Context.dataStore by preferencesDataStore(
+    name = USER_PREFERENCES_NAME
 )

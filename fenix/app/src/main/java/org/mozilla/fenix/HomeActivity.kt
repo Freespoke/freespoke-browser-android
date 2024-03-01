@@ -377,6 +377,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         }
     }
 
+    fun showNews() {
+        binding.bottomNavigation.selectedItemId = R.id.action_news
+    }
+
     private fun setupMenuButton() {
         val mbottomNavigationView = binding.bottomNavigation
 

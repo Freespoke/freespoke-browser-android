@@ -9,9 +9,12 @@ import org.mozilla.fenix.apiservice.model.DateJsonAdapter
 import org.mozilla.fenix.apiservice.model.QuickLinkObject
 import org.mozilla.fenix.apiservice.model.ShopCollection
 import org.mozilla.fenix.apiservice.model.TrendingNews
+import org.mozilla.fenix.apiservice.model.UserData
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.http.Field
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 private val moshi = Moshi.Builder()
@@ -19,19 +22,14 @@ private val moshi = Moshi.Builder()
     .addLast(KotlinJsonAdapterFactory())
     .build()
 
-val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).setLevel(HttpLoggingInterceptor.Level.BODY)
+val interceptor = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger.DEFAULT).setLevel(
+    if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE)
 val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
-
-val apiUrl = if (BuildConfig.DEBUG) {
-    "https://api.staging.freespoke.com"
-} else {
-    "https://api.freespoke.com"
-}
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshi))
     .client(client)
-    .baseUrl(apiUrl)
+    .baseUrl(BuildConfig.BASE_URL)
     .build()
 interface FreespokeApiService {
 
@@ -43,6 +41,12 @@ interface FreespokeApiService {
 
     @GET("app/freespoke/widgets/quick-links")
     suspend fun getFreespokeQuickLinks(@Query("limit") limit: Int, @Query("client") client: String): QuickLinkObject
+
+    @POST("/accounts/register/android")
+    suspend fun signUpUser(@Field("firstName") firstName: String,
+                           @Field("lastName") lastName: String,
+                           @Field("email") email: String,
+                           @Field("password") password: String): UserData
 }
 
 object FreespokeApi {

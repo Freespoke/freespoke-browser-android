@@ -7,7 +7,9 @@ package org.mozilla.fenix.onboarding.view
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,18 +23,30 @@ import com.google.accompanist.insets.statusBarsPadding
 import mozilla.telemetry.glean.private.NoExtras
 import org.mozilla.fenix.R
 import org.mozilla.fenix.compose.annotation.LightDarkPreview
+import org.mozilla.fenix.onboarding.AccountViewModel
 import org.mozilla.fenix.theme.FirefoxTheme
 import org.mozilla.fenix.GleanMetrics.Onboarding as OnboardingMetrics
 
 /**
  * Enum that represents the onboarding screen that is displayed.
  */
-private enum class UpgradeOnboardingState {
+enum class UpgradeOnboardingState {
     Welcome,
-    Newsfeed,
-    Shop,
-    Search,
-    Tabs,
+    DefaultBrowser,
+    DefaultBrowserShow,
+    Notifications,
+    NotificationsSetup,
+    Login,
+    Registration,
+    RegistrationWithErrors,
+    Subscriptions,
+    Premium,
+    CompleteOnboarding
+}
+
+enum class OnboardingAppSettings {
+    Notifications,
+    SetupDefaultBrowser
 }
 
 /**
@@ -46,11 +60,15 @@ private enum class UpgradeOnboardingState {
 fun UpgradeOnboarding(
     isSyncSignIn: Boolean,
     onDismiss: () -> Unit,
+    viewModel: AccountViewModel?,
+    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)? = null
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection()) {
         UpgradeOnboardingContent(
             isSyncSignIn = isSyncSignIn,
             onDismiss = onDismiss,
+            viewModel = viewModel,
+            onSetupSettingsClick
         )
     }
 }
@@ -59,6 +77,8 @@ fun UpgradeOnboarding(
 private fun UpgradeOnboardingContent(
     isSyncSignIn: Boolean,
     onDismiss: () -> Unit,
+    viewModel: AccountViewModel?,
+    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)?
 ) {
     var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Welcome) }
 
@@ -66,57 +86,74 @@ private fun UpgradeOnboardingContent(
         modifier = Modifier
             .background(FirefoxTheme.colors.layerOnboarding)
             .fillMaxSize()
-            .padding(bottom = 32.dp)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+            .statusBarsPadding(),
     ) {
         OnboardingPage(
             pageState = when (onboardingState) {
                 UpgradeOnboardingState.Welcome -> OnboardingPageState(
-                    image = R.drawable.ic_onboarding_welcome,
-                    title = "",
-                    description = "",
-                    primaryButtonText = stringResource(id = R.string.onboarding_home_get_started_button),
+                    type = onboardingState,
                     onRecordImpressionEvent = {
                         OnboardingMetrics.welcomeCardImpression.record(NoExtras())
                     },
                 )
-                UpgradeOnboardingState.Newsfeed -> OnboardingPageState(
-                    image = R.drawable.ic_onboarding_news,
-                    title = stringResource(id = R.string.newsfeed_onboarding),
-                    description = stringResource(id = R.string.navigating_the_news_onboarding),
-                    primaryButtonText = stringResource(id = R.string.onboarding_home_sign_in_button),
-                    secondaryButtonText = stringResource(id = R.string.onboarding_home_skip_button),
+                UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> OnboardingPageState(
+                    type = onboardingState,
+                    image = R.drawable.onboarding_default_browser,
+                    title = stringResource(id = R.string.onboarding_default_browser_title),
+                    description = stringResource(id = R.string.onboarding_default_browser_description),
+                    primaryButtonText = stringResource(id = R.string.set_as_default_browser),
+                    secondaryButtonText = stringResource(id = R.string.onboarding_default_browser_skip),
                     onRecordImpressionEvent = {
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
                 )
-                UpgradeOnboardingState.Shop -> OnboardingPageState(
-                    image = R.drawable.ic_onboarding_shop,
-                    title = stringResource(id = R.string.onboarding_shop_usa),
-                    description = stringResource(id = R.string.onboarding_shop_subtitle),
-                    primaryButtonText = stringResource(id = R.string.onboarding_home_sign_in_button),
-                    secondaryButtonText = stringResource(id = R.string.onboarding_home_skip_button),
+                UpgradeOnboardingState.Notifications, UpgradeOnboardingState.NotificationsSetup -> OnboardingPageState(
+                    type = onboardingState,
+                    image = R.drawable.onboarding_notification_settings,
+                    title = stringResource(id = R.string.onboarding_notification_settings_title),
+                    description = stringResource(id = R.string.onboarding_notification_settings_description),
+                    primaryButtonText = stringResource(id = R.string.onboarding_next_button),
+                    secondaryButtonText = stringResource(id = R.string.onboarding_notification_settings_skip),
                     onRecordImpressionEvent = {
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
                 )
-                UpgradeOnboardingState.Search -> OnboardingPageState(
-                    image = R.drawable.ic_onboarding_search,
-                    title = stringResource(id = R.string.onboarding_search),
-                    description = stringResource(id = R.string.onboarding_search_subtitle),
-                    primaryButtonText = stringResource(id = R.string.onboarding_home_sign_in_button),
-                    secondaryButtonText = stringResource(id = R.string.onboarding_home_skip_button),
+                UpgradeOnboardingState.Login -> OnboardingPageState(
+                    type = onboardingState,
                     onRecordImpressionEvent = {
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
                 )
-                UpgradeOnboardingState.Tabs -> OnboardingPageState(
+                UpgradeOnboardingState.Registration -> OnboardingPageState(
+                    type = onboardingState,
+                    onRecordImpressionEvent = {
+                        OnboardingMetrics.syncCardImpression.record(NoExtras())
+                    },
+                )
+                UpgradeOnboardingState.Subscriptions -> OnboardingPageState(
+                    type = onboardingState,
+                    onRecordImpressionEvent = {
+                        OnboardingMetrics.syncCardImpression.record(NoExtras())
+                    },
+                )
+                UpgradeOnboardingState.CompleteOnboarding -> OnboardingPageState(
+                    type = onboardingState,
                     image = R.drawable.ic_onboarding_tabs,
-                    title = stringResource(id = R.string.onboarding_tabs),
-                    description = stringResource(id = R.string.onboarding_tabs_subtitle),
-                    primaryButtonText = stringResource(id = R.string.onboarding_home_sign_in_button),
-                    secondaryButtonText = stringResource(id = R.string.onboarding_home_skip_button),
+                    title = stringResource(id = R.string.onboarding_complete_title),
+                    description = stringResource(id = R.string.onboarding_complete_description),
+                    primaryButtonText = stringResource(id = R.string.onboarding_finish),
+                    onRecordImpressionEvent = {
+                        OnboardingMetrics.syncCardImpression.record(NoExtras())
+                    },
+                )
+                UpgradeOnboardingState.RegistrationWithErrors -> OnboardingPageState(
+                    type = onboardingState,
+                    onRecordImpressionEvent = {
+                        OnboardingMetrics.syncCardImpression.record(NoExtras())
+                    },
+                )
+                UpgradeOnboardingState.Premium -> OnboardingPageState(
+                    type = onboardingState,
                     onRecordImpressionEvent = {
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
@@ -126,25 +163,13 @@ private fun UpgradeOnboardingContent(
                 onDismiss()
             },
             onPrimaryButtonClick = {
-                when (onboardingState) {
-                    UpgradeOnboardingState.Welcome -> {
-                        onboardingState = UpgradeOnboardingState.Newsfeed
-                    }
-                    UpgradeOnboardingState.Newsfeed -> {
-                        onboardingState = UpgradeOnboardingState.Shop
-                    }
-                    UpgradeOnboardingState.Shop -> {
-                        onboardingState = UpgradeOnboardingState.Search
-                    }
-                    UpgradeOnboardingState.Search -> {
-                        onboardingState = UpgradeOnboardingState.Tabs
-                    }
-                    UpgradeOnboardingState.Tabs -> {
-                        onDismiss()
-                    }
+                when (it) {
+                    UpgradeOnboardingState.DefaultBrowserShow -> onSetupSettingsClick?.invoke(OnboardingAppSettings.SetupDefaultBrowser)
+                    UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(OnboardingAppSettings.Notifications)
+                    else -> onboardingState = it
                 }
             },
-            modifier = Modifier.weight(1f),
+            viewModel = viewModel,
         )
 
         if (isSyncSignIn) {
@@ -173,7 +198,7 @@ private fun Indicators(
 
         Spacer(modifier = Modifier.width(28.dp))
 
-        Indicator(
+    /*    Indicator(
             color = if (onboardingState == UpgradeOnboardingState.Newsfeed) {
                 FirefoxTheme.colors.indicatorActive
             } else {
@@ -209,7 +234,7 @@ private fun Indicators(
             } else {
                 FirefoxTheme.colors.indicatorInactive
             },
-        )
+        )*/
 
     }
 }
@@ -231,7 +256,9 @@ private fun OnboardingPreview() {
         UpgradeOnboarding(
             isSyncSignIn = false,
             onDismiss = {},
-        )
+            viewModel = null
+        ) {
+        }
     }
 }
 

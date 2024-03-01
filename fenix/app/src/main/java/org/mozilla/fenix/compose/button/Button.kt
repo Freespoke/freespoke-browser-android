@@ -31,6 +31,7 @@ import org.mozilla.fenix.theme.FirefoxTheme
  */
 @Composable
 private fun Button(
+    modifier: Modifier? = null,
     text: String,
     textColor: Color,
     backgroundColor: Color,
@@ -40,7 +41,7 @@ private fun Button(
 ) {
     androidx.compose.material.Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier ?: Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
         colors = ButtonDefaults.outlinedButtonColors(
@@ -176,6 +177,7 @@ fun DestructiveButton(
 
 @Composable
 fun PrimaryButtonOnboarding(
+    modifier: Modifier = Modifier,
     text: String,
     textColor: Color = FirefoxTheme.colors.textActionPrimary,
     backgroundColor: Color = FirefoxTheme.colors.onboardingButtonColor,
@@ -183,6 +185,7 @@ fun PrimaryButtonOnboarding(
     onClick: () -> Unit,
 ) {
     Button(
+        modifier,
         text = text,
         textColor = textColor,
         backgroundColor = backgroundColor,

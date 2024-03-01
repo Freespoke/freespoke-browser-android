@@ -48,6 +48,8 @@ class FenixTypography(
     val button: TextStyle,
     val caption: TextStyle,
     val overline: TextStyle,
+    val headLine3: TextStyle,
+    val headLine2: TextStyle,
 )
 
 val defaultTypography = FenixTypography(
@@ -140,6 +142,20 @@ val defaultTypography = FenixTypography(
         letterSpacing = 1.5.sp,
         lineHeight = 16.sp,
     ),
+
+    headLine3 = TextStyle(
+        fontSize = 28.sp,
+        fontWeight = FontWeight.W400,
+        letterSpacing = 0.18.sp,
+        lineHeight = 34.sp,
+    ),
+
+    headLine2 = TextStyle(
+        fontSize = 36.sp,
+        fontWeight = FontWeight.W400,
+        letterSpacing = 0.18.sp,
+        lineHeight = 40.sp,
+    )
 )
 
 @Composable
