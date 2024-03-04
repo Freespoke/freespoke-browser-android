@@ -150,6 +150,7 @@ private val darkColorPalette = FirefoxColors(
     freespokeDescriptionColor = PhotonColors.DarkGreyO4,
     dividerColor = PhotonColors.LightGrey005,
     subtitleColor = PhotonColors.DarkGreyO4,
+    errorColor = PhotonColors.Red400
 )
 
 private val lightColorPalette = FirefoxColors(
@@ -222,6 +223,7 @@ private val lightColorPalette = FirefoxColors(
     freespokeDescriptionColor = PhotonColors.FreespokeGrayTextColor,
     dividerColor = PhotonColors.LightGrey005,
     subtitleColor = PhotonColors.LightGrey02,
+    errorColor = PhotonColors.Red600,
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -305,6 +307,7 @@ class FirefoxColors(
     freespokeDescriptionColor: Color,
     dividerColor: Color,
     subtitleColor: Color,
+    errorColor: Color,
 ) {
     // Layers
 
@@ -573,6 +576,8 @@ class FirefoxColors(
 
     var subtitleColor by mutableStateOf(subtitleColor)
 
+    var errorColor by mutableStateOf(errorColor)
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -640,6 +645,7 @@ class FirefoxColors(
         borderWarning = other.borderWarning
         dividerColor = other.dividerColor
         subtitleColor = other.subtitleColor
+        errorColor = other.errorColor
     }
 
     /**
@@ -714,7 +720,8 @@ class FirefoxColors(
         onboardingTextColor: Color = this.onboardingTextColor,
         freespokeDescriptionColor: Color = this.freespokeDescriptionColor,
         dividerColor: Color = this.dividerColor,
-        subtitleColor: Color = this.subtitleColor
+        subtitleColor: Color = this.subtitleColor,
+        errorColor: Color = this.errorColor,
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -784,7 +791,8 @@ class FirefoxColors(
         onboardingTextColor = onboardingTextColor,
         freespokeDescriptionColor = freespokeDescriptionColor,
         dividerColor = dividerColor,
-        subtitleColor = subtitleColor
+        subtitleColor = subtitleColor,
+        errorColor = errorColor
     )
 }
 

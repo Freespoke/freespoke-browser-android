@@ -18,12 +18,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsPadding
 import mozilla.telemetry.glean.private.NoExtras
 import org.mozilla.fenix.R
 import org.mozilla.fenix.compose.annotation.LightDarkPreview
-import org.mozilla.fenix.onboarding.AccountViewModel
+import org.mozilla.fenix.onboarding.viewmodel.AccountViewModel
 import org.mozilla.fenix.theme.FirefoxTheme
 import org.mozilla.fenix.GleanMetrics.Onboarding as OnboardingMetrics
 
@@ -58,14 +57,12 @@ enum class OnboardingAppSettings {
  */
 @Composable
 fun UpgradeOnboarding(
-    isSyncSignIn: Boolean,
     onDismiss: () -> Unit,
-    viewModel: AccountViewModel?,
+    viewModel: AccountViewModel,
     onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)? = null
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection()) {
         UpgradeOnboardingContent(
-            isSyncSignIn = isSyncSignIn,
             onDismiss = onDismiss,
             viewModel = viewModel,
             onSetupSettingsClick
@@ -75,18 +72,18 @@ fun UpgradeOnboarding(
 
 @Composable
 private fun UpgradeOnboardingContent(
-    isSyncSignIn: Boolean,
     onDismiss: () -> Unit,
-    viewModel: AccountViewModel?,
+    viewModel: AccountViewModel,
     onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)?
 ) {
     var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Welcome) }
 
     Column(
         modifier = Modifier
-            .background(FirefoxTheme.colors.layerOnboarding)
-            .fillMaxSize()
-            .statusBarsPadding(),
+            .background(FirefoxTheme.colors.layer1)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .fillMaxSize(),
     ) {
         OnboardingPage(
             pageState = when (onboardingState) {
@@ -162,7 +159,7 @@ private fun UpgradeOnboardingContent(
             onDismiss = {
                 onDismiss()
             },
-            onPrimaryButtonClick = {
+            updatedOnboardingState = {
                 when (it) {
                     UpgradeOnboardingState.DefaultBrowserShow -> onSetupSettingsClick?.invoke(OnboardingAppSettings.SetupDefaultBrowser)
                     UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(OnboardingAppSettings.Notifications)
@@ -170,95 +167,8 @@ private fun UpgradeOnboardingContent(
                 }
             },
             viewModel = viewModel,
+            modifier = Modifier.weight(1f)
         )
-
-        if (isSyncSignIn) {
-            Spacer(modifier = Modifier.height(6.dp))
-        } else {
-            Indicators(onboardingState = onboardingState)
-        }
-    }
-}
-
-@Composable
-private fun Indicators(
-    onboardingState: UpgradeOnboardingState,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-    ) {
-        Indicator(
-            color = if (onboardingState == UpgradeOnboardingState.Welcome) {
-                FirefoxTheme.colors.indicatorActive
-            } else {
-                FirefoxTheme.colors.indicatorInactive
-            },
-        )
-
-        Spacer(modifier = Modifier.width(28.dp))
-
-    /*    Indicator(
-            color = if (onboardingState == UpgradeOnboardingState.Newsfeed) {
-                FirefoxTheme.colors.indicatorActive
-            } else {
-                FirefoxTheme.colors.indicatorInactive
-            },
-        )
-
-        Spacer(modifier = Modifier.width(28.dp))
-
-        Indicator(
-            color = if (onboardingState == UpgradeOnboardingState.Shop) {
-                FirefoxTheme.colors.indicatorActive
-            } else {
-                FirefoxTheme.colors.indicatorInactive
-            },
-        )
-
-        Spacer(modifier = Modifier.width(28.dp))
-
-        Indicator(
-            color = if (onboardingState == UpgradeOnboardingState.Search) {
-                FirefoxTheme.colors.indicatorActive
-            } else {
-                FirefoxTheme.colors.indicatorInactive
-            },
-        )
-
-        Spacer(modifier = Modifier.width(28.dp))
-
-        Indicator(
-            color = if (onboardingState == UpgradeOnboardingState.Tabs) {
-                FirefoxTheme.colors.indicatorActive
-            } else {
-                FirefoxTheme.colors.indicatorInactive
-            },
-        )*/
-
-    }
-}
-
-@Composable
-private fun Indicator(color: Color) {
-    Box(
-        modifier = Modifier
-            .size(14.dp)
-            .clip(CircleShape)
-            .background(color),
-    )
-}
-
-@Composable
-@LightDarkPreview
-private fun OnboardingPreview() {
-    FirefoxTheme {
-        UpgradeOnboarding(
-            isSyncSignIn = false,
-            onDismiss = {},
-            viewModel = null
-        ) {
-        }
     }
 }
 

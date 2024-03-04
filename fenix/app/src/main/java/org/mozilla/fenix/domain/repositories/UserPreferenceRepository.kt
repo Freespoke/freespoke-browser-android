@@ -5,11 +5,15 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import mozilla.components.support.ktx.android.content.stringPreference
+import androidx.datastore.preferences.preferencesDataStore
 import org.mozilla.fenix.apiservice.model.UserData
 
+private const val PREFERENCES_NAME = "freespoke_preferences"
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
+
 class UserPreferenceRepository(
-    private val dataStore: DataStore<Preferences>
+    private val context: Context
 ) {
 
     private object PreferencesKeys {
@@ -19,7 +23,7 @@ class UserPreferenceRepository(
     }
 
     suspend fun writeUserData(userData: UserData) {
-        dataStore.edit { preferences ->
+        context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.USER_ACCESS_TOKEN] = userData.accessToken
             preferences[PreferencesKeys.USER_REFRESH_TOKEN] = userData.refreshToken
             preferences[PreferencesKeys.USER_ID] = userData.id

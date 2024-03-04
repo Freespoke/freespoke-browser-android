@@ -49,7 +49,8 @@ object PhotonColors {
     val Red70 = Color(0xFFC50042)
     val Red80 = Color(0xFF810220)
     val Red90 = Color(0xFF440306)
-
+    val Red400 = Color(0xFFFC486D)
+    val Red600 = Color(0xFFC43351)
     // Yellow is primarily used for attention / caution / warning status in user interface.
     val Yellow05 = Color(0xFFFFFFCC)
     val Yellow10 = Color(0xFFFFFF98)

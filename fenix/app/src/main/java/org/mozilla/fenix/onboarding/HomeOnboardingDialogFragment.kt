@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
@@ -24,6 +25,7 @@ import org.mozilla.fenix.ext.openSetDefaultBrowserOption
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.onboarding.view.OnboardingAppSettings
 import org.mozilla.fenix.onboarding.view.UpgradeOnboarding
+import org.mozilla.fenix.onboarding.viewmodel.AccountViewModel
 import org.mozilla.fenix.theme.FirefoxTheme
 
 /**
@@ -39,6 +41,7 @@ class HomeOnboardingDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.HomeOnboardingDialogStyle)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     override fun onDestroy() {
@@ -56,11 +59,7 @@ class HomeOnboardingDialogFragment : DialogFragment() {
         setContent {
             ProvideWindowInsets {
                 FirefoxTheme {
-                    val account =
-                        components.backgroundServices.syncStore.observeAsComposableState { state -> state.account }
-
                     UpgradeOnboarding(
-                        isSyncSignIn = account.value != null,
                         onDismiss = ::onDismiss,
                         onSetupSettingsClick = {
                             when (it) {
