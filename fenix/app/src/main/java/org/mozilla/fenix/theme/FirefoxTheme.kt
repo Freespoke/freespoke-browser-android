@@ -150,7 +150,9 @@ private val darkColorPalette = FirefoxColors(
     freespokeDescriptionColor = PhotonColors.DarkGreyO4,
     dividerColor = PhotonColors.LightGrey005,
     subtitleColor = PhotonColors.DarkGreyO4,
-    errorColor = PhotonColors.Red400
+    errorColor = PhotonColors.Red400,
+    freeSpokeProfileGradientStartColor = PhotonColors.DarkGrey161616,
+    freeSpokeProfileGradientEndColor = PhotonColors.DarkGrey161616,
 )
 
 private val lightColorPalette = FirefoxColors(
@@ -224,6 +226,8 @@ private val lightColorPalette = FirefoxColors(
     dividerColor = PhotonColors.LightGrey005,
     subtitleColor = PhotonColors.LightGrey02,
     errorColor = PhotonColors.Red600,
+    freeSpokeProfileGradientStartColor = PhotonColors.FreeSpokeProfileGradientStartColor,
+    freeSpokeProfileGradientEndColor = PhotonColors.White,
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -308,6 +312,8 @@ class FirefoxColors(
     dividerColor: Color,
     subtitleColor: Color,
     errorColor: Color,
+    freeSpokeProfileGradientStartColor: Color,
+    freeSpokeProfileGradientEndColor: Color,
 ) {
     // Layers
 
@@ -578,6 +584,12 @@ class FirefoxColors(
 
     var errorColor by mutableStateOf(errorColor)
 
+    var freeSpokeProfileGradientStartColor by mutableStateOf(freeSpokeProfileGradientStartColor)
+        private set
+
+    var freeSpokeProfileGradientEndColor by mutableStateOf(freeSpokeProfileGradientEndColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -722,6 +734,8 @@ class FirefoxColors(
         dividerColor: Color = this.dividerColor,
         subtitleColor: Color = this.subtitleColor,
         errorColor: Color = this.errorColor,
+        freeSpokeProfileGradientStartColor: Color = this.freeSpokeProfileGradientStartColor,
+        freeSpokeProfileGradientEndColor: Color = this.freeSpokeProfileGradientEndColor,
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -792,7 +806,9 @@ class FirefoxColors(
         freespokeDescriptionColor = freespokeDescriptionColor,
         dividerColor = dividerColor,
         subtitleColor = subtitleColor,
-        errorColor = errorColor
+        errorColor = errorColor,
+        freeSpokeProfileGradientStartColor = freeSpokeProfileGradientStartColor,
+        freeSpokeProfileGradientEndColor = freeSpokeProfileGradientEndColor,
     )
 }
 

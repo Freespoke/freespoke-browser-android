@@ -58,4 +58,34 @@ object FreespokeApi {
     val service : FreespokeApiService by lazy {
         retrofit.create(FreespokeApiService::class.java)
     }
+
+    public suspend fun getUserProfileData(): UserProfileData {
+        return UserProfileData(
+            attributes = ProfileAttributes(
+                registrationPlatform = "android",
+                subscription = Subscription(
+                    subscriptionName = "premium"
+                )
+            ),
+            firstName = "Nic",
+            lastName = "Test",
+            manageSubscriptionLink = "https://freespoke.recurly.com/account/65TZ59ZEFRacyVASnFoKSSYfoWTiL338"
+        )
+    }
 }
+
+data class UserProfileData(
+    val attributes: ProfileAttributes,
+    val firstName: String,
+    val lastName: String,
+    val manageSubscriptionLink: String
+)
+
+data class ProfileAttributes(
+    val registrationPlatform: String,
+    val subscription: Subscription
+)
+
+data class Subscription(
+    val subscriptionName: String
+)

@@ -2071,4 +2071,13 @@
     <string name="continue_without_premium">Continue without premium</string>
     <string name="premium_badge_example">This badge shows when Premium is active.</string>
 
+    <!-- Freespoke profile -->
+    <string name="freefolk_profile">Freefolk Profile</string>
+    <string name="log_out">Log Out</string>
+    <string name="list_item_premium">Premium</string>
+    <string name="list_item_account">Account</string>
+    <string name="list_item_dark_mode">Manage Light/Dark Mode</string>
+    <string name="list_item_default_browser">Manage Default Browser</string>
+    <string name="list_item_notifications">Manage Notifications</string>
+
 </resources>

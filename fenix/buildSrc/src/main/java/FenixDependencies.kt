@@ -84,6 +84,7 @@ object FenixDependencies {
     const val androidx_compose_ui_tooling = "androidx.compose.ui:ui-tooling:${FenixVersions.androidx_compose}"
     const val androidx_compose_foundation = "androidx.compose.foundation:foundation:${FenixVersions.androidx_compose}"
     const val androidx_compose_material = "androidx.compose.material:material:${FenixVersions.androidx_compose}"
+    const val androidx_lifecycle_viewmodel_compose = "androidx.lifecycle:lifecycle-viewmodel-compose:${FenixVersions.androidx_lifecycle}"
     const val androidx_annotation = "androidx.annotation:annotation:${FenixVersions.androidx_annotation}"
     const val androidx_benchmark_junit4 = "androidx.benchmark:benchmark-junit4:${FenixVersions.androidx_benchmark}"
     const val androidx_biometric = "androidx.biometric:biometric:${FenixVersions.androidx_biometric}"

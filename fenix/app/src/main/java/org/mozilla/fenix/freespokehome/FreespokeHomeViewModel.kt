@@ -20,6 +20,7 @@ import org.mozilla.fenix.apiservice.model.ShopCollection
 import org.mozilla.fenix.apiservice.model.TrendingNews
 import org.mozilla.fenix.components.bookmarks.BookmarksUseCase
 import org.mozilla.fenix.components.bookmarks.BookmarksUseCase.Companion.DEFAULT_BOOKMARKS_DAYS_AGE_TO_RETRIEVE
+import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
 import java.util.concurrent.TimeUnit
 
@@ -32,6 +33,7 @@ class FreespokeHomeViewModel(
     val shopsData = MutableLiveData<ShopCollection>()
     val quickLinksData = MutableLiveData<QuickLinkObject>()
     val bookmarkData = MutableLiveData<List<RecentBookmark>>()
+    val profileData = MutableLiveData<ProfileUiModel?>()
 
     val defaultBookmarks = listOf("https://freespoke.com/",
         "https://freespoke-support.freshdesk.com/support/tickets/new",
@@ -90,6 +92,22 @@ class FreespokeHomeViewModel(
             val maxAgeInMs: Long = TimeUnit.DAYS.toMillis(DEFAULT_BOOKMARKS_DAYS_AGE_TO_RETRIEVE)
             val data = bookmarksUseCase.retrieveRecentBookmarks.invoke(10, maxAgeInMs).take(4)
             bookmarkData.value = data
+        }
+    }
+
+    fun getProfileData() {
+        //todo if(!userLoggedIn) profileData.value = null
+
+        viewModelScope.launch {
+            try {
+                val profile = FreespokeApi.getUserProfileData()
+                profileData.value = ProfileUiModel(
+                    shortName = "${profile.firstName.first()}${profile.lastName.first()}",
+                    hasPremium = profile.attributes.subscription.subscriptionName == "premium"
+                )
+            } catch (e: Exception) {
+                Log.e("API", e.localizedMessage ?: "")
+            }
         }
     }
 
