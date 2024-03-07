@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import androidx.annotation.VisibleForTesting
 import mozilla.components.browser.engine.gecko.GeckoEngineSession
 import mozilla.components.browser.engine.gecko.await
+import mozilla.components.browser.engine.gecko.util.BlockListHandler
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.Settings
 import mozilla.components.concept.engine.webextension.Action
@@ -34,6 +35,7 @@ import org.mozilla.geckoview.WebExtension.Action as GeckoNativeWebExtensionActio
 class GeckoWebExtension(
     val nativeExtension: GeckoNativeWebExtension,
     val runtime: GeckoRuntime,
+    val blockListHandler: BlockListHandler
 ) : WebExtension(nativeExtension.id, nativeExtension.location, true) {
 
     private val connectedPorts: MutableMap<PortId, GeckoPort> = mutableMapOf()
@@ -263,6 +265,7 @@ class GeckoWebExtension(
                     runtime,
                     defaultSettings = defaultSettings,
                     openGeckoSession = false,
+                    blockListHandler = blockListHandler
                 )
 
                 tabHandler.onNewTab(
@@ -281,6 +284,7 @@ class GeckoWebExtension(
                         GeckoEngineSession(
                             runtime,
                             defaultSettings = defaultSettings,
+                            blockListHandler = blockListHandler
                         ),
                         false,
                         optionsPageUrl,

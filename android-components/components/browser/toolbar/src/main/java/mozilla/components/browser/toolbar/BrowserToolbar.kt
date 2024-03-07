@@ -196,7 +196,8 @@ class BrowserToolbar @JvmOverloads constructor(
         val height = if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
             MeasureSpec.getSize(heightMeasureSpec)
         } else {
-            resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_default_toolbar_height)
+            //TODO add logic to change height when ad block enabled/disabled
+            resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_adblock_toolbar_height)
         }
 
         setMeasuredDimension(width, height)
@@ -302,6 +303,14 @@ class BrowserToolbar @JvmOverloads constructor(
      */
     override fun addNavigationAction(action: Toolbar.Action) {
         display.addNavigationAction(action)
+    }
+
+    /**
+     * Adds an action to be display on the far left and top side of the toolbar. This area is usually used
+     * on larger devices for adblock actions like "enable" and "disable".
+     */
+    override fun addAdBlockAction(action: Toolbar.Action) {
+        display.addAdBlockAction(action)
     }
 
     /**
@@ -495,6 +504,32 @@ class BrowserToolbar @JvmOverloads constructor(
         visible,
         selected,
         background,
+        padding,
+        listener,
+    )
+
+    /**
+     * An action switch button with two states, selected and unselected. When the switch is pressed, the
+     * state changes automatically.
+     *
+     * @param text The text description that shows near switch.
+     * @param visible Lambda that returns true or false to indicate whether this button should be shown.
+     * @param selected Sets whether this button should be checked initially.
+     * @param padding A optional custom padding.
+     * @param listener Callback that will be invoked whenever the checked state changes.
+     */
+    open class SwitchButton(
+        text: String,
+        textSize: Float,
+        visible: () -> Boolean = { true },
+        selected: Boolean = false,
+        val padding: Padding = DEFAULT_PADDING,
+        listener: (Boolean) -> Unit,
+    ) : Toolbar.ActionSwitchButton(
+        text,
+        textSize,
+        visible,
+        selected,
         padding,
         listener,
     )

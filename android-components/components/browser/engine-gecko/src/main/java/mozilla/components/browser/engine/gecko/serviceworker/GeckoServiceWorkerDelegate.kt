@@ -5,6 +5,7 @@
 package mozilla.components.browser.engine.gecko.serviceworker
 
 import mozilla.components.browser.engine.gecko.GeckoEngineSession
+import mozilla.components.browser.engine.gecko.util.BlockListHandler
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.Settings
 import mozilla.components.concept.engine.serviceworker.ServiceWorkerDelegate
@@ -23,9 +24,10 @@ class GeckoServiceWorkerDelegate(
     internal val delegate: ServiceWorkerDelegate,
     internal val runtime: GeckoRuntime,
     internal val engineSettings: Settings?,
+    internal val blockListHandler: BlockListHandler
 ) : GeckoRuntime.ServiceWorkerDelegate {
     override fun onOpenWindow(url: String): GeckoResult<GeckoSession> {
-        val newEngineSession = GeckoEngineSession(runtime, false, engineSettings, openGeckoSession = false)
+        val newEngineSession = GeckoEngineSession(runtime, false, engineSettings, openGeckoSession = false, blockListHandler = blockListHandler)
 
         return when (delegate.addNewTab(newEngineSession)) {
             true -> GeckoResult.fromValue(newEngineSession.geckoSession)

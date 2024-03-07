@@ -346,6 +346,9 @@ abstract class BaseBrowserFragment :
                     operation = { },
                 )
             },
+            onAdBlockStateChanged = {
+                //TODO add ad block switch logic with Engine
+            }
         )
         val browserToolbarMenuController = DefaultBrowserToolbarMenuController(
             store = store,

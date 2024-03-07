@@ -26,7 +26,7 @@ import org.json.JSONObject
  * Entry point for interacting with the engine implementation.
  */
 interface Engine : WebExtensionRuntime, DataCleanable {
-
+        //TODO add ad block switch logic
     /**
      * Describes a combination of browsing data types stored by the engine.
      */

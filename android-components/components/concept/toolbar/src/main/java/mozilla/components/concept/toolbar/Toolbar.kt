@@ -5,17 +5,22 @@
 package mozilla.components.concept.toolbar
 
 import android.graphics.drawable.Drawable
+import android.util.TypedValue
 import android.view.View
 import android.view.View.NO_ID
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.annotation.Dimension.Companion.DP
 import androidx.annotation.DrawableRes
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import mozilla.components.support.base.android.Padding
 import mozilla.components.support.ktx.android.content.res.resolveAttribute
@@ -157,6 +162,11 @@ interface Toolbar {
      * Adds an action to be displayed on the far left side of the URL in display mode.
      */
     fun addNavigationAction(action: Action)
+
+    /**
+     * Adds an action to be displayed on the far left side of the URL in display mode.
+     */
+    fun addAdBlockAction(action: Action)
 
     /**
      * Adds an action to be displayed at the start of the URL in edit mode.
@@ -403,6 +413,103 @@ interface Toolbar {
                     it.setImageDrawable(imageDrawable)
                     it.contentDescription = contentDescription
                 }
+            }
+        }
+
+        override fun bind(view: View) = Unit
+    }
+
+    /**
+     * An action switch button with two states, selected and unselected. When the switch is pressed, the
+     * state changes automatically.
+     *
+     * @param text The text description that shows near switch.
+     * @param visible Lambda that returns true or false to indicate whether this button should be shown.
+     * @param selected Sets whether this button should be checked initially.
+     * @param padding A optional custom padding.
+     * @param listener Callback that will be invoked whenever the checked state changes.
+     */
+    open class ActionSwitchButton(
+        private val text: String,
+        private val switchTextSize: Float? = null,
+        override val visible: () -> Boolean = { true },
+        private var selected: Boolean = false,
+        private val padding: Padding? = null,
+        private val listener: ((isEnabled: Boolean) -> Unit)?,
+    ) : Action {
+        private var view: WeakReference<LinearLayoutCompat>? = null
+
+        override fun createView(parent: ViewGroup): View = LinearLayoutCompat(parent.context).also { container ->
+            view = WeakReference(container)
+            //TODO add style to switch
+            val switch = SwitchCompat(
+                ContextThemeWrapper(
+                    parent.context,
+                    R.style.Widget_AppCompat_CompoundButton_Switch
+                )
+            ).also { switch ->
+                with(switch) {
+                    isSelected = selected
+                    isChecked = selected
+                }
+                switch.setOnCheckedChangeListener { _, _ ->
+                    toggle(true)
+                }
+            }
+            val textView = TextView(parent.context).also { textView ->
+                textView.text = text
+                textView.setSingleLine()
+                textView.maxLines = 1
+                switchTextSize?.let {
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                }
+            }
+            with(container) {
+                orientation = LinearLayoutCompat.HORIZONTAL
+                addView(switch)
+                addView(textView)
+                updateViewState()
+            }
+            padding?.let { switch.setPadding(it) }
+        }
+
+        /**
+         * Changes the selected state of the action to the inverse of its current state.
+         *
+         * @param notifyListener If true (default) the listener will be notified about the state change.
+         */
+        fun toggle(notifyListener: Boolean = true) {
+            setSelected(!selected, notifyListener)
+        }
+
+        /**
+         * Changes the selected state of the action.
+         *
+         * @param selected The new selected state
+         * @param notifyListener If true (default) the listener will be notified about a state change.
+         */
+        fun setSelected(selected: Boolean, notifyListener: Boolean = true) {
+            if (this.selected == selected) {
+                // Nothing to do here.
+                return
+            }
+
+            this.selected = selected
+            updateViewState()
+
+            if (notifyListener) {
+                listener?.invoke(selected)
+            }
+        }
+
+        /**
+         * Returns the current selected state of the action.
+         */
+        fun isSelected() = selected
+
+        private fun updateViewState() {
+            view?.get()?.let {
+                it.isSelected = selected
             }
         }
 

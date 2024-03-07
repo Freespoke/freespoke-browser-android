@@ -160,6 +160,7 @@ class DisplayToolbar internal constructor(
         progress = rootView.findViewById<ProgressBar>(R.id.mozac_browser_toolbar_progress),
         highlight = rootView.findViewById(R.id.mozac_browser_toolbar_permission_indicator),
         backIcon = rootView.findViewById(R.id.toolbar_back_icon),
+        adBlockActions = rootView.findViewById(R.id.mozac_browser_toolbar_adblock_actions)
     )
 
     /**
@@ -651,6 +652,14 @@ class DisplayToolbar internal constructor(
     }
 
     /**
+     * Adds an action to be display on the far left and top side of the toolbar. This area is usually used
+     * on larger devices for adblock actions like "enable" and "disable".
+     */
+    internal fun addAdBlockAction(action: Toolbar.Action) {
+        views.adBlockActions.addAction(action)
+    }
+
+    /**
      * Removes a previously added navigation action (see [addNavigationAction]). If the provided
      * action was never added, this method has no effect.
      *
@@ -678,5 +687,6 @@ internal class DisplayToolbarViews(
     val origin: OriginView,
     val progress: ProgressBar,
     val highlight: HighlightView,
-    val backIcon: ImageView
+    val backIcon: ImageView,
+    val adBlockActions: ActionContainer
 )

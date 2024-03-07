@@ -130,6 +130,20 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
             view = view,
         )
 
+        val adBlockAction =
+            BrowserToolbar.SwitchButton(
+                text = context.getString(R.string.mozac_feature_customtabs_adblock_switch_text, tab.content.url),
+                visible = {
+                    true
+                },
+                listener = {
+                    browserToolbarInteractor.onBrowserToolbarAdBlockChanged(it)
+                },
+                textSize = resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_url_textsize).toFloat()
+            )
+
+        browserToolbarView.view.addAdBlockAction(adBlockAction)
+
         readerViewFeature.set(
             feature = components.strictMode.resetAfter(StrictMode.allowThreadDiskReads()) {
                 ReaderViewFeature(

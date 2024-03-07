@@ -20,6 +20,7 @@ import mozilla.components.browser.engine.gecko.media.GeckoMediaDelegate
 import mozilla.components.browser.engine.gecko.mediasession.GeckoMediaSessionDelegate
 import mozilla.components.browser.engine.gecko.permission.GeckoPermissionRequest
 import mozilla.components.browser.engine.gecko.prompt.GeckoPromptDelegate
+import mozilla.components.browser.engine.gecko.util.BlockListHandler
 import mozilla.components.browser.engine.gecko.window.GeckoWindowRequest
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
@@ -90,6 +91,7 @@ class GeckoEngineSession(
     },
     private val context: CoroutineContext = Dispatchers.IO,
     openGeckoSession: Boolean = true,
+    private val blockListHandler: BlockListHandler
 ) : CoroutineScope, EngineSession() {
 
     // This logger is temporary and parsed by FNPRMS for performance measurements. It can be
@@ -620,7 +622,7 @@ class GeckoEngineSession(
             if (currentUrl?.isExtensionUrl() != request.uri.isExtensionUrl()) {
                 initialLoad = true
             }
-
+            if (isAdsRequest(request)) return GeckoResult.fromValue(AllowOrDeny.DENY)
             return when {
                 maybeInterceptRequest(request, false) != null ->
                     GeckoResult.fromValue(AllowOrDeny.DENY)
@@ -648,7 +650,7 @@ class GeckoEngineSession(
                 return GeckoResult.fromValue(AllowOrDeny.ALLOW)
             }
 
-            return if (maybeInterceptRequest(request, true) != null) {
+            return if (maybeInterceptRequest(request, true) != null || isAdsRequest(request)) {
                 GeckoResult.fromValue(AllowOrDeny.DENY)
             } else {
                 // Not notifying session observer because of performance concern and currently there
@@ -672,7 +674,7 @@ class GeckoEngineSession(
             uri: String,
         ): GeckoResult<GeckoSession> {
             val newEngineSession =
-                GeckoEngineSession(runtime, privateMode, defaultSettings, openGeckoSession = false)
+                GeckoEngineSession(runtime, privateMode, defaultSettings, openGeckoSession = false, blockListHandler = blockListHandler)
             notifyObservers {
                 onWindowRequest(GeckoWindowRequest(uri, newEngineSession))
             }
@@ -692,6 +694,7 @@ class GeckoEngineSession(
             return GeckoResult.fromValue(response?.uri)
         }
 
+        //TODO handle ads requests
         private fun maybeInterceptRequest(
             request: NavigationDelegate.LoadRequest,
             isSubframeRequest: Boolean,
@@ -699,7 +702,6 @@ class GeckoEngineSession(
             if (request.hasUserGesture) {
                 lastLoadRequestUri = ""
             }
-
             val interceptor = settings.requestInterceptor
             val interceptionResponse = if (
                 interceptor != null && (!request.isDirectNavigation || interceptor.interceptsAppInitiatedRequests())
@@ -745,6 +747,10 @@ class GeckoEngineSession(
             lastLoadRequestUri = request.uri
             return interceptionResponse
         }
+    }
+
+    private fun isAdsRequest(request: NavigationDelegate.LoadRequest): Boolean {
+        return blockListHandler.isAdsRequest(request)
     }
 
     /**

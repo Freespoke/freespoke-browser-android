@@ -4,6 +4,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
     <dimen name="mozac_browser_toolbar_default_toolbar_height">56dp</dimen>
+    <dimen name="mozac_browser_toolbar_adblock_toolbar_height">81dp</dimen>
 
     <!-- DisplayToolbar -->
     <dimen name="mozac_browser_toolbar_progress_bar_height">3dp</dimen>
