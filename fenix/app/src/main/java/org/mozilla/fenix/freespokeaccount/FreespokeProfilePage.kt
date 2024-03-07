@@ -44,8 +44,6 @@ fun FreespokeProfilePage(
 ) {
     val scrollState = rememberScrollState()
 
-    //background: linear-gradient(180deg, #EDF0F5 -17.09%, #FFFFFF 100%);
-
     Column(
         modifier = Modifier
             .fillMaxSize()
