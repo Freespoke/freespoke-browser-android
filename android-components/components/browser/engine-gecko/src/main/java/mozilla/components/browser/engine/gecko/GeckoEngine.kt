@@ -809,6 +809,12 @@ class GeckoEngine(
                 runtime.settings.enterpriseRootsEnabled = value
             }
 
+        override var adBlockEnabled: Boolean
+            get() = defaultSettings?.adBlockEnabled == true
+            set(value) {
+                defaultSettings?.adBlockEnabled = value
+            }
+
         override var httpsOnlyMode: Engine.HttpsOnlyMode
             get() = when (runtime.settings.allowInsecureConnections) {
                 GeckoRuntimeSettings.ALLOW_ALL -> Engine.HttpsOnlyMode.DISABLED
@@ -846,6 +852,7 @@ class GeckoEngine(
             this.cookieBannerHandlingModePrivateBrowsing =
                 it.cookieBannerHandlingModePrivateBrowsing
             this.cookieBannerHandlingDetectOnlyMode = it.cookieBannerHandlingDetectOnlyMode
+            this.adBlockEnabled = it.adBlockEnabled
         }
     }
 

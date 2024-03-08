@@ -109,7 +109,9 @@ class BrowserToolbar @JvmOverloads constructor(
 
     override var title: String
         get() = display.title
-        set(value) { display.title = value }
+        set(value) {
+            display.title = value
+        }
 
     override var url: CharSequence
         get() = display.url.toString()
@@ -122,7 +124,9 @@ class BrowserToolbar @JvmOverloads constructor(
 
     override var siteSecure: Toolbar.SiteSecurity
         get() = display.siteSecurity
-        set(value) { display.siteSecurity = value }
+        set(value) {
+            display.siteSecurity = value
+        }
 
     override var highlight: Highlight = Highlight.NONE
         set(value) {
@@ -143,7 +147,9 @@ class BrowserToolbar @JvmOverloads constructor(
 
     override var private: Boolean
         get() = edit.private
-        set(value) { edit.private = value }
+        set(value) {
+            edit.private = value
+        }
 
     /**
      * Registers the given listener to be invoked when the user edits the URL.
@@ -359,6 +365,7 @@ class BrowserToolbar @JvmOverloads constructor(
             Toolbar.CursorPlacement.ALL -> {
                 edit.selectAll()
             }
+
             Toolbar.CursorPlacement.END -> {
                 edit.selectEnd()
             }
@@ -421,6 +428,7 @@ class BrowserToolbar @JvmOverloads constructor(
                 edit.stopEditing()
                 Pair(display.rootView, edit.rootView)
             }
+
             State.EDIT -> {
                 edit.startEditing()
                 Pair(edit.rootView, display.rootView)
@@ -517,13 +525,17 @@ class BrowserToolbar @JvmOverloads constructor(
      * @param selected Sets whether this button should be checked initially.
      * @param padding A optional custom padding.
      * @param listener Callback that will be invoked whenever the checked state changes.
+     * @param track A optional custom track for switch.
+     * @param thumb A optional custom thumb for switch.
      */
     open class SwitchButton(
         text: String,
         textSize: Float,
         visible: () -> Boolean = { true },
         selected: Boolean = false,
-        val padding: Padding = DEFAULT_PADDING,
+        val padding: Padding = SMALL_PADDING,
+        @DrawableRes track: Int = R.drawable.background_switch_track,
+        @DrawableRes thumb: Int = R.drawable.background_switch_thumb,
         listener: (Boolean) -> Unit,
     ) : Toolbar.ActionSwitchButton(
         text,
@@ -531,6 +543,8 @@ class BrowserToolbar @JvmOverloads constructor(
         visible,
         selected,
         padding,
+        track,
+        thumb,
         listener,
     )
 
@@ -594,8 +608,16 @@ class BrowserToolbar @JvmOverloads constructor(
 
     companion object {
         internal const val ACTION_PADDING_DP = 16
+        internal const val ACTION_SMALL_PADDING_DP = 8
         internal val DEFAULT_PADDING =
             Padding(ACTION_PADDING_DP, ACTION_PADDING_DP, ACTION_PADDING_DP, ACTION_PADDING_DP)
+        internal val SMALL_PADDING =
+            Padding(
+                ACTION_SMALL_PADDING_DP,
+                ACTION_SMALL_PADDING_DP,
+                ACTION_SMALL_PADDING_DP,
+                ACTION_SMALL_PADDING_DP,
+            )
     }
 }
 

@@ -9,6 +9,7 @@ import android.transition.TransitionManager
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import mozilla.components.browser.toolbar.R
@@ -24,6 +25,8 @@ internal class ActionContainer @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
     private val actions = mutableListOf<ActionWrapper>()
     private var actionSize: Int? = null
+    private var actionWidth: Int? = null
+    private var actionHeight: Int? = null
 
     init {
         gravity = Gravity.CENTER_VERTICAL
@@ -37,7 +40,13 @@ internal class ActionContainer @JvmOverloads constructor(
             0,
         ).run {
             actionSize = attrs?.let {
-                getDimensionPixelSize(R.styleable.ActionContainer_actionContainerItemSize, 0)
+                getDimensionPixelSize(R.styleable.ActionContainer_actionContainerItemSize, LayoutParams.WRAP_CONTENT)
+            }
+            actionWidth = attrs?.let {
+                getDimensionPixelSize(R.styleable.ActionContainer_actionContainerItemWidth, LayoutParams.WRAP_CONTENT)
+            }
+            actionHeight = attrs?.let {
+                getDimensionPixelSize(R.styleable.ActionContainer_actionContainerItemHeight, LayoutParams.WRAP_CONTENT)
             }
 
             recycle()
@@ -105,6 +114,8 @@ internal class ActionContainer @JvmOverloads constructor(
     }
 
     private fun addActionView(view: View) {
-        addView(view, LayoutParams(actionSize ?: 0, actionSize ?: 0))
+        val width = actionWidth ?: actionSize ?: LayoutParams.WRAP_CONTENT
+        val height = actionHeight ?: actionSize ?: LayoutParams.WRAP_CONTENT
+        addView(view, LayoutParams(width, height))
     }
 }

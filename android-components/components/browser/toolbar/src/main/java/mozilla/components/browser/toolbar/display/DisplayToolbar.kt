@@ -597,6 +597,7 @@ class DisplayToolbar internal constructor(
         views.browserActions.invalidateActions()
         views.pageActions.invalidateActions()
         views.navigationActions.invalidateActions()
+        views.adBlockActions.invalidateActions()
     }
 
     /**

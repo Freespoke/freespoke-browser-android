@@ -16,9 +16,9 @@
     <mozilla.components.browser.toolbar.internal.ActionContainer
         android:id="@+id/mozac_browser_toolbar_adblock_actions"
         android:layout_width="wrap_content"
-        android:layout_height="33dp"
+        android:layout_height="wrap_content"
         android:visibility="visible"
-        mozac:actionContainerItemSize="133dp"
+        mozac:actionContainerItemHeight="33dp"
         app:layout_constraintStart_toEndOf="@id/toolbar_back_icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/mozac_browser_toolbar_menu"

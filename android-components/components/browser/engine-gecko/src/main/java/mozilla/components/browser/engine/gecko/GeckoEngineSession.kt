@@ -132,6 +132,12 @@ class GeckoEngineSession(
             set(value) {
                 geckoSession.settings.suspendMediaWhenInactive = value
             }
+
+        override var adBlockEnabled: Boolean
+            get() = defaultSettings?.adBlockEnabled == true
+            set(value) {
+                defaultSettings?.adBlockEnabled = value
+            }
     }
 
     internal var initialLoad = true
@@ -750,7 +756,7 @@ class GeckoEngineSession(
     }
 
     private fun isAdsRequest(request: NavigationDelegate.LoadRequest): Boolean {
-        return blockListHandler.isAdsRequest(request)
+        return blockListHandler.isAdsRequest(request)  && settings.adBlockEnabled
     }
 
     /**

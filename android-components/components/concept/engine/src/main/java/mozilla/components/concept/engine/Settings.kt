@@ -205,6 +205,11 @@ abstract class Settings {
      * Setting the HTTPS-Only mode for upgrading connections to HTTPS.
      */
     open var httpsOnlyMode: Engine.HttpsOnlyMode by UnsupportedSetting()
+
+    /**
+     * Setting the AdBlock mode for blocking ads requests.
+     */
+    open var adBlockEnabled: Boolean by UnsupportedSetting()
 }
 
 /**
@@ -247,6 +252,7 @@ data class DefaultSettings(
     override var cookieBannerHandlingModePrivateBrowsing: CookieBannerHandlingMode =
         CookieBannerHandlingMode.DISABLED,
     override var cookieBannerHandlingDetectOnlyMode: Boolean = false,
+    override var adBlockEnabled: Boolean = false
 ) : Settings()
 
 class UnsupportedSetting<T> {
