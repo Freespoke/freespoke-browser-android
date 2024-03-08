@@ -99,8 +99,7 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
                 listener = {
                     browserToolbarInteractor.onBrowserToolbarAdBlockChanged(it)
                 },
-                textSize = resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_url_textsize).toFloat(),
-                padding = Padding(0, 0, 0, 0)
+                textSize = resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_url_textsize).toFloat()
             )
 
         browserToolbarView.view.addAdBlockAction(adBlockAction)
