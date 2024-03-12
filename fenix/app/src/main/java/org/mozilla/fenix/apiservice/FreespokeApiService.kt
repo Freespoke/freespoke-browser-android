@@ -16,6 +16,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -52,6 +53,9 @@ interface FreespokeApiService {
                            @Field("lastName") lastName: String,
                            @Field("email") email: String,
                            @Field("password") password: String): Response<UserData>
+
+    @GET("/accounts/profile")
+    suspend fun getProfile(@Header("Authorization") bearerToken: String): Response<UserProfileData>
 }
 
 object FreespokeApi {
@@ -64,7 +68,9 @@ object FreespokeApi {
             attributes = ProfileAttributes(
                 registrationPlatform = "android",
                 subscription = Subscription(
-                    subscriptionName = "premium"
+                    subscriptionName = "free trial",
+                    subscriptionPaymentSource = "android",
+                    subscriptionExpiry = 1711866551L
                 )
             ),
             firstName = "Nic",
@@ -87,5 +93,7 @@ data class ProfileAttributes(
 )
 
 data class Subscription(
-    val subscriptionName: String
+    val subscriptionName: String,
+    val subscriptionPaymentSource: String,
+    val subscriptionExpiry: Long
 )

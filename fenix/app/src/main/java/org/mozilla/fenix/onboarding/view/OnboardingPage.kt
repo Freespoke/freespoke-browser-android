@@ -62,6 +62,7 @@ fun OnboardingPage(
                 )
             }
             UpgradeOnboardingState.Subscriptions -> SubscriptionsView(
+                SubscriptionInfoBlockType.Trial,
                 onDismiss,
                 updatedOnboardingState,
                 Modifier.align(Alignment.BottomCenter)

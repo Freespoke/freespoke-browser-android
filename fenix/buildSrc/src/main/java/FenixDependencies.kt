@@ -58,6 +58,8 @@ object FenixVersions {
 
     const val google_play_review_version = "2.0.0"
 
+    const val google_play_billing_version = "6.0.1"
+
     const val protobuf = "3.21.10" // keep in sync with the version used in AS.
 }
 
@@ -116,6 +118,8 @@ object FenixDependencies {
         "com.google.accompanist:accompanist-drawablepainter:${FenixVersions.accompanist_drawablepainter}"
     const val google_accompanist_insets =
         "com.google.accompanist:accompanist-insets:${FenixVersions.accompanist_drawablepainter}"
+
+    const val google_play_billing_ktx = "com.android.billingclient:billing-ktx:${FenixVersions.google_play_billing_version}"
 
     const val protobuf_javalite = "com.google.protobuf:protobuf-javalite:${FenixVersions.protobuf}"
     const val protobuf_compiler = "com.google.protobuf:protoc:${FenixVersions.protobuf}"

@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix.compose.button
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ButtonDefaults
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import mozilla.components.ui.colors.PhotonColors
 import org.mozilla.fenix.R
 import org.mozilla.fenix.compose.annotation.LightDarkPreview
 import org.mozilla.fenix.theme.FirefoxTheme
@@ -35,6 +37,7 @@ private fun Button(
     text: String,
     textColor: Color,
     backgroundColor: Color,
+    borderStroke: BorderStroke? = null,
     icon: Painter? = null,
     tint: Color,
     onClick: () -> Unit,
@@ -47,6 +50,7 @@ private fun Button(
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = backgroundColor,
         ),
+        border = borderStroke,
     ) {
         icon?.let { painter ->
             Icon(
@@ -195,6 +199,27 @@ fun PrimaryButtonOnboarding(
     )
 }
 
+@Composable
+fun SecondaryButtonOnboarding(
+    modifier: Modifier = Modifier,
+    text: String,
+    textColor: Color = FirefoxTheme.colors.textActionSecondary,
+    backgroundColor: Color = PhotonColors.White,
+    icon: Painter? = null,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier,
+        text = text,
+        textColor = textColor,
+        backgroundColor = backgroundColor,
+        icon = icon,
+        tint = FirefoxTheme.colors.iconActionPrimary,
+        onClick = onClick,
+        borderStroke = BorderStroke(1.dp, FirefoxTheme.colors.dividerColor)
+    )
+}
+
 
 @Composable
 @LightDarkPreview
@@ -210,6 +235,11 @@ private fun ButtonPreview() {
                 text = "Continue",
                 icon = painterResource(R.drawable.ic_tab_collection),
                 onClick = {},
+            )
+            SecondaryButtonOnboarding(
+                text = "Cancel",
+                icon = null,
+                onClick = {}
             )
             PrimaryButton(
                 text = "Label",

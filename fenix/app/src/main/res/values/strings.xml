@@ -2065,10 +2065,13 @@
     <string name="porn_free">Porn Free</string>
     <string name="porn_free_description">Fight sextrafficking</string>
     <string name="subscriptions_rules">By tapping below for monthly or yearly subscription you are enrolling in automatic payments after the 30-day trial period. You can cancel anytime, effective at end of billing period.</string>
-    <string name="month_subscription_value">$5.00 / MONTH</string>
-    <string name="year_subscription_value">$30.00 / Year</string>
+    <string name="month_subscription_value">%s / MONTH</string>
+    <string name="year_subscription_value">%s / Year</string>
+    <string name="update_plan">Update Plan</string>
+    <string name="cancel_plan">Cancel Plan</string>
     <string name="restore_purchase">Already have premium? Restore Purchase</string>
     <string name="continue_without_premium">Continue without premium</string>
+    <string name="continue_without_updating">Continue without Updating</string>
     <string name="premium_badge_example">This badge shows when Premium is active.</string>
 
     <!-- Freespoke profile -->

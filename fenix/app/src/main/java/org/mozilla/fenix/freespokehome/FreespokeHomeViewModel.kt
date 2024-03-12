@@ -21,6 +21,7 @@ import org.mozilla.fenix.apiservice.model.TrendingNews
 import org.mozilla.fenix.components.bookmarks.BookmarksUseCase
 import org.mozilla.fenix.components.bookmarks.BookmarksUseCase.Companion.DEFAULT_BOOKMARKS_DAYS_AGE_TO_RETRIEVE
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
+import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
 import java.util.concurrent.TimeUnit
 
@@ -101,10 +102,7 @@ class FreespokeHomeViewModel(
         viewModelScope.launch {
             try {
                 val profile = FreespokeApi.getUserProfileData()
-                profileData.value = ProfileUiModel(
-                    shortName = "${profile.firstName.first()}${profile.lastName.first()}",
-                    hasPremium = profile.attributes.subscription.subscriptionName == "premium"
-                )
+                profileData.value = profile.mapToUiProfile()
             } catch (e: Exception) {
                 Log.e("API", e.localizedMessage ?: "")
             }
