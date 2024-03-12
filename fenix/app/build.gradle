@@ -641,6 +641,9 @@ dependencies {
     implementation FenixDependencies.google_play_review
     implementation FenixDependencies.google_play_review_ktx
 
+    //Billing
+    implementation FenixDependencies.google_play_billing_ktx
+
     androidTestImplementation FenixDependencies.uiautomator
     androidTestImplementation "tools.fastlane:screengrab:2.0.0"
     // This Falcon version is added to maven central now required for Screengrab
