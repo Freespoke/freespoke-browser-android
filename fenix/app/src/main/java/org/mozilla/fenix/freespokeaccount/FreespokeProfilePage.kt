@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.fenix.freespokeaccount
 
 import androidx.compose.foundation.background
@@ -34,7 +38,8 @@ import org.mozilla.fenix.theme.FirefoxTheme
 
 @Composable
 fun FreespokeProfilePage(
-    viewModel: FreespokeProfileViewModel = viewModel(),
+    viewModel: FreespokeProfileViewModel = viewModel(factory = FreespokeProfileViewModel.Factory),
+    onManagePremium: () -> Unit,
     onSetDefaultBrowser: () -> Unit,
     onManageNotifications: () -> Unit,
     onShare: () -> Unit,
@@ -114,7 +119,9 @@ fun FreespokeProfilePage(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             FreespokeProfileListItem(
-                type = FreespokeProfileListItemType.ExternalLink(""),
+                type = FreespokeProfileListItemType.Default {
+                    onManagePremium()
+                },
                 text = stringResource(id = R.string.list_item_premium),
                 iconPainter = painterResource(id = R.drawable.ic_premium_small),
             )

@@ -22,12 +22,15 @@ import org.mozilla.fenix.components.bookmarks.BookmarksUseCase
 import org.mozilla.fenix.components.bookmarks.BookmarksUseCase.Companion.DEFAULT_BOOKMARKS_DAYS_AGE_TO_RETRIEVE
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
+import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
+import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
 import java.util.concurrent.TimeUnit
 
 class FreespokeHomeViewModel(
     val bookmarksUseCase: BookmarksUseCase,
-    val historyStorage: PlacesHistoryStorage
+    val historyStorage: PlacesHistoryStorage,
+    val freespokeProfileStore: FreespokeProfileStore
 ): ViewModel() {
 
     val newsData = MutableLiveData<List<TrendingNews>>()
@@ -99,14 +102,17 @@ class FreespokeHomeViewModel(
     fun getProfileData() {
         //todo if(!userLoggedIn) profileData.value = null
 
-        viewModelScope.launch {
-            try {
-                val profile = FreespokeApi.getUserProfileData()
-                profileData.value = profile.mapToUiProfile()
-            } catch (e: Exception) {
-                Log.e("API", e.localizedMessage ?: "")
-            }
-        }
+//        viewModelScope.launch {
+//            try {
+//                val profile = FreespokeApi.getUserProfileData()
+//                profileData.value = profile.mapToUiProfile()
+//                freespokeProfileStore.dispatch(
+//                    UpdateProfileAction(profile)
+//                )
+//            } catch (e: Exception) {
+//                Log.e("API", e.localizedMessage ?: "")
+//            }
+//        }
     }
 
     companion object {
@@ -122,7 +128,8 @@ class FreespokeHomeViewModel(
                 val application = checkNotNull(extras[APPLICATION_KEY])
                 return FreespokeHomeViewModel(
                     (application as FenixApplication).components.useCases.bookmarksUseCases,
-                    application.components.core.historyStorage) as T
+                    application.components.core.historyStorage,
+                    application.components.freespokeProfileStore) as T
             }
         }
     }

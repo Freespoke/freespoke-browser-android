@@ -1406,8 +1406,16 @@
     <fragment
         android:id="@+id/freespokeProfileFragment"
         android:name="org.mozilla.fenix.freespokeaccount.FreespokeProfileFragment"
-        android:label="FreespokeProfileFragment" />
+        android:label="FreespokeProfileFragment" >
+        <action
+            android:id="@+id/action_freespokeProfileFragment_to_subscriptionManagementFragment"
+            app:destination="@id/subscriptionManagementFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_customizationFragment"
         app:destination="@id/customizationFragment" />
+    <fragment
+        android:id="@+id/subscriptionManagementFragment"
+        android:name="org.mozilla.fenix.freespokepremium.SubscriptionManagementFragment"
+        android:label="SubscriptionManagementFragment" />
 </navigation>

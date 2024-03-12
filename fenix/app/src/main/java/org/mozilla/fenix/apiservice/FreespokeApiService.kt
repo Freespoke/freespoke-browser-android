@@ -89,7 +89,7 @@ data class UserProfileData(
 
 data class ProfileAttributes(
     val registrationPlatform: String,
-    val subscription: Subscription
+    val subscription: Subscription?
 )
 
 data class Subscription(

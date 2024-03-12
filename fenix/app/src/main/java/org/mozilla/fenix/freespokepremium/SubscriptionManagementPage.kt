@@ -14,44 +14,54 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import mozilla.telemetry.glean.private.NoExtras
 import org.mozilla.fenix.GleanMetrics.Onboarding
+import org.mozilla.fenix.components.components
 import org.mozilla.fenix.onboarding.view.LoginView
 import org.mozilla.fenix.onboarding.view.OnboardingPageState
 import org.mozilla.fenix.onboarding.view.PremiumView
-import org.mozilla.fenix.onboarding.view.SubscriptionInfoBlockType
+import org.mozilla.fenix.onboarding.view.SignUpView
 import org.mozilla.fenix.onboarding.view.SubscriptionsView
 import org.mozilla.fenix.onboarding.view.UpgradeOnboardingState
+import org.mozilla.fenix.onboarding.viewmodel.AccountViewModel
 import org.mozilla.fenix.theme.FirefoxTheme
 
 @Composable
 fun SubscriptionManagementPage(
+    onUpgradePlan: () -> Unit,
+    onCancelPlan: (Boolean) -> Unit,
     onDismiss: () -> Unit,
 ) {
 
+    val viewModel: AccountViewModel = viewModel(factory = AccountViewModel.Factory)
+
+    val profileStore = components.freespokeProfileStore
+    val initialState = if (profileStore.state.profile != null) {
+        UpgradeOnboardingState.Subscriptions
+    } else {
+        UpgradeOnboardingState.Registration
+    }
+
     var type by remember {
-        mutableStateOf(UpgradeOnboardingState.Subscriptions)
+        mutableStateOf(initialState)
     }
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(FirefoxTheme.colors.layerOnboarding)
+            .background(FirefoxTheme.colors.layerOnboarding),
     ) {
 
         when (type) {
             UpgradeOnboardingState.Subscriptions -> SubscriptionsView(
-                subscriptionPageType = SubscriptionInfoBlockType.Regular,
                 onDismiss = onDismiss,
                 updatedOnboardingState = { type = it },
                 modifier = Modifier.align(Alignment.BottomCenter),
-                onUpgradePlan = {
-
-                },
-                onCancelPlan = {
-
-                }
+                onUpgradePlan = onUpgradePlan,
+                onCancelPlan = onCancelPlan,
             )
+
             UpgradeOnboardingState.Login -> LoginView()
             UpgradeOnboardingState.Premium -> PremiumView(
                 onDismiss,
@@ -62,8 +72,16 @@ fun SubscriptionManagementPage(
                         Onboarding.syncCardImpression.record(NoExtras())
                     },
                 ),
-                Modifier.align(Alignment.BottomCenter)
+                Modifier.align(Alignment.BottomCenter),
             )
+
+            UpgradeOnboardingState.Registration -> SignUpView(
+                onDismiss = onDismiss,
+                updatedOnboardingState = { type = it },
+                viewModel = viewModel,
+                modifier = Modifier.align(Alignment.BottomCenter),
+            )
+
             else -> {}
         }
     }

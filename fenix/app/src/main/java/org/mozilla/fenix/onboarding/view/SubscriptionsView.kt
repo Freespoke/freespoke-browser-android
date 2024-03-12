@@ -26,9 +26,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.mozilla.fenix.R
+import org.mozilla.fenix.components.components
 import org.mozilla.fenix.compose.button.PrimaryButtonOnboarding
 import org.mozilla.fenix.compose.button.SecondaryButtonOnboarding
 import org.mozilla.fenix.ext.asActivity
+import org.mozilla.fenix.ext.components
+import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokepremium.FreespokePremiumViewModel
 import org.mozilla.fenix.freespokepremium.SubscriptionsUiModel
 import org.mozilla.fenix.theme.FirefoxTheme
@@ -36,13 +39,21 @@ import org.mozilla.fenix.theme.FirefoxTheme.colors
 
 @Composable
 fun SubscriptionsView(
-    subscriptionPageType: SubscriptionInfoBlockType,
     onDismiss: () -> Unit,
     updatedOnboardingState: (UpgradeOnboardingState) -> Unit,
     modifier: Modifier,
     onUpgradePlan: (() -> Unit)? = null,
-    onCancelPlan: (() -> Unit)? = null,
+    onCancelPlan: ((Boolean) -> Unit)? = null,
 ) {
+
+    val activity = LocalContext.current.asActivity()
+    val viewModel: FreespokePremiumViewModel = viewModel(
+        factory = FreespokePremiumViewModel.Factory
+    )
+
+    val pageType by viewModel.uiTypeFlow.collectAsState()
+    val subscriptions by viewModel.subscriptionUiStateFlow.collectAsState()
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -158,13 +169,23 @@ fun SubscriptionsView(
         }*/
     }
 
-    SubscriptionInfoBlock(
-        modifier = modifier,
-        type = subscriptionPageType,
-        updatedOnboardingState = updatedOnboardingState,
-        onUpgradePlan = onUpgradePlan,
-        onCancelPlan = onCancelPlan,
-    )
+    pageType?.let {
+        SubscriptionInfoBlock(
+            modifier = modifier,
+            subscriptionsUiModel = subscriptions,
+            type = it,
+            updatedOnboardingState = updatedOnboardingState,
+            onUpgradePlan = onUpgradePlan,
+            onCancelPlan = onCancelPlan,
+            onLaunchPurchaseFlow = { offerToken ->
+                activity?.let { activity ->
+                    viewModel.launchPurchaseFlow(activity, offerToken) {
+                        updatedOnboardingState(UpgradeOnboardingState.Premium)
+                    }
+                }
+            }
+        )
+    }
 }
 
 enum class SubscriptionInfoBlockType {
@@ -177,18 +198,15 @@ enum class SubscriptionInfoBlockType {
 @Composable
 fun SubscriptionInfoBlock(
     modifier: Modifier,
+    subscriptionsUiModel: SubscriptionsUiModel?,
     type: SubscriptionInfoBlockType,
     updatedOnboardingState: (UpgradeOnboardingState) -> Unit,
+    onLaunchPurchaseFlow: (String) -> Unit,
     onUpgradePlan: (() -> Unit)? = null,
-    onCancelPlan: (() -> Unit)? = null,
+    onCancelPlan: ((Boolean) -> Unit)? = null,
 ) {
-    val activity = LocalContext.current.asActivity()
-    val viewModel: FreespokePremiumViewModel = viewModel(
-        factory = FreespokePremiumViewModel.Factory
-    )
-    val uiState by viewModel.subscriptionUiStateFlow.collectAsState()
 
-    uiState?.let { uiModel ->
+    subscriptionsUiModel?.let { uiModel ->
         Column(modifier = modifier
             .fillMaxWidth()
             .background(colors.layerOnboarding)
@@ -214,17 +232,13 @@ fun SubscriptionInfoBlock(
                 type = type,
                 uiModel = uiModel,
                 onPurchasePlan = { offerToken ->
-                    activity?.let {
-                        viewModel.launchPurchaseFlow(it, offerToken) {
-                            updatedOnboardingState(UpgradeOnboardingState.Premium)
-                        }
-                    }
+                    onLaunchPurchaseFlow(offerToken)
                 },
                 onUpgradePlan = {
                     onUpgradePlan?.invoke()
                 },
                 onCancelPlan = {
-                    onCancelPlan?.invoke()
+                    onCancelPlan?.invoke(type == SubscriptionInfoBlockType.Upgrade)
                 }
             )
 

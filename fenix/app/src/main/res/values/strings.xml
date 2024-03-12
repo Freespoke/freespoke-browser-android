@@ -2069,6 +2069,7 @@
     <string name="year_subscription_value">%s / Year</string>
     <string name="update_plan">Update Plan</string>
     <string name="cancel_plan">Cancel Plan</string>
+    <string name="cancel_anytime">Cancel anytime.</string>
     <string name="restore_purchase">Already have premium? Restore Purchase</string>
     <string name="continue_without_premium">Continue without premium</string>
     <string name="continue_without_updating">Continue without Updating</string>

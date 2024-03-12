@@ -33,6 +33,7 @@ import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.filterState
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.ext.sort
+import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.gleanplumb.state.MessagingMiddleware
 import org.mozilla.fenix.home.PocketUpdatesMiddleware
 import org.mozilla.fenix.home.blocklist.BlocklistHandler
@@ -217,6 +218,7 @@ class Components(private val context: Context) {
     }
 
     val billing by lazyMonitored { Billing(context) }
+    val freespokeProfileStore by lazyMonitored { FreespokeProfileStore() }
 }
 
 /**

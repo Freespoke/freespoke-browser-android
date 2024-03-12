@@ -14,9 +14,9 @@ data class ProfileUiModel(
 
             return ProfileUiModel(
                 shortName = "${firstName.first()}${lastName.first()}",
-                hasPremium = System.currentTimeMillis() / 1000 < attributes.subscription.subscriptionExpiry,
+                hasPremium = System.currentTimeMillis() / 1000 < (attributes.subscription?.subscriptionExpiry ?: 0L),
                 //todo
-                hasNativeSubscription = attributes.subscription.subscriptionPaymentSource == "android",
+                hasNativeSubscription = attributes.subscription?.subscriptionPaymentSource == "android",
                 manageSubscriptionLink = null
             )
         }

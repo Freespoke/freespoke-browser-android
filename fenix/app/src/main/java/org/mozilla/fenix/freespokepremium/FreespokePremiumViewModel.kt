@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.fenix.freespokepremium
 
 import android.app.Activity
@@ -14,13 +18,19 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import mozilla.components.lib.state.ext.flow
+import mozilla.components.lib.state.ext.flowScoped
+import org.mozilla.fenix.apiservice.UserProfileData
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.billing.Billing.Companion.filterBaseOffers
 import org.mozilla.fenix.components.billing.Billing.Companion.filterTrialOffers
 import org.mozilla.fenix.ext.components
+import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
+import org.mozilla.fenix.onboarding.view.SubscriptionInfoBlockType
 
 class FreespokePremiumViewModel(
     private val billing: Billing,
+    private val freespokeProfileStore: FreespokeProfileStore
 ) : ViewModel() {
 
     private val cachedProductDetails: MutableStateFlow<ProductDetails?> = MutableStateFlow(null)
@@ -28,6 +38,10 @@ class FreespokePremiumViewModel(
     private val _subscriptionUiStateFlow: MutableStateFlow<SubscriptionsUiModel?> =
         MutableStateFlow(null)
     val subscriptionUiStateFlow = _subscriptionUiStateFlow.asStateFlow()
+
+    private val _uiTypeFlow: MutableStateFlow<SubscriptionInfoBlockType?> =
+        MutableStateFlow(null)
+    val uiTypeFlow = _uiTypeFlow.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -59,6 +73,30 @@ class FreespokePremiumViewModel(
             cachedProductDetails.value = subscription
             _subscriptionUiStateFlow.value = uiModel
         }
+        viewModelScope.launch {
+            freespokeProfileStore.flow().collect {
+                it.profile?.let { profile ->
+                    _uiTypeFlow.value = resolveUiType(profile)
+                } ?: run {
+                    _uiTypeFlow.value = SubscriptionInfoBlockType.Trial
+                }
+            }
+        }
+    }
+
+    private fun resolveUiType(profile: UserProfileData): SubscriptionInfoBlockType {
+        val subscriptionNotExpired =
+            System.currentTimeMillis() / 1000 < (profile.attributes.subscription?.subscriptionExpiry ?: 0L)
+        val subscriptionNativeToPlatform =
+            profile.attributes.subscription?.subscriptionPaymentSource == "android"
+        val userHasSubscribed = profile.attributes.subscription != null
+
+        return when {
+            subscriptionNotExpired && subscriptionNativeToPlatform -> SubscriptionInfoBlockType.Upgrade
+            subscriptionNotExpired && !subscriptionNativeToPlatform -> SubscriptionInfoBlockType.Cancel
+            !userHasSubscribed -> SubscriptionInfoBlockType.Trial
+            else -> SubscriptionInfoBlockType.Regular
+        }
     }
 
     fun launchPurchaseFlow(activity: Activity, offerToken: String, onSuccess: () -> Unit) {
@@ -87,7 +125,10 @@ class FreespokePremiumViewModel(
             ): T {
                 val application =
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                return FreespokePremiumViewModel(application.components.billing) as T
+                return FreespokePremiumViewModel(
+                    application.components.billing,
+                    application.components.freespokeProfileStore
+                ) as T
             }
         }
     }

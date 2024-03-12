@@ -224,8 +224,8 @@ class Billing(
         const val PREMIUM_YEARLY_PLAN_ID = "premium-annual"
         const val TRIAL_OFFER_ID = "1-month-free-trial"
 
-        const val GOOGLE_PLAY_SUBS_URL =
-            "https://play.google.com/store/account/subscriptions?product=%s&package=%s"
+        const val GOOGLE_PLAY_SUBSCRIPTION_URL =
+            "https://play.google.com/store/account/subscriptions"
     }
 
 }
