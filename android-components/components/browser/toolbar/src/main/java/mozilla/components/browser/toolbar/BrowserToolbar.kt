@@ -5,6 +5,7 @@
 package mozilla.components.browser.toolbar
 
 import android.content.Context
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -521,6 +522,7 @@ class BrowserToolbar @JvmOverloads constructor(
      * state changes automatically.
      *
      * @param text The text description that shows near switch.
+     * @param textSize The text size that shows near switch.
      * @param visible Lambda that returns true or false to indicate whether this button should be shown.
      * @param selected Sets whether this button should be checked initially.
      * @param padding A optional custom padding.
@@ -529,7 +531,7 @@ class BrowserToolbar @JvmOverloads constructor(
      * @param thumb A optional custom thumb for switch.
      */
     open class SwitchButton(
-        text: String,
+        text: CharSequence,
         textSize: Float,
         visible: () -> Boolean = { true },
         selected: Boolean = false,

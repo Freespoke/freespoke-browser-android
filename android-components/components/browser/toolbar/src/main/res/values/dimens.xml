@@ -24,6 +24,7 @@
 
     <dimen name="mozac_browser_toolbar_url_textsize">15sp</dimen>
     <dimen name="mozac_browser_toolbar_title_textsize">15sp</dimen>
+    <dimen name="mozac_browser_toolbar_adblock_textsize">16sp</dimen>
     <dimen name="mozac_browser_toolbar_url_with_title_textsize">12sp</dimen>
 
     <dimen name="mozac_browser_toolbar_pageaction_size">48dp</dimen>

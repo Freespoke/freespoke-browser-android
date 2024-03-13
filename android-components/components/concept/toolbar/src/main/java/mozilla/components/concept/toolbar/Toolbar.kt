@@ -4,8 +4,10 @@
 
 package mozilla.components.concept.toolbar
 
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.text.TextUtils
+import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -23,7 +25,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import mozilla.components.support.base.android.Padding
 import mozilla.components.support.ktx.android.content.res.resolveAttribute
 import mozilla.components.support.ktx.android.view.setPadding
@@ -428,13 +429,16 @@ interface Toolbar {
      * state changes automatically.
      *
      * @param textValue The text description that shows near switch.
+     * @param switchTextSize The text size that shows near switch.
      * @param visible Lambda that returns true or false to indicate whether this button should be shown.
      * @param selected Sets whether this button should be checked initially.
      * @param padding A optional custom padding.
      * @param listener Callback that will be invoked whenever the checked state changes.
+     * @param track A optional custom track for switch.
+     * @param thumb A optional custom thumb for switch.
      */
     open class ActionSwitchButton(
-        private val textValue: String,
+        private val textValue: CharSequence,
         private val switchTextSize: Float? = null,
         override val visible: () -> Boolean = { true },
         private var selected: Boolean = true,
@@ -469,35 +473,22 @@ interface Toolbar {
                 }
                 val textView = TextView(parent.context).also { textView ->
                     with(textView) {
-                        text = HtmlCompat.fromHtml(textValue, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                        text = textValue
+                        typeface = Typeface.SANS_SERIF
                         maxLines = 1
                         ellipsize = TextUtils.TruncateAt.END
                         switchTextSize?.let {
                             setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
                         }
-                        layoutParams = LinearLayoutCompat.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                        )
+                        padding?.let { setPadding(Padding(it.left, 0, 0, 0)) }
                     }
                 }
                 with(container) {
                     orientation = LinearLayoutCompat.HORIZONTAL
                     gravity = Gravity.CENTER_VERTICAL
                     addView(switch)
-                    addView(
-                        textView,
-                        LinearLayoutCompat.LayoutParams(
-                            LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-                            LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-                        ).apply {
-                            padding?.let {
-                                setMargins(it.left, 0, 0, 0)
-                            }
-                        },
-                    )
+                    addView(textView)
                     updateViewState()
-                    padding?.let { setPadding(it) }
                 }
             }
 
