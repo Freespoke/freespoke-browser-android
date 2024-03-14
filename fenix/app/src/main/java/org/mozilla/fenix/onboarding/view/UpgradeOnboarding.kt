@@ -7,24 +7,18 @@ package org.mozilla.fenix.onboarding.view
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.statusBarsPadding
 import mozilla.telemetry.glean.private.NoExtras
 import org.mozilla.fenix.R
-import org.mozilla.fenix.compose.annotation.LightDarkPreview
 import org.mozilla.fenix.onboarding.viewmodel.AccountViewModel
 import org.mozilla.fenix.theme.FirefoxTheme
 import org.mozilla.fenix.GleanMetrics.Onboarding as OnboardingMetrics
+
 
 /**
  * Enum that represents the onboarding screen that is displayed.
@@ -45,7 +39,8 @@ enum class UpgradeOnboardingState {
 
 enum class OnboardingAppSettings {
     Notifications,
-    SetupDefaultBrowser
+    SetupDefaultBrowser,
+    Login
 }
 
 /**
@@ -59,13 +54,13 @@ enum class OnboardingAppSettings {
 fun UpgradeOnboarding(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
-    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)? = null
+    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)? = null,
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection()) {
         UpgradeOnboardingContent(
             onDismiss = onDismiss,
             viewModel = viewModel,
-            onSetupSettingsClick
+            onSetupSettingsClick,
         )
     }
 }
@@ -74,7 +69,7 @@ fun UpgradeOnboarding(
 private fun UpgradeOnboardingContent(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
-    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)?
+    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)?,
 ) {
     var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Subscriptions) }
 
@@ -93,6 +88,7 @@ private fun UpgradeOnboardingContent(
                         OnboardingMetrics.welcomeCardImpression.record(NoExtras())
                     },
                 )
+
                 UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> OnboardingPageState(
                     type = onboardingState,
                     image = R.drawable.onboarding_default_browser,
@@ -104,6 +100,7 @@ private fun UpgradeOnboardingContent(
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
                 )
+
                 UpgradeOnboardingState.Notifications, UpgradeOnboardingState.NotificationsSetup -> OnboardingPageState(
                     type = onboardingState,
                     image = R.drawable.onboarding_notification_settings,
@@ -115,6 +112,7 @@ private fun UpgradeOnboardingContent(
                         OnboardingMetrics.syncCardImpression.record(NoExtras())
                     },
                 )
+
                 UpgradeOnboardingState.Login -> OnboardingPageState(
                     type = onboardingState,
                     onRecordImpressionEvent = {
@@ -161,13 +159,20 @@ private fun UpgradeOnboardingContent(
             },
             updatedOnboardingState = {
                 when (it) {
-                    UpgradeOnboardingState.DefaultBrowserShow -> onSetupSettingsClick?.invoke(OnboardingAppSettings.SetupDefaultBrowser)
-                    UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(OnboardingAppSettings.Notifications)
+                    UpgradeOnboardingState.DefaultBrowserShow -> onSetupSettingsClick?.invoke(
+                        OnboardingAppSettings.SetupDefaultBrowser
+                    )
+                    UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(
+                        OnboardingAppSettings.Notifications
+                    )
+                    UpgradeOnboardingState.Login -> {
+                        onSetupSettingsClick?.invoke(OnboardingAppSettings.Login)
+                    }
                     else -> onboardingState = it
                 }
             },
             viewModel = viewModel,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
     }
 }
