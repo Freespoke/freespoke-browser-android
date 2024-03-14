@@ -176,7 +176,8 @@ fun SubscriptionsView(
         Spacer(modifier = Modifier.height(16.dp))
         PrimaryButtonOnboarding(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
             text = stringResource(id = R.string.year_subscription_value),
             onClick = {
                 updatedOnboardingState(UpgradeOnboardingState.Premium)
