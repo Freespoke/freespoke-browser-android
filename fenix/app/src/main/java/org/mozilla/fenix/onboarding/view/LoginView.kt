@@ -1,13 +1,18 @@
 package org.mozilla.fenix.onboarding.view
 
+import android.annotation.SuppressLint
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun LoginView() {
+
+    val URL = "https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/auth"
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -32,8 +37,8 @@ fun LoginView() {
         update = { webView ->
             webView.settings.javaScriptEnabled = true
 
-            webView.loadUrl("https://auth.staging.freespoke.com/realms/freespoke-staging")
-        }
+            webView.loadUrl(URL)
+        },
     )
 }
 
