@@ -279,7 +279,7 @@ android.applicationVariants.all { variant ->
         // same version code. Therefore we need to have different version codes for our ARM and x86
         // builds.
 
-        def versionName = "2.1.4"
+        def versionName = "2.1.5"
         println("versionName override: $versionName")
 
         variant.outputs.each { output ->
@@ -289,7 +289,7 @@ android.applicationVariants.all { variant ->
             def arch = (isMozillaOnline) ? "armeabi-v7a" : abi
             // We use the same version code generator, that we inherited from Fennec, across all channels - even on
             // channels that never shipped a Fennec build.
-            def versionCodeOverride = 331
+            def versionCodeOverride = 332
 
             println("versionCode for $abi = $versionCodeOverride, isMozillaOnline = $isMozillaOnline")
 
