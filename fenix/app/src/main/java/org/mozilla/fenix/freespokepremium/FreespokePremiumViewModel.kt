@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mozilla.components.lib.state.ext.flow
 import mozilla.components.lib.state.ext.flowScoped
-import org.mozilla.fenix.apiservice.UserProfileData
+import org.mozilla.fenix.apiservice.model.UserProfileData
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.billing.Billing.Companion.filterBaseOffers
 import org.mozilla.fenix.components.billing.Billing.Companion.filterTrialOffers

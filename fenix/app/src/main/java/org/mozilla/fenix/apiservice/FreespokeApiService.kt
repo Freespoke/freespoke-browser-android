@@ -6,11 +6,14 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.mozilla.fenix.BuildConfig
 import org.mozilla.fenix.apiservice.model.DateJsonAdapter
+import org.mozilla.fenix.apiservice.model.ProfileAttributes
 import org.mozilla.fenix.apiservice.model.QuickLinkObject
 import org.mozilla.fenix.apiservice.model.ShopCollection
 import org.mozilla.fenix.apiservice.model.SignUpUserModel
+import org.mozilla.fenix.apiservice.model.Subscription
 import org.mozilla.fenix.apiservice.model.TrendingNews
 import org.mozilla.fenix.apiservice.model.UserData
+import org.mozilla.fenix.apiservice.model.UserProfileData
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -78,21 +81,3 @@ object FreespokeApi {
         )
     }
 }
-
-data class UserProfileData(
-    val attributes: ProfileAttributes,
-    val firstName: String,
-    val lastName: String,
-    val manageSubscriptionLink: String
-)
-
-data class ProfileAttributes(
-    val registrationPlatform: String,
-    val subscription: Subscription?
-)
-
-data class Subscription(
-    val subscriptionName: String,
-    val subscriptionPaymentSource: String,
-    val subscriptionExpiry: Long
-)

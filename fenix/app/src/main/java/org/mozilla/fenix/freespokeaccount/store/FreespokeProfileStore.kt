@@ -7,7 +7,7 @@ package org.mozilla.fenix.freespokeaccount.store
 import mozilla.components.lib.state.Action
 import mozilla.components.lib.state.State
 import mozilla.components.lib.state.Store
-import org.mozilla.fenix.apiservice.UserProfileData
+import org.mozilla.fenix.apiservice.model.UserProfileData
 
 class FreespokeProfileStore : Store<UserProfileDataState, ProfileStoreAction>(
     initialState = UserProfileDataState(),

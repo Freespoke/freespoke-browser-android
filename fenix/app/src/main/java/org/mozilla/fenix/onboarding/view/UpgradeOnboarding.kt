@@ -71,7 +71,7 @@ private fun UpgradeOnboardingContent(
     viewModel: AccountViewModel,
     onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)?,
 ) {
-    var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Subscriptions) }
+    var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Welcome) }
 
     Column(
         modifier = Modifier

@@ -1,6 +1,6 @@
 package org.mozilla.fenix.freespokeaccount.profile
 
-import org.mozilla.fenix.apiservice.UserProfileData
+import org.mozilla.fenix.apiservice.model.UserProfileData
 
 data class ProfileUiModel(
     val shortName: String,
