@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.first
 import org.mozilla.fenix.apiservice.model.UserData
 
 private const val PREFERENCES_NAME = "freespoke_preferences"
@@ -28,6 +29,10 @@ class UserPreferenceRepository(
             preferences[PreferencesKeys.USER_REFRESH_TOKEN] = userData.refreshToken
             preferences[PreferencesKeys.USER_ID] = userData.id
         }
+    }
+
+    suspend fun getAccessToken(): String? {
+        return context.dataStore.data.first()[PreferencesKeys.USER_ACCESS_TOKEN]
     }
 
 }

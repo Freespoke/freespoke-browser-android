@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.mozilla.fenix.apiservice.FreespokeApi
+import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
@@ -20,7 +21,8 @@ import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 
 class FreespokeProfileViewModel(
-    freespokeProfileStore: FreespokeProfileStore
+    freespokeProfileStore: FreespokeProfileStore,
+    //userRepository: UserPreferenceRepository
 ) : ViewModel() {
 
     private val _profileData: MutableStateFlow<ProfileUiModel?> = MutableStateFlow(null)
@@ -34,6 +36,19 @@ class FreespokeProfileViewModel(
                 freespokeProfileStore.dispatch(
                     UpdateProfileAction(profile)
                 )
+
+//                todo remove placeholder above
+//                val accessToken = userRepository.getAccessToken() ?: return@launch
+//                val profileResponse = FreespokeApi.service.getProfile(accessToken)
+//
+//                if (profileResponse.isSuccessful) {
+//                    profileResponse.body()?.let { profile ->
+//                        _profileData.value = profile.mapToUiProfile()
+//                        freespokeProfileStore.dispatch(
+//                            UpdateProfileAction(profile)
+//                        )
+//                    }
+//                }
             } catch (e: Exception) {
                 Log.e("API", e.localizedMessage ?: "")
             }
@@ -50,7 +65,10 @@ class FreespokeProfileViewModel(
             ): T {
                 val application =
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                return FreespokeProfileViewModel(application.components.freespokeProfileStore) as T
+                return FreespokeProfileViewModel(
+                    application.components.freespokeProfileStore,
+                    //UserPreferenceRepository(context = application.baseContext)
+                ) as T
             }
         }
     }

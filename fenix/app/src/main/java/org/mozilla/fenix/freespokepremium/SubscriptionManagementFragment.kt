@@ -15,6 +15,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import org.mozilla.fenix.BrowserDirection
+import org.mozilla.fenix.HomeActivity
+import org.mozilla.fenix.R
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.components
 import org.mozilla.fenix.ext.hideToolbar
@@ -49,6 +52,11 @@ class SubscriptionManagementFragment : Fragment() {
                                 profileState.profile?.let {
                                     val url = it.manageSubscriptionLink
                                     //todo open web wrapper
+                                    (context as HomeActivity).openToBrowserAndLoad(
+                                        searchTermOrURL = url,
+                                        newTab = true,
+                                        from = BrowserDirection.FromGlobal,
+                                    )
                                     Log.d("manageSubscription", url)
                                 }
                             }

@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.AbstractComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.unit.dp
 import org.mozilla.fenix.theme.FirefoxTheme
 import org.mozilla.fenix.R
@@ -54,6 +55,7 @@ class ProfileBubbleWrapperView @JvmOverloads constructor(
     }
 }
 
+@Suppress("DEPRECATION")
 @Composable
 fun ProfileBubble(
     profileUiModel: ProfileUiModel?,
@@ -68,7 +70,7 @@ fun ProfileBubble(
                 onClick()
             }
             .border(1.dp, FirefoxTheme.colors.dividerColor, CircleShape)
-            .padding(12.dp),
+            .padding(horizontal = 12.dp),
         contentAlignment = Alignment.Center,
     ) {
         if (profileUiModel == null) {
@@ -93,7 +95,11 @@ fun ProfileBubble(
                 Text(
                     text = profileUiModel.shortName,
                     color = FirefoxTheme.colors.textPrimary,
-                    style = FirefoxTheme.typography.button
+                    style = FirefoxTheme.typography.button.copy(
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        )
+                    )
                 )
             }
 
