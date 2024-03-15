@@ -255,6 +255,10 @@
     <!-- Home onboarding -->
     <!-- Onboarding home screen popup dialog, shown on top of the Jump back in section. -->
     <string name="onboarding_home_screen_jump_back_contextual_hint_2">Meet your personalized homepage. Recent tabs, bookmarks, and search results will appear here.</string>
+    <string name="onboarding_home_welcome_new_title">Break free free from big tech.</string>
+    <string name="onboarding_home_welcome_subtitle">Get the unfiltered truth.</string>
+    <string name="onboarding_home_welcome_subtitle2">Protect your privacy</string>
+
     <!-- Home onboarding dialog welcome screen title text. -->
     <string name="onboarding_home_welcome_title_2">Welcome to Freespoke</string>
     <!-- Home onboarding dialog welcome screen description text. -->
@@ -274,6 +278,21 @@
     <string name="onboarding_next_button">Next</string>
     <string name="set_freespoke_as_your_default_browser">Set Freespoke as your default browser.</string>
     <string name="search_better_browse_better">Search better, browse better:</string>
+
+    <!-- Home onboarding set Freespoke browser by default -->
+    <string name="onboarding_default_browser_title">Make Freespoke your favorite.</string>
+    <string name="onboarding_default_browser_description">Set Freespoke as your default browser and break free from big tech.</string>
+    <string name="onboarding_default_browser_skip">No thanks, I’ll stick with Big Tech</string>
+
+    <!-- Home onboarding Notifications settings -->
+    <string name="onboarding_notification_settings_title">Stay up to date with the latest.</string>
+    <string name="onboarding_notification_settings_description">Enable notifications from Freespoke</string>
+    <string name="onboarding_notification_settings_skip">No thanks to notifications</string>
+
+    <!-- Home onboarding complete screen-->
+    <string name="onboarding_complete_title">Thanks for joining the Freespoke revolution.</string>
+    <string name="onboarding_complete_description">Give Freespoke a spin. And be sure to tell your friends!</string>
+
     <!-- Text for the button to continue the onboarding on the home onboarding dialog. -->
     <string name="onboarding_home_get_started_button">Get started</string>
     <!-- Text for the button to navigate to the sync sign in screen on the home onboarding dialog. -->
@@ -2032,7 +2051,37 @@
     <string name="attribution">photo: %s</string>
     <string name="icon_count">+%d</string>
     <string name="election">Election</string>
-    <string name="onboarding_elections">Elections</string>
-    <string name="onboarding_election_subtitle">Explore the Freespoke election portal featuring the latest voting information, breaking news, and elections results.</string>
+    <string name="continue_without_account">Continue without account</string>
+    <string name="create_account">Create Account</string>
+    <string name="login_with_account">Already have an account? Log In</string>
+    <string name="join_freespoke_revolution">Join the Freespoke revolution!</string>
+    <string name="signup_subtitle">Take back control from big tech.</string>
+    <string name="password">Password</string>
+    <string name="start_free_trial">Start your 30 day\n free trial</string>
+    <string name="ad_free_search">Ad Free Search</string>
+    <string name="ad_free_search_description">Block unwanted ads in search results</string>
+    <string name="without_bias">Without Bias</string>
+    <string name="without_bias_description">Get the unfiltered truth</string>
+    <string name="porn_free">Porn Free</string>
+    <string name="porn_free_description">Fight sextrafficking</string>
+    <string name="subscriptions_rules">By tapping below for monthly or yearly subscription you are enrolling in automatic payments after the 30-day trial period. You can cancel anytime, effective at end of billing period.</string>
+    <string name="month_subscription_value">%s / MONTH</string>
+    <string name="year_subscription_value">%s / Year</string>
+    <string name="update_plan">Update Plan</string>
+    <string name="cancel_plan">Cancel Plan</string>
+    <string name="cancel_anytime">Cancel anytime.</string>
+    <string name="restore_purchase">Already have premium? Restore Purchase</string>
+    <string name="continue_without_premium">Continue without premium</string>
+    <string name="continue_without_updating">Continue without Updating</string>
+    <string name="premium_badge_example">This badge shows when Premium is active.</string>
+
+    <!-- Freespoke profile -->
+    <string name="freefolk_profile">Freefolk Profile</string>
+    <string name="log_out">Log Out</string>
+    <string name="list_item_premium">Premium</string>
+    <string name="list_item_account">Account</string>
+    <string name="list_item_dark_mode">Manage Light/Dark Mode</string>
+    <string name="list_item_default_browser">Manage Default Browser</string>
+    <string name="list_item_notifications">Manage Notifications</string>
 
 </resources>

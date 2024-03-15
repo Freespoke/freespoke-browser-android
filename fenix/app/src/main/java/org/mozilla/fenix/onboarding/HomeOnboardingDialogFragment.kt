@@ -10,27 +10,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import com.google.accompanist.insets.ProvideWindowInsets
-import mozilla.components.lib.state.ext.observeAsComposableState
 import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.R
-import org.mozilla.fenix.components.components
+import org.mozilla.fenix.ext.components
+import org.mozilla.fenix.ext.navigateToNotificationAppsSettings
+import org.mozilla.fenix.ext.openSetDefaultBrowserOption
 import org.mozilla.fenix.ext.settings
+import org.mozilla.fenix.onboarding.view.OnboardingAppSettings
 import org.mozilla.fenix.onboarding.view.UpgradeOnboarding
+import org.mozilla.fenix.onboarding.viewmodel.AccountViewModel
 import org.mozilla.fenix.theme.FirefoxTheme
-
+import timber.log.Timber
 /**
  * Dialog displaying a welcome and sync sign in onboarding.
  */
 class HomeOnboardingDialogFragment : DialogFragment() {
+
+    private val viewModel: AccountViewModel by viewModels {
+        AccountViewModel.Factory
+    }
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.HomeOnboardingDialogStyle)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     override fun onDestroy() {
@@ -48,12 +58,27 @@ class HomeOnboardingDialogFragment : DialogFragment() {
         setContent {
             ProvideWindowInsets {
                 FirefoxTheme {
-                    val account =
-                        components.backgroundServices.syncStore.observeAsComposableState { state -> state.account }
-
                     UpgradeOnboarding(
-                        isSyncSignIn = account.value != null,
                         onDismiss = ::onDismiss,
+                        onSetupSettingsClick = {
+                            when (it) {
+                                OnboardingAppSettings.SetupDefaultBrowser -> {
+                                    (context as HomeActivity).openSetDefaultBrowserOption()
+                                }
+                                OnboardingAppSettings.Notifications -> {
+                                    (context as HomeActivity).navigateToNotificationAppsSettings()
+                                }
+                                OnboardingAppSettings.Login -> {
+                                    (context as HomeActivity).components.strictMode.allowDiskReads()
+                                    (context as HomeActivity).startLoginFlow { success ->
+                                        if (success) {
+                                            Timber.d("Success sign in")
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        viewModel = viewModel,
                     )
                 }
             }

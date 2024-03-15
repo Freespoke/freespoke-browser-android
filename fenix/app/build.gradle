@@ -67,7 +67,8 @@ android {
         def deepLinkSchemeValue = "fenix-dev"
         buildConfigField "String", "DEEP_LINK_SCHEME", "\"$deepLinkSchemeValue\""
         manifestPlaceholders = [
-                "deepLinkScheme": deepLinkSchemeValue
+                "deepLinkScheme": deepLinkSchemeValue,
+                "appAuthRedirectScheme": "com.freespoke"
         ]
 
         // Build flag for "Mozilla Online" variants. See `Config.isMozillaOnline`.
@@ -80,9 +81,6 @@ android {
 
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
-
-        buildConfigField "String", "ONESIGNAL_APP_ID", "\"${properties.getProperty("ONESIGNAL_APP_ID")}\""
-        buildConfigField "String", "ONESIGNAL_APP_ID_DEBUG", "\"${properties.getProperty("ONESIGNAL_APP_ID_DEBUG")}\""
     }
 
     def releaseTemplate = {
@@ -110,7 +108,6 @@ android {
         debug {
             shrinkResources false
             minifyEnabled false
-            applicationIdSuffix ".debug"
             resValue "bool", "IS_DEBUG", "true"
             pseudoLocalesEnabled true
         }
@@ -174,13 +171,33 @@ android {
         animationsDisabled = true
     }
 
-    flavorDimensions "engine"
-
-    flavorDimensions "product"
+    flavorDimensions "developer"
 
     productFlavors {
-        fenix {
-            dimension "product"
+        staging {
+            dimension "developer"
+            applicationIdSuffix ".debug"
+            buildConfigField "String","ONE_SIGNAL_APP_ID",'"de8ebc15-f8ef-427a-b1c1-f312ce831eea"'
+            buildConfigField "Integer","MATOMO_APP_ID",'7'
+            buildConfigField "String","BASE_URL",'"https://api.staging.freespoke.com"'
+            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
+            resValue "string", "app_name", "Freespoke (Staging)"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round"
+            ]
+        }
+        production {
+            dimension "developer"
+            buildConfigField "String","ONE_SIGNAL_APP_ID",'" "'
+            buildConfigField "Integer","MATOMO_APP_ID",'6'
+            buildConfigField "String","BASE_URL",'"https://api.freespoke.com"'
+            buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
+            resValue "string", "app_name", "Freespoke"
+            manifestPlaceholders = [
+                    appIcon: "@mipmap/ic_launcher",
+                    appIconRound: "@mipmap/ic_launcher_round"
+            ]
         }
     }
 
@@ -607,6 +624,7 @@ dependencies {
     implementation FenixDependencies.androidx_lifecycle_process
     implementation FenixDependencies.androidx_lifecycle_runtime
     implementation FenixDependencies.androidx_lifecycle_viewmodel
+    implementation FenixDependencies.androidx_lifecycle_viewmodel_compose
     implementation FenixDependencies.androidx_core
     implementation FenixDependencies.androidx_core_ktx
     implementation FenixDependencies.androidx_transition
@@ -623,6 +641,9 @@ dependencies {
     // Required for in-app reviews
     implementation FenixDependencies.google_play_review
     implementation FenixDependencies.google_play_review_ktx
+
+    //Billing
+    implementation FenixDependencies.google_play_billing_ktx
 
     androidTestImplementation FenixDependencies.uiautomator
     androidTestImplementation "tools.fastlane:screengrab:2.0.0"
@@ -703,9 +724,20 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     // Retrofit with Scalar Converter
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
-    implementation 'com.squareup.moshi:moshi-kotlin:1.14.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.15.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
     implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    implementation ('org.jboss.aerogear:aerogear-android-authz:3.1.1') {
+        exclude module : 'compatibility-v4'
+        transitive = true
+    }
+    implementation ('net.openid:appauth:0.11.0') {
+        exclude module : 'compatibility-v4'
+        transitive = true
+    }
+
 }
 
 protobuf {

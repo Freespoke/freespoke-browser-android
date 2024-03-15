@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix
 
+import android.app.Activity
 import android.app.assist.AssistContent
 import android.content.Context
 import android.content.Intent
@@ -21,6 +22,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.*
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.annotation.IdRes
@@ -85,6 +87,12 @@ import mozilla.components.support.utils.SafeIntent
 import mozilla.components.support.utils.toSafeIntent
 import mozilla.components.support.webextensions.WebExtensionPopupFeature
 import mozilla.telemetry.glean.private.NoExtras
+import net.openid.appauth.AuthorizationException
+import net.openid.appauth.AuthorizationRequest
+import net.openid.appauth.AuthorizationResponse
+import net.openid.appauth.AuthorizationService
+import net.openid.appauth.AuthorizationServiceConfiguration
+import net.openid.appauth.ResponseTypeValues
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.Metrics
 import org.mozilla.fenix.GleanMetrics.StartOnHome
@@ -134,8 +142,10 @@ import org.mozilla.fenix.tabstray.TabsTrayFragmentDirections
 import org.mozilla.fenix.theme.DefaultThemeManager
 import org.mozilla.fenix.theme.ThemeManager
 import org.mozilla.fenix.trackingprotection.TrackingProtectionPanelDialogFragmentDirections
+import org.mozilla.fenix.utils.AuthManager
 import org.mozilla.fenix.utils.BrowsersCache
 import org.mozilla.fenix.utils.Settings
+import timber.log.Timber
 import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.set
@@ -181,6 +191,21 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
     private val navHost by lazy {
         supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
+    }
+
+    private var signInListener: ((Boolean) -> Unit)? = null
+
+    private var mAuthService: AuthorizationService? = null
+
+    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val resp = AuthorizationResponse.fromIntent(data!!)
+            val ex = AuthorizationException.fromIntent(data)
+            Timber.d("response = $resp")
+            Timber.d("exception = $ex")
+            signInListener?.invoke(true)
+        }
     }
 
     private val onboarding by lazy { FenixOnboarding(applicationContext) }
@@ -377,6 +402,10 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         }
     }
 
+    fun showNews() {
+        binding.bottomNavigation.selectedItemId = R.id.action_news
+    }
+
     private fun setupMenuButton() {
         val mbottomNavigationView = binding.bottomNavigation
 
@@ -456,9 +485,11 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                         newTab = false,
                         from = BrowserDirection.FromGlobal,
                     )
-                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                    (application as FenixApplication).trackEvent(
+                        MatomoAnalytics.MENU,
                         MatomoAnalytics.TAB_MENU_NEWS_CLICKED,
-                        MatomoAnalytics.CLICK)
+                        MatomoAnalytics.CLICK,
+                    )
                 }
                 R.id.action_election -> {
                     openToBrowserAndLoad(
@@ -466,27 +497,35 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                         newTab = false,
                         from = BrowserDirection.FromGlobal,
                     )
-                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                    (application as FenixApplication).trackEvent(
+                        MatomoAnalytics.MENU,
                         MatomoAnalytics.TAB_MENU_ELECTION_CLICKED,
-                        MatomoAnalytics.CLICK)
+                        MatomoAnalytics.CLICK,
+                    )
                 }
                 R.id.action_home -> {
                     navigateToFreespokeHome()
-                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                    (application as FenixApplication).trackEvent(
+                        MatomoAnalytics.MENU,
                         MatomoAnalytics.TAB_MENU_HOME_CLICKED,
-                        MatomoAnalytics.CLICK)
+                        MatomoAnalytics.CLICK,
+                    )
                 }
                 R.id.action_tabs -> {
                     navHost.navController.navigate(NavGraphDirections.actionGlobalTabsTrayFragment())
-                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                    (application as FenixApplication).trackEvent(
+                        MatomoAnalytics.MENU,
                         MatomoAnalytics.TAB_MENU_TABS_CLICKED,
-                        MatomoAnalytics.CLICK)
+                        MatomoAnalytics.CLICK,
+                    )
                 }
                 R.id.action_settings -> {
                     binding.bottomNavigation.selectedItemId = R.id.action_home
-                    (application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                    (application as FenixApplication).trackEvent(
+                        MatomoAnalytics.MENU,
                         MatomoAnalytics.TAB_MENU_SETTINGS_CLICKED,
-                        MatomoAnalytics.CLICK)
+                        MatomoAnalytics.CLICK,
+                    )
                 }
             }
             true
@@ -657,6 +696,30 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         CookieBannerReEngagementDialogUtils.tryToEnableDetectOnlyModeIfNeeded(
             components.settings,
             components.core.engine.settings,
+        )
+    }
+
+    fun startLoginFlow(onSuccessListener: (Boolean) -> Unit) {
+        var serviceConfig: AuthorizationServiceConfiguration
+        signInListener = onSuccessListener
+        AuthorizationServiceConfiguration.fetchFromIssuer(
+            Uri.parse("https://auth.staging.freespoke.com/realms/freespoke-staging/.well-known/openid-configuration"),
+            AuthorizationServiceConfiguration.RetrieveConfigurationCallback { serviceConfiguration, ex ->
+                if (ex != null) {
+                    Timber.d("failed to fetch configuration")
+                   // return@RetrieveConfigurationCallback
+                }
+                Timber.d("service configs - $serviceConfiguration")
+                serviceConfig = AuthorizationServiceConfiguration(
+                    Uri.parse("https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/auth"),  // authorization endpoint
+                    Uri.parse("https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/token"),
+                ) // token endpoint
+
+                val authService = AuthorizationService(this)
+                val authIntent = authService.getAuthorizationRequestIntent(AuthManager.prepareAuthRequest(serviceConfig))
+
+                launcher.launch(authIntent)
+            },
         )
     }
 
@@ -944,6 +1007,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                 return
             }
         }
+
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
     }

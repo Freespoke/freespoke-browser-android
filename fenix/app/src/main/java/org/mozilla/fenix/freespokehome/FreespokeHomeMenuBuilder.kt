@@ -198,6 +198,8 @@ class FreespokeHomeMenuBuilder (
                     )
                 }
                 HomeMenu.Item.FreespokePremium -> {
+                    (homeActivity.application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.APP_MENU_GET_PREMIUM_CLICKED, MatomoAnalytics.CLICK)
                     homeActivity.openToBrowserAndLoad(
                         searchTermOrURL = context.getString(R.string.get_premium_url),
                         newTab = true,
@@ -212,9 +214,13 @@ class FreespokeHomeMenuBuilder (
                     )
                 }
                 HomeMenu.Item.MakeDefaultFreespoke -> {
+                    (homeActivity.application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.APP_MENU_MAKE_DEFAULT_BROWSER, MatomoAnalytics.CLICK)
                     (context as HomeActivity).openSetDefaultBrowserOption()
                 }
                 HomeMenu.Item.Notifications -> {
+                    (homeActivity.application as FenixApplication).trackEvent(MatomoAnalytics.MENU,
+                        MatomoAnalytics.APP_MENU_MANAGE_NOTIFICATION, MatomoAnalytics.CLICK)
                     homeActivity.components.strictMode.resetAfter(StrictMode.allowThreadDiskReads()) {
                         (context as HomeActivity).navigateToNotificationAppsSettings()
                     }
