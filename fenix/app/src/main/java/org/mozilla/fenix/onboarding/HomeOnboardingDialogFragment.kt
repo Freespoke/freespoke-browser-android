@@ -60,8 +60,8 @@ class HomeOnboardingDialogFragment : DialogFragment() {
                 FirefoxTheme {
                     UpgradeOnboarding(
                         onDismiss = ::onDismiss,
-                        onSetupSettingsClick = {
-                            when (it) {
+                        onSetupSettingsClick = { setting, action ->
+                            when (setting) {
                                 OnboardingAppSettings.SetupDefaultBrowser -> {
                                     (context as HomeActivity).openSetDefaultBrowserOption()
                                 }
@@ -72,6 +72,7 @@ class HomeOnboardingDialogFragment : DialogFragment() {
                                     (context as HomeActivity).components.strictMode.allowDiskReads()
                                     (context as HomeActivity).startLoginFlow { success ->
                                         if (success) {
+                                            action?.invoke()
                                             Timber.d("Success sign in")
                                         }
                                     }

@@ -11,7 +11,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import mozilla.components.lib.state.ext.flow
 import org.mozilla.fenix.apiservice.FreespokeApi
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
@@ -22,7 +26,7 @@ import org.mozilla.fenix.utils.Settings
 
 class FreespokeProfileViewModel(
     freespokeProfileStore: FreespokeProfileStore,
-    //userRepository: UserPreferenceRepository,
+    userRepository: UserPreferenceRepository,
     settings: Settings,
 ) : ViewModel() {
 
@@ -32,27 +36,28 @@ class FreespokeProfileViewModel(
     val adsBlockEnabled = _adsBlockEnabled.asStateFlow()
 
     init {
+        freespokeProfileStore.flow()
+            .onEach {
+                _profileData.value = it.profile?.mapToUiProfile()
+            }
+            .launchIn(viewModelScope)
+
         viewModelScope.launch {
             _adsBlockEnabled.value = settings.adsBlockFeatureEnabled
             try {
-                val profile = FreespokeApi.getUserProfileData()
-                _profileData.value = profile.mapToUiProfile()
-                freespokeProfileStore.dispatch(
-                    UpdateProfileAction(profile)
-                )
+                userRepository.getAccessTokenFlow().collectLatest {
+                    //todo if(!userLoggedIn) profileData.value = null
+                    val profileResponse = FreespokeApi.service.getProfile("Bearer $it")
 
-//                todo remove placeholder above
-//                val accessToken = userRepository.getAccessToken() ?: return@launch
-//                val profileResponse = FreespokeApi.service.getProfile(accessToken)
-//
-//                if (profileResponse.isSuccessful) {
-//                    profileResponse.body()?.let { profile ->
-//                        _profileData.value = profile.mapToUiProfile()
-//                        freespokeProfileStore.dispatch(
-//                            UpdateProfileAction(profile)
-//                        )
-//                    }
-//                }
+                    if (profileResponse.isSuccessful) {
+                        profileResponse.body()?.let { profile ->
+                            _profileData.value = profile.mapToUiProfile()
+                            freespokeProfileStore.dispatch(
+                                UpdateProfileAction(profile)
+                            )
+                        }
+                    }
+                }
             } catch (e: Exception) {
                 Log.e("API", e.localizedMessage ?: "")
             }
@@ -77,7 +82,7 @@ class FreespokeProfileViewModel(
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
                 return FreespokeProfileViewModel(
                     application.components.freespokeProfileStore,
-                    //UserPreferenceRepository(context = application.baseContext),
+                    UserPreferenceRepository(context = application.baseContext),
                     application.components.settings
                 ) as T
             }

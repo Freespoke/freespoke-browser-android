@@ -123,6 +123,7 @@ class Billing(
         activity: Activity,
         productDetails: ProductDetails,
         offerToken: String,
+        accountId: String,
     ) {
         val productDetailsParams = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -133,6 +134,7 @@ class Billing(
 
         val billingFlowParams = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(productDetailsParams)
+            .setObfuscatedAccountId(accountId)
             .build()
 
         billingClient.launchBillingFlow(activity, billingFlowParams)

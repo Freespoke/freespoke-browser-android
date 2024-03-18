@@ -30,7 +30,7 @@ import org.mozilla.fenix.theme.FirefoxTheme
 fun SubscriptionManagementPage(
     onUpgradePlan: () -> Unit,
     onCancelPlan: (Boolean) -> Unit,
-    onLogin: () -> Unit,
+    onLogin: (() -> Unit) -> Unit,
     onDismiss: () -> Unit,
 ) {
 
@@ -78,7 +78,9 @@ fun SubscriptionManagementPage(
                 onDismiss = onDismiss,
                 updatedOnboardingState = {
                     if (it == UpgradeOnboardingState.Login) {
-                        onLogin()
+                        onLogin {
+                            type = UpgradeOnboardingState.Subscriptions
+                        }
                     } else {
                         type = it
                     }

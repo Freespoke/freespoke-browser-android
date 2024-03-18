@@ -105,6 +105,7 @@ import org.mozilla.fenix.browser.browsingmode.DefaultBrowsingModeManager
 import org.mozilla.fenix.components.appstate.AppAction
 import org.mozilla.fenix.components.metrics.BreadcrumbsRecorder
 import org.mozilla.fenix.databinding.ActivityHomeBinding
+import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.exceptions.trackingprotection.TrackingProtectionExceptionsFragmentDirections
 import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.freespokehome.FreespokeHomeFragmentDirections
@@ -193,19 +194,36 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
     private var signInListener: ((Boolean) -> Unit)? = null
 
-    private var authManager = AuthManager()
+    private val authManager by lazy {
+        components.authManager
+    }
 
     private var authService: AuthorizationService? = null
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data: Intent? = result.data
-            val resp = AuthorizationResponse.fromIntent(data!!)
-            val ex = AuthorizationException.fromIntent(data)
-            authManager.updateAuthState(resp, ex)
-            signInListener?.invoke(resp != null)
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val resp = AuthorizationResponse.fromIntent(data!!)
+                //val ex = AuthorizationException.fromIntent(data)
+                //authManager.updateAuthState(resp, ex)
+                authService?.let { service ->
+                    resp?.let { authResponse ->
+                        authManager.requestAccessToken(
+                            service,
+                            authResponse,
+                            UserPreferenceRepository(this),
+                        ) { isSuccess ->
+                            signInListener?.invoke(isSuccess)
+                        }
+                    } ?: run {
+                        signInListener?.invoke(false)
+                    }
+                } ?: run {
+                    signInListener?.invoke(false)
+                }
+            }
         }
-    }
 
     private val onboarding by lazy { FenixOnboarding(applicationContext) }
 

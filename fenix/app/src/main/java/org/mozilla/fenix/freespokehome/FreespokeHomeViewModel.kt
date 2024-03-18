@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import mozilla.components.browser.storage.sync.PlacesHistoryStorage
 import mozilla.components.concept.storage.HistoryMetadata
@@ -26,13 +27,15 @@ import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapTo
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
+import org.mozilla.fenix.utils.AuthManager
 import java.util.concurrent.TimeUnit
 
 class FreespokeHomeViewModel(
     val bookmarksUseCase: BookmarksUseCase,
     val historyStorage: PlacesHistoryStorage,
     val freespokeProfileStore: FreespokeProfileStore,
-    val userRepository: UserPreferenceRepository
+    val userRepository: UserPreferenceRepository,
+    //val authManager: AuthManager
 ): ViewModel() {
 
     val newsData = MutableLiveData<List<TrendingNews>>()
@@ -102,20 +105,19 @@ class FreespokeHomeViewModel(
     }
 
     fun getProfileData() {
-        //todo if(!userLoggedIn) profileData.value = null
-
         viewModelScope.launch {
             try {
-                //val profile = FreespokeApi.getUserProfileData()
-                val accessToken = userRepository.getAccessToken() ?: return@launch
-                val profileResponse = FreespokeApi.service.getProfile(accessToken)
+                userRepository.getAccessTokenFlow().collectLatest {
+                    //todo if(!userLoggedIn) profileData.value = null
+                    val profileResponse = FreespokeApi.service.getProfile("Bearer $it")
 
-                if (profileResponse.isSuccessful) {
-                    profileResponse.body()?.let { profile ->
-                        profileData.value = profile.mapToUiProfile()
-                        freespokeProfileStore.dispatch(
-                            UpdateProfileAction(profile)
-                        )
+                    if (profileResponse.isSuccessful) {
+                        profileResponse.body()?.let { profile ->
+                            profileData.value = profile.mapToUiProfile()
+                            freespokeProfileStore.dispatch(
+                                UpdateProfileAction(profile)
+                            )
+                        }
                     }
                 }
             } catch (e: Exception) {
@@ -140,7 +142,8 @@ class FreespokeHomeViewModel(
                     (application as FenixApplication).components.useCases.bookmarksUseCases,
                     application.components.core.historyStorage,
                     application.components.freespokeProfileStore,
-                    UserPreferenceRepository(context = application.baseContext)
+                    UserPreferenceRepository(context = application.baseContext),
+                    //application.components.authManager
                 ) as T
             }
         }

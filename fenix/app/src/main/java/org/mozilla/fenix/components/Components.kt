@@ -43,6 +43,7 @@ import org.mozilla.fenix.perf.StartupActivityLog
 import org.mozilla.fenix.perf.StartupStateProvider
 import org.mozilla.fenix.perf.StrictModeManager
 import org.mozilla.fenix.perf.lazyMonitored
+import org.mozilla.fenix.utils.AuthManager
 import org.mozilla.fenix.utils.ClipboardHandler
 import org.mozilla.fenix.utils.Settings
 import org.mozilla.fenix.wifi.WifiConnectionMonitor
@@ -221,6 +222,8 @@ class Components(private val context: Context) {
 
     val billing by lazyMonitored { Billing(context) }
     val freespokeProfileStore by lazyMonitored { FreespokeProfileStore() }
+
+    val authManager by lazyMonitored { AuthManager() }
 }
 
 /**
