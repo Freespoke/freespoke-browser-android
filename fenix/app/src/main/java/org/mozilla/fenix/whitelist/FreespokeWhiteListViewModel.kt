@@ -28,7 +28,8 @@ class FreespokeWhiteListViewModel(
         viewModelScope.launch {
             _adsBlockEnabled.value = settings.adsBlockFeatureEnabled
             try {
-                val whiteList = listOf("domain.com", "site.biz", "url.ru", "domain.com", "domain.com", "domain.com")
+                val whiteList = /*listOf("domain.com", "site.biz", "url.ru", "domain.com", "domain.com", "domain.com")*/
+                    emptyList<String>()
                 _whiteListData.value = whiteList.mapToWhiteList()
                 freespokeWhiteListStore.dispatch(
                     UpdateWhiteListAction(whiteList),
