@@ -6,11 +6,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.mozilla.fenix.BuildConfig
 import org.mozilla.fenix.apiservice.model.DateJsonAdapter
-import org.mozilla.fenix.apiservice.model.ProfileAttributes
 import org.mozilla.fenix.apiservice.model.QuickLinkObject
 import org.mozilla.fenix.apiservice.model.ShopCollection
 import org.mozilla.fenix.apiservice.model.SignUpUserModel
-import org.mozilla.fenix.apiservice.model.Subscription
 import org.mozilla.fenix.apiservice.model.TrendingNews
 import org.mozilla.fenix.apiservice.model.UserData
 import org.mozilla.fenix.apiservice.model.UserProfileData
@@ -18,8 +16,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -63,21 +59,5 @@ interface FreespokeApiService {
 object FreespokeApi {
     val service : FreespokeApiService by lazy {
         retrofit.create(FreespokeApiService::class.java)
-    }
-
-    public suspend fun getUserProfileData(): UserProfileData {
-        return UserProfileData(
-            attributes = ProfileAttributes(
-                registrationPlatform = "android",
-                subscription = Subscription(
-                    subscriptionName = "free trial",
-                    subscriptionPaymentSource = "android",
-                    subscriptionExpiry = 1711866551L
-                )
-            ),
-            firstName = "Nic",
-            lastName = "Test",
-            manageSubscriptionLink = "https://freespoke.recurly.com/account/65TZ59ZEFRacyVASnFoKSSYfoWTiL338"
-        )
     }
 }

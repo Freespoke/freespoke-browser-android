@@ -13,13 +13,11 @@ import com.android.billingclient.api.ProductDetails
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import mozilla.components.lib.state.ext.flow
-import mozilla.components.lib.state.ext.flowScoped
 import org.mozilla.fenix.apiservice.model.UserProfileData
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.billing.Billing.Companion.filterBaseOffers
@@ -49,7 +47,6 @@ class FreespokePremiumViewModel(
             val subscriptionOffers = subscription.filterTrialOffers().takeIf {
                 it.isNotEmpty()
             } ?: subscription.filterBaseOffers()
-            //val subscriptionOffers = subscription.filterBaseOffers()
 
             val monthlyOffer = subscriptionOffers.find {
                 it.basePlanId == Billing.PREMIUM_MONTHLY_PLAN_ID
@@ -101,11 +98,19 @@ class FreespokePremiumViewModel(
 
     fun launchPurchaseFlow(activity: Activity, offerToken: String, onSuccess: () -> Unit) {
         cachedProductDetails.value?.let { productDetails ->
-            billing.launchBillingFlow(
-                activity,
-                productDetails,
-                offerToken,
-            )
+            viewModelScope.launch {
+                val accountId = freespokeProfileStore.flow().mapNotNull { it.profile?.id }.first()
+
+                withContext(Dispatchers.Main) {
+                    billing.launchBillingFlow(
+                        activity,
+                        productDetails,
+                        offerToken,
+                        accountId,
+                    )
+                }
+            }
+
             viewModelScope.launch {
                 billing.successfulPurchaseTrigger.first()
                 withContext(Dispatchers.Main) {

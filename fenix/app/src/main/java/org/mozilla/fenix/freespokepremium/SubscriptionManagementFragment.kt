@@ -52,7 +52,7 @@ class SubscriptionManagementFragment : Fragment() {
                                 context.startActivity(intent)
                             } else {
                                 profileState.profile?.let {
-                                    val url = it.manageSubscriptionLink
+                                    val url = it.manageSubscriptionLink ?: ""
                                     //todo open web wrapper
                                     (context as HomeActivity).openToBrowserAndLoad(
                                         searchTermOrURL = url,
@@ -67,6 +67,7 @@ class SubscriptionManagementFragment : Fragment() {
                             (context as HomeActivity).components.strictMode.allowDiskReads()
                             (context as HomeActivity).startLoginFlow { success ->
                                 if (success) {
+                                    it()
                                     Timber.d("Success sign in")
                                 }
                             }

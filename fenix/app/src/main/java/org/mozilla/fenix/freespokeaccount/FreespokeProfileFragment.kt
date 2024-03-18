@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.mozilla.fenix.BrowserDirection
+import org.mozilla.fenix.BuildConfig
 import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.R
 import org.mozilla.fenix.ext.components
@@ -36,6 +37,13 @@ class FreespokeProfileFragment : Fragment() {
             setContent {
                 FirefoxTheme {
                     FreespokeProfilePage(
+                        onManageAccount = {
+                            (context as HomeActivity).openToBrowserAndLoad(
+                                searchTermOrURL = BuildConfig.PROFILE_URL,
+                                newTab = true,
+                                from = BrowserDirection.FromGlobal,
+                            )
+                        },
                         onManagePremium = {
                             findNavController().navigate(
                                 FreespokeProfileFragmentDirections.actionFreespokeProfileFragmentToSubscriptionManagementFragment(),

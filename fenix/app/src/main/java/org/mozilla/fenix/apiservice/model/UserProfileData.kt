@@ -4,14 +4,19 @@
 
 package org.mozilla.fenix.apiservice.model
 
+import com.squareup.moshi.Json
+
 data class UserProfileData(
+    val id: String,
     val attributes: ProfileAttributes,
     val firstName: String,
     val lastName: String,
-    val manageSubscriptionLink: String
+    val manageSubscriptionLink: String?
 )
 
 data class ProfileAttributes(
+    @Json(name = "external_account_id")
+    val externalAccountId: String,
     val registrationPlatform: String,
     val subscription: Subscription?
 )

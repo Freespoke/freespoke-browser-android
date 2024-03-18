@@ -39,6 +39,7 @@ import org.mozilla.fenix.theme.FirefoxTheme
 @Composable
 fun FreespokeProfilePage(
     viewModel: FreespokeProfileViewModel = viewModel(factory = FreespokeProfileViewModel.Factory),
+    onManageAccount: () -> Unit,
     onManagePremium: () -> Unit,
     onSetDefaultBrowser: () -> Unit,
     onManageNotifications: () -> Unit,
@@ -126,7 +127,9 @@ fun FreespokeProfilePage(
                 iconPainter = painterResource(id = R.drawable.ic_premium_small),
             )
             FreespokeProfileListItem(
-                type = FreespokeProfileListItemType.ExternalLink(""),
+                type = FreespokeProfileListItemType.ExternalLink {
+                    onManageAccount()
+                },
                 text = stringResource(id = R.string.list_item_account),
                 iconPainter = painterResource(id = R.drawable.ic_freespoke_flame),
             )
