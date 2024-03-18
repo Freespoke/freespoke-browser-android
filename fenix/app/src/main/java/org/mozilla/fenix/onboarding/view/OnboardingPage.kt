@@ -66,7 +66,6 @@ fun OnboardingPage(
                 updatedOnboardingState,
                 Modifier.align(Alignment.BottomCenter)
             )
-            UpgradeOnboardingState.Login -> LoginView()
             UpgradeOnboardingState.Premium -> PremiumView(
                 onDismiss,
                 updatedOnboardingState,

@@ -88,11 +88,9 @@ import mozilla.components.support.utils.toSafeIntent
 import mozilla.components.support.webextensions.WebExtensionPopupFeature
 import mozilla.telemetry.glean.private.NoExtras
 import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.ResponseTypeValues
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.Metrics
 import org.mozilla.fenix.GleanMetrics.StartOnHome
@@ -195,16 +193,17 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
     private var signInListener: ((Boolean) -> Unit)? = null
 
-    private var mAuthService: AuthorizationService? = null
+    private var authManager = AuthManager()
+
+    private var authService: AuthorizationService? = null
 
     private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
             val resp = AuthorizationResponse.fromIntent(data!!)
             val ex = AuthorizationException.fromIntent(data)
-            Timber.d("response = $resp")
-            Timber.d("exception = $ex")
-            signInListener?.invoke(true)
+            authManager.updateAuthState(resp, ex)
+            signInListener?.invoke(resp != null)
         }
     }
 
@@ -399,6 +398,18 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
         if (onboarding.userHasBeenOnboarded().not()) {
             importDataFromSQLite()
+        }
+        checkAuthData()
+    }
+
+    private fun checkAuthData() {
+        val resp = AuthorizationResponse.fromIntent(getIntent())
+        val ex = AuthorizationException.fromIntent(getIntent())
+        if (resp != null) {
+            Timber.d("auth complete - $resp")
+        } else {
+            Timber.d("auth error - ${ex?.message}")
+            // authorization failed, check ex for more details
         }
     }
 
@@ -700,27 +711,18 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
     }
 
     fun startLoginFlow(onSuccessListener: (Boolean) -> Unit) {
-        var serviceConfig: AuthorizationServiceConfiguration
         signInListener = onSuccessListener
-        AuthorizationServiceConfiguration.fetchFromIssuer(
-            Uri.parse("https://auth.staging.freespoke.com/realms/freespoke-staging/.well-known/openid-configuration"),
-            AuthorizationServiceConfiguration.RetrieveConfigurationCallback { serviceConfiguration, ex ->
-                if (ex != null) {
-                    Timber.d("failed to fetch configuration")
-                   // return@RetrieveConfigurationCallback
-                }
-                Timber.d("service configs - $serviceConfiguration")
-                serviceConfig = AuthorizationServiceConfiguration(
-                    Uri.parse("https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/auth"),  // authorization endpoint
-                    Uri.parse("https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/token"),
-                ) // token endpoint
+        val serviceConfig = AuthorizationServiceConfiguration(
+            Uri.parse(BuildConfig.AUTH_URL),  // authorization endpoint
+            Uri.parse(BuildConfig.REFRESH_TOKEN_URL),) // token endpoint
 
-                val authService = AuthorizationService(this)
-                val authIntent = authService.getAuthorizationRequestIntent(AuthManager.prepareAuthRequest(serviceConfig))
-
-                launcher.launch(authIntent)
-            },
-        )
+        authService = AuthorizationService(this)
+        authService?.let {
+            val authIntent = it.getAuthorizationRequestIntent(
+                authManager.prepareAuthRequest(serviceConfig)
+            )
+            launcher.launch(authIntent)
+        }
     }
 
     override fun onStart() {
