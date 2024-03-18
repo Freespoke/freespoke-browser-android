@@ -18,7 +18,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import mozilla.telemetry.glean.private.NoExtras
 import org.mozilla.fenix.GleanMetrics.Onboarding
 import org.mozilla.fenix.components.components
-import org.mozilla.fenix.onboarding.view.LoginView
 import org.mozilla.fenix.onboarding.view.OnboardingPageState
 import org.mozilla.fenix.onboarding.view.PremiumView
 import org.mozilla.fenix.onboarding.view.SignUpView
@@ -31,6 +30,7 @@ import org.mozilla.fenix.theme.FirefoxTheme
 fun SubscriptionManagementPage(
     onUpgradePlan: () -> Unit,
     onCancelPlan: (Boolean) -> Unit,
+    onLogin: () -> Unit,
     onDismiss: () -> Unit,
 ) {
 
@@ -62,7 +62,6 @@ fun SubscriptionManagementPage(
                 onCancelPlan = onCancelPlan,
             )
 
-            UpgradeOnboardingState.Login -> LoginView()
             UpgradeOnboardingState.Premium -> PremiumView(
                 onDismiss,
                 { type = it },
@@ -77,7 +76,13 @@ fun SubscriptionManagementPage(
 
             UpgradeOnboardingState.Registration -> SignUpView(
                 onDismiss = onDismiss,
-                updatedOnboardingState = { type = it },
+                updatedOnboardingState = {
+                    if (it == UpgradeOnboardingState.Login) {
+                        onLogin()
+                    } else {
+                        type = it
+                    }
+                },
                 viewModel = viewModel,
                 modifier = Modifier.align(Alignment.BottomCenter),
             )
