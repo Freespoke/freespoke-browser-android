@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import mozilla.components.lib.state.ext.flow
 import org.mozilla.fenix.apiservice.FreespokeApi
+import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile

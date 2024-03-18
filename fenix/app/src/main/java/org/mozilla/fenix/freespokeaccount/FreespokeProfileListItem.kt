@@ -51,41 +51,6 @@ fun FreespokeProfileListItem(
     iconPainter: Painter,
 ) {
 
-    val interactionSource = remember {
-        MutableInteractionSource()
-    }
-
-    val clickableModifier = when (type) {
-        is FreespokeProfileListItemType.Default -> {
-            Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    type.onClick()
-                },
-            )
-        }
-
-        is FreespokeProfileListItemType.ExternalLink -> {
-            Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    type.onClick()
-                },
-            )
-        }
-
-        is FreespokeProfileListItemType.Toggle -> {
-            Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    type.onToggled(false)
-                },
-            )
-        }
-    }
     val clickableModifier = getClickableModifier(type)
 
     Row(
@@ -175,8 +140,14 @@ fun getClickableModifier(type: FreespokeProfileListItemType): Modifier {
             )
         }
 
-        else -> {
-            Modifier
+        is FreespokeProfileListItemType.ExternalLink -> {
+            Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = {
+                    type.onClick()
+                },
+            )
         }
     }
 }

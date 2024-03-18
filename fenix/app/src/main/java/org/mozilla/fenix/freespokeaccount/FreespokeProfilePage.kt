@@ -73,9 +73,10 @@ fun FreespokeProfilePage(
 
         val profile by viewModel.profileData.collectAsState()
         val adsBlockEnabled by viewModel.adsBlockEnabled.collectAsState()
-        val hasPremium by remember {
+        //todo uncomment when premium starts working
+        /*val hasPremium by remember {
             mutableStateOf(profile?.hasPremium == true)
-        }
+        }*/
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -141,7 +142,8 @@ fun FreespokeProfilePage(
                 text = stringResource(id = R.string.list_item_account),
                 iconPainter = painterResource(id = R.drawable.ic_freespoke_flame),
             )
-            if (hasPremium) {
+            //todo uncomment when premium starts working
+//            if (hasPremium) {
                 var expanded by remember { mutableStateOf(adsBlockEnabled) }
                 FreespokeProfileListItemWithButton(
                     type = FreespokeProfileListItemType.Toggle(
@@ -160,7 +162,7 @@ fun FreespokeProfilePage(
                     },
                     expanded = expanded,
                 )
-            }
+//            }
             FreespokeProfileListItem(
                 type = FreespokeProfileListItemType.Default {
                     onManageDarkMode()
