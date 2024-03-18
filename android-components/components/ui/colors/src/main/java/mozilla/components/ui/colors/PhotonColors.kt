@@ -150,6 +150,7 @@ object PhotonColors {
     val DarkGrey90A95 = Color(0xF215141A)
     val DarkGrey90A96 = Color(0xF515141A)
     val DarkGrey1D1D1D = Color(0xFF1D1D1D)
+    val DarkGrey161616 = Color(0xFF161616)
 
     // Violet
     val Violet05 = Color(0xFFE7DFFF)
@@ -177,4 +178,6 @@ object PhotonColors {
     val FreeSpokeButtonColor = Color(0xFF149590)
     val FreeSpokeNavyTextColor = Color(0xFF081A33)
     val FreespokeGrayTextColor = Color(0xFF2F3644)
+
+    val FreeSpokeProfileGradientStartColor = Color(0xFFEDF0F5)
 }

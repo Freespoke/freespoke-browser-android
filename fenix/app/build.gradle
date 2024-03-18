@@ -183,6 +183,7 @@ android {
             buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
             buildConfigField "String","AUTH_URL", '"https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/auth"'
             buildConfigField "String","REFRESH_TOKEN_URL", '"https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/token"'
+            buildConfigField "String","PROFILE_URL", '"https://staging.freespoke.com/account/profile"'
             resValue "string", "app_name", "Freespoke (Staging)"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher",
@@ -197,6 +198,7 @@ android {
             buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
             buildConfigField "String","AUTH_URL", '"https://auth.freespoke.com/realms/freespoke-staging/protocol/openid-connect/auth"'
             buildConfigField "String","REFRESH_TOKEN_URL", '"https://auth.freespoke.com/realms/freespoke-staging/protocol/openid-connect/token"'
+            buildConfigField "String","PROFILE_URL", '"https://freespoke.com/account/profile"'
             resValue "string", "app_name", "Freespoke"
             manifestPlaceholders = [
                     appIcon: "@mipmap/ic_launcher",
@@ -628,6 +630,7 @@ dependencies {
     implementation FenixDependencies.androidx_lifecycle_process
     implementation FenixDependencies.androidx_lifecycle_runtime
     implementation FenixDependencies.androidx_lifecycle_viewmodel
+    implementation FenixDependencies.androidx_lifecycle_viewmodel_compose
     implementation FenixDependencies.androidx_core
     implementation FenixDependencies.androidx_core_ktx
     implementation FenixDependencies.androidx_transition
@@ -644,6 +647,9 @@ dependencies {
     // Required for in-app reviews
     implementation FenixDependencies.google_play_review
     implementation FenixDependencies.google_play_review_ktx
+
+    //Billing
+    implementation FenixDependencies.google_play_billing_ktx
 
     androidTestImplementation FenixDependencies.uiautomator
     androidTestImplementation "tools.fastlane:screengrab:2.0.0"
@@ -734,6 +740,7 @@ dependencies {
         transitive = true
     }
 
+    implementation "com.auth0.android:jwtdecode:2.0.0"
 }
 
 protobuf {

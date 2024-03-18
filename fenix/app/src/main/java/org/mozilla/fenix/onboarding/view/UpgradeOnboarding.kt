@@ -54,7 +54,7 @@ enum class OnboardingAppSettings {
 fun UpgradeOnboarding(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
-    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)? = null,
+    onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)? = null,
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection()) {
         UpgradeOnboardingContent(
@@ -69,7 +69,7 @@ fun UpgradeOnboarding(
 private fun UpgradeOnboardingContent(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
-    onSetupSettingsClick: ((OnboardingAppSettings) -> Unit)?,
+    onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)?,
 ) {
     var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Welcome) }
 
@@ -160,13 +160,15 @@ private fun UpgradeOnboardingContent(
             updatedOnboardingState = {
                 when (it) {
                     UpgradeOnboardingState.DefaultBrowserShow -> onSetupSettingsClick?.invoke(
-                        OnboardingAppSettings.SetupDefaultBrowser
+                        OnboardingAppSettings.SetupDefaultBrowser, null
                     )
                     UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(
-                        OnboardingAppSettings.Notifications
+                        OnboardingAppSettings.Notifications, null
                     )
                     UpgradeOnboardingState.Login -> {
-                        onSetupSettingsClick?.invoke(OnboardingAppSettings.Login)
+                        onSetupSettingsClick?.invoke(OnboardingAppSettings.Login) {
+                            onboardingState = UpgradeOnboardingState.Subscriptions
+                        }
                     }
                     else -> onboardingState = it
                 }

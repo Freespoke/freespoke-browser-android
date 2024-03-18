@@ -140,6 +140,7 @@ class FreespokeHomeFragment : Fragment() {
             viewModel.getShopCollections()
             viewModel.getQuickLinks()
             viewModel.getBookmarks(requireActivity().getPreferences(Context.MODE_PRIVATE))
+            viewModel.getProfileData()
 
             viewModel.historyData.observe(viewLifecycleOwner) { data ->
                 val adapter = FreespokeHistoryAdapter(data) {
@@ -185,6 +186,19 @@ class FreespokeHomeFragment : Fragment() {
                     MatomoAnalytics.CLICK)
                 openItem(SupportUtils.getFreespokeURLForTopic(SupportUtils.SumoTopic.NEWS))
             }
+
+            viewModel.profileData.observe(viewLifecycleOwner) { profileModel ->
+                profileModel?.let {
+                    freespokeProfile.updateProfile(it)
+                }
+            }
+
+            freespokeProfile.setOnProfileClick {
+                findNavController().navigate(
+                    FreespokeHomeFragmentDirections.actionFreespokeHomeFragmentToFreespokeProfileFragment()
+                )
+            }
+
         }
 
         return binding.root

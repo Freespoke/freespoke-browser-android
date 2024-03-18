@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import mozilla.components.browser.storage.sync.PlacesHistoryStorage
 import mozilla.components.concept.storage.HistoryMetadata
@@ -20,18 +21,28 @@ import org.mozilla.fenix.apiservice.model.ShopCollection
 import org.mozilla.fenix.apiservice.model.TrendingNews
 import org.mozilla.fenix.components.bookmarks.BookmarksUseCase
 import org.mozilla.fenix.components.bookmarks.BookmarksUseCase.Companion.DEFAULT_BOOKMARKS_DAYS_AGE_TO_RETRIEVE
+import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
+import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
+import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
+import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
+import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
+import org.mozilla.fenix.utils.AuthManager
 import java.util.concurrent.TimeUnit
 
 class FreespokeHomeViewModel(
     val bookmarksUseCase: BookmarksUseCase,
-    val historyStorage: PlacesHistoryStorage
+    val historyStorage: PlacesHistoryStorage,
+    val freespokeProfileStore: FreespokeProfileStore,
+    val userRepository: UserPreferenceRepository,
+    //val authManager: AuthManager
 ): ViewModel() {
 
     val newsData = MutableLiveData<List<TrendingNews>>()
     val shopsData = MutableLiveData<ShopCollection>()
     val quickLinksData = MutableLiveData<QuickLinkObject>()
     val bookmarkData = MutableLiveData<List<RecentBookmark>>()
+    val profileData = MutableLiveData<ProfileUiModel?>()
 
     val defaultBookmarks = listOf("https://freespoke.com/",
         "https://freespoke-support.freshdesk.com/support/tickets/new",
@@ -93,6 +104,29 @@ class FreespokeHomeViewModel(
         }
     }
 
+    fun getProfileData() {
+        viewModelScope.launch {
+            try {
+                userRepository.getAccessTokenFlow().collectLatest {
+                    //todo if(!userLoggedIn) profileData.value = null
+                    val profileResponse = FreespokeApi.service.getProfile("Bearer $it")
+
+                    if (profileResponse.isSuccessful) {
+                        profileResponse.body()?.let { profile ->
+                            profileData.value = profile.mapToUiProfile()
+                            freespokeProfileStore.dispatch(
+                                UpdateProfileAction(profile)
+                            )
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                profileData.value = null
+                Log.e("API", e.localizedMessage ?: "")
+            }
+        }
+    }
+
     companion object {
         const val IS_DEFAULT_BOOKMARKS_ADDED = "is_default_bookmarks_added"
 
@@ -106,7 +140,11 @@ class FreespokeHomeViewModel(
                 val application = checkNotNull(extras[APPLICATION_KEY])
                 return FreespokeHomeViewModel(
                     (application as FenixApplication).components.useCases.bookmarksUseCases,
-                    application.components.core.historyStorage) as T
+                    application.components.core.historyStorage,
+                    application.components.freespokeProfileStore,
+                    UserPreferenceRepository(context = application.baseContext),
+                    //application.components.authManager
+                ) as T
             }
         }
     }

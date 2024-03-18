@@ -2065,12 +2065,25 @@
     <string name="porn_free">Porn Free</string>
     <string name="porn_free_description">Fight sextrafficking</string>
     <string name="subscriptions_rules">By tapping below for monthly or yearly subscription you are enrolling in automatic payments after the 30-day trial period. You can cancel anytime, effective at end of billing period.</string>
-    <string name="month_subscription_value">$5.00 / MONTH</string>
-    <string name="year_subscription_value">$30.00 / Year</string>
+    <string name="month_subscription_value">%s / MONTH</string>
+    <string name="year_subscription_value">%s / Year</string>
+    <string name="update_plan">Update Plan</string>
+    <string name="cancel_plan">Cancel Plan</string>
+    <string name="cancel_anytime">Cancel anytime.</string>
     <string name="restore_purchase">Already have premium? Restore Purchase</string>
     <string name="continue_without_premium">Continue without premium</string>
+    <string name="continue_without_updating">Continue without Updating</string>
     <string name="premium_badge_example">This badge shows when Premium is active.</string>
     <string name="onboarding_elections">Elections</string>
     <string name="onboarding_election_subtitle">Explore the Freespoke election portal featuring the latest voting information, breaking news, and elections results.</string>
+
+    <!-- Freespoke profile -->
+    <string name="freefolk_profile">Freefolk Profile</string>
+    <string name="log_out">Log Out</string>
+    <string name="list_item_premium">Premium</string>
+    <string name="list_item_account">Account</string>
+    <string name="list_item_dark_mode">Manage Light/Dark Mode</string>
+    <string name="list_item_default_browser">Manage Default Browser</string>
+    <string name="list_item_notifications">Manage Notifications</string>
 
 </resources>

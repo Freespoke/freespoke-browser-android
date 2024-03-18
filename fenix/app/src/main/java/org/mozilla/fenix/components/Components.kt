@@ -25,6 +25,7 @@ import org.mozilla.fenix.autofill.AutofillConfirmActivity
 import org.mozilla.fenix.autofill.AutofillSearchActivity
 import org.mozilla.fenix.autofill.AutofillUnlockActivity
 import org.mozilla.fenix.components.appstate.AppState
+import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.metrics.MetricsMiddleware
 import org.mozilla.fenix.datastore.pocketStoriesSelectedCategoriesDataStore
 import org.mozilla.fenix.ext.asRecentTabs
@@ -32,6 +33,7 @@ import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.filterState
 import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.ext.sort
+import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.gleanplumb.state.MessagingMiddleware
 import org.mozilla.fenix.home.PocketUpdatesMiddleware
 import org.mozilla.fenix.home.blocklist.BlocklistHandler
@@ -41,6 +43,7 @@ import org.mozilla.fenix.perf.StartupActivityLog
 import org.mozilla.fenix.perf.StartupStateProvider
 import org.mozilla.fenix.perf.StrictModeManager
 import org.mozilla.fenix.perf.lazyMonitored
+import org.mozilla.fenix.utils.AuthManager
 import org.mozilla.fenix.utils.ClipboardHandler
 import org.mozilla.fenix.utils.Settings
 import org.mozilla.fenix.wifi.WifiConnectionMonitor
@@ -214,6 +217,11 @@ class Components(private val context: Context) {
             ),
         )
     }
+
+    val billing by lazyMonitored { Billing(context) }
+    val freespokeProfileStore by lazyMonitored { FreespokeProfileStore() }
+
+    val authManager by lazyMonitored { AuthManager() }
 }
 
 /**
