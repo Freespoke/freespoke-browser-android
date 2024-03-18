@@ -183,6 +183,8 @@ class Components(private val context: Context) {
     val startupActivityLog by lazyMonitored { StartupActivityLog() }
     val startupStateProvider by lazyMonitored { StartupStateProvider(startupActivityLog, appStartReasonProvider) }
 
+    val lazyWhiteListStorage by lazyMonitored { core.lazyWhiteListStorage }
+
     val appStore by lazyMonitored {
         val blocklistHandler = BlocklistHandler(settings)
 

@@ -108,6 +108,8 @@ class BrowserToolbar @JvmOverloads constructor(
         @VisibleForTesting(otherwise = PRIVATE)
         internal set
 
+    var adBlockingEnabled: Boolean = false
+
     override var title: String
         get() = display.title
         set(value) {
@@ -203,8 +205,13 @@ class BrowserToolbar @JvmOverloads constructor(
         val height = if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.EXACTLY) {
             MeasureSpec.getSize(heightMeasureSpec)
         } else {
-            //TODO add logic to change height when ad block enabled/disabled
-            resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_adblock_toolbar_height)
+            resources.getDimensionPixelSize(
+                if (adBlockingEnabled) {
+                    R.dimen.mozac_browser_toolbar_adblock_toolbar_height
+                } else {
+                    R.dimen.mozac_browser_toolbar_default_toolbar_height
+                }
+            )
         }
 
         setMeasuredDimension(width, height)

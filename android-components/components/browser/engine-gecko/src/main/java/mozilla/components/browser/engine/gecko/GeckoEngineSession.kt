@@ -91,7 +91,7 @@ class GeckoEngineSession(
     },
     private val context: CoroutineContext = Dispatchers.IO,
     openGeckoSession: Boolean = true,
-    private val blockListHandler: BlockListHandler
+    private val blockListHandler: BlockListHandler,
 ) : CoroutineScope, EngineSession() {
 
     // This logger is temporary and parsed by FNPRMS for performance measurements. It can be
@@ -133,10 +133,16 @@ class GeckoEngineSession(
                 geckoSession.settings.suspendMediaWhenInactive = value
             }
 
-        override var adBlockEnabled: Boolean
-            get() = defaultSettings?.adBlockEnabled == true
+        override var adBlockingEnabled: Boolean
+            get() = defaultSettings?.adBlockingEnabled == true
             set(value) {
-                defaultSettings?.adBlockEnabled = value
+                defaultSettings?.adBlockingEnabled = value
+            }
+
+        override var adsBlockEnabled: Boolean
+            get() = defaultSettings?.adsBlockEnabled == true
+            set(value) {
+                defaultSettings?.adsBlockEnabled = value
             }
     }
 
@@ -443,7 +449,10 @@ class GeckoEngineSession(
             if (overrideUrl == null) {
                 this.reload()
             } else {
-                loadUrl(overrideUrl, flags = LoadUrlFlags.select(LoadUrlFlags.LOAD_FLAGS_REPLACE_HISTORY))
+                loadUrl(
+                    overrideUrl,
+                    flags = LoadUrlFlags.select(LoadUrlFlags.LOAD_FLAGS_REPLACE_HISTORY),
+                )
             }
         }
     }
@@ -632,8 +641,10 @@ class GeckoEngineSession(
             return when {
                 maybeInterceptRequest(request, false) != null ->
                     GeckoResult.fromValue(AllowOrDeny.DENY)
+
                 request.target == NavigationDelegate.TARGET_WINDOW_NEW ->
                     GeckoResult.fromValue(AllowOrDeny.ALLOW)
+
                 else -> {
                     notifyObservers {
                         onLoadRequest(
@@ -680,7 +691,13 @@ class GeckoEngineSession(
             uri: String,
         ): GeckoResult<GeckoSession> {
             val newEngineSession =
-                GeckoEngineSession(runtime, privateMode, defaultSettings, openGeckoSession = false, blockListHandler = blockListHandler)
+                GeckoEngineSession(
+                    runtime,
+                    privateMode,
+                    defaultSettings,
+                    openGeckoSession = false,
+                    blockListHandler = blockListHandler,
+                )
             notifyObservers {
                 onWindowRequest(GeckoWindowRequest(uri, newEngineSession))
             }
@@ -729,14 +746,19 @@ class GeckoEngineSession(
                         is InterceptionResponse.Content -> loadData(data, mimeType, encoding)
                         is InterceptionResponse.Url -> loadUrl(
                             url = url,
-                            flags = LoadUrlFlags.select(EXTERNAL, LOAD_FLAGS_BYPASS_LOAD_URI_DELEGATE),
+                            flags = LoadUrlFlags.select(
+                                EXTERNAL,
+                                LOAD_FLAGS_BYPASS_LOAD_URI_DELEGATE,
+                            ),
                         )
+
                         is InterceptionResponse.AppIntent -> {
                             appRedirectUrl = lastLoadRequestUri
                             notifyObservers {
                                 onLaunchIntentRequest(url = url, appIntent = appIntent)
                             }
                         }
+
                         else -> {
                             // no-op
                         }
@@ -756,7 +778,7 @@ class GeckoEngineSession(
     }
 
     private fun isAdsRequest(request: NavigationDelegate.LoadRequest): Boolean {
-        return blockListHandler.isAdsRequest(request)  && settings.adBlockEnabled
+        return blockListHandler.isAdsRequest(request) && settings.adBlockingEnabled && settings.adsBlockEnabled
     }
 
     /**
@@ -823,7 +845,10 @@ class GeckoEngineSession(
             }
         }
 
-        override fun onSessionStateChange(session: GeckoSession, sessionState: GeckoSession.SessionState) {
+        override fun onSessionStateChange(
+            session: GeckoSession,
+            sessionState: GeckoSession.SessionState,
+        ) {
             notifyObservers {
                 onStateUpdated(GeckoEngineSessionState(sessionState))
             }
@@ -882,15 +907,19 @@ class GeckoEngineSession(
                 isReload -> VisitType.RELOAD
                 flags and GeckoSession.HistoryDelegate.VISIT_REDIRECT_SOURCE_PERMANENT != 0 ->
                     VisitType.REDIRECT_PERMANENT
+
                 flags and GeckoSession.HistoryDelegate.VISIT_REDIRECT_SOURCE != 0 ->
                     VisitType.REDIRECT_TEMPORARY
+
                 else -> VisitType.LINK
             }
             val redirectSource = when {
                 flags and GeckoSession.HistoryDelegate.VISIT_REDIRECT_SOURCE_PERMANENT != 0 ->
                     RedirectSource.PERMANENT
+
                 flags and GeckoSession.HistoryDelegate.VISIT_REDIRECT_SOURCE != 0 ->
                     RedirectSource.TEMPORARY
+
                 else -> null
             }
 
@@ -959,7 +988,8 @@ class GeckoEngineSession(
             screenY: Int,
             element: GeckoSession.ContentDelegate.ContextElement,
         ) {
-            val hitResult = handleLongClick(element.srcUri, element.type, element.linkUri, element.title)
+            val hitResult =
+                handleLongClick(element.srcUri, element.type, element.linkUri, element.title)
             hitResult?.let {
                 notifyObservers { onLongPress(it) }
             }
@@ -1174,7 +1204,8 @@ class GeckoEngineSession(
             val geckoResult = GeckoResult<Int>()
             val uri = geckoContentPermission.uri
             val type = geckoContentPermission.permission
-            val request = GeckoPermissionRequest.Content(uri, type, geckoContentPermission, geckoResult)
+            val request =
+                GeckoPermissionRequest.Content(uri, type, geckoContentPermission, geckoResult)
             notifyObservers { onContentPermissionRequest(request) }
             return geckoResult
         }
@@ -1215,25 +1246,35 @@ class GeckoEngineSession(
     }
 
     @Suppress("ComplexMethod")
-    fun handleLongClick(elementSrc: String?, elementType: Int, uri: String? = null, title: String? = null): HitResult? {
+    fun handleLongClick(
+        elementSrc: String?,
+        elementType: Int,
+        uri: String? = null,
+        title: String? = null,
+    ): HitResult? {
         return when (elementType) {
             GeckoSession.ContentDelegate.ContextElement.TYPE_AUDIO ->
                 elementSrc?.let {
                     HitResult.AUDIO(it, title)
                 }
+
             GeckoSession.ContentDelegate.ContextElement.TYPE_VIDEO ->
                 elementSrc?.let {
                     HitResult.VIDEO(it, title)
                 }
+
             GeckoSession.ContentDelegate.ContextElement.TYPE_IMAGE -> {
                 when {
                     elementSrc != null && uri != null ->
                         HitResult.IMAGE_SRC(elementSrc, uri)
+
                     elementSrc != null ->
                         HitResult.IMAGE(elementSrc, title)
+
                     else -> HitResult.UNKNOWN("")
                 }
             }
+
             GeckoSession.ContentDelegate.ContextElement.TYPE_NONE -> {
                 elementSrc?.let {
                     when {
@@ -1246,6 +1287,7 @@ class GeckoEngineSession(
                     HitResult.UNKNOWN(it)
                 }
             }
+
             else -> HitResult.UNKNOWN("")
         }
     }

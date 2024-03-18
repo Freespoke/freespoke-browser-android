@@ -22,7 +22,6 @@ import androidx.annotation.CallSuper
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -348,8 +347,8 @@ abstract class BaseBrowserFragment :
                 )
             },
             onAdBlockStateChanged = {
-                requireComponents.settings.adBlockEnabled = it
-                requireComponents.core.engine.settings.adBlockEnabled = it
+                requireComponents.settings.adBlockingEnabled = it
+                requireComponents.core.engine.settings.adBlockingEnabled = it
             }
         )
         val browserToolbarMenuController = DefaultBrowserToolbarMenuController(

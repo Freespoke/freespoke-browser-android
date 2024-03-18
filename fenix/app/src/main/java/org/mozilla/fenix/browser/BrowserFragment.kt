@@ -131,22 +131,28 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
         val adBlockAction =
             BrowserToolbar.SwitchButton(
                 text = adBlockText,
-                selected = context.settings().adBlockEnabled,
+                selected = context.settings().adBlockingEnabled,
                 visible = {
                     true
                 },
                 listener = {
                     browserToolbarInteractor.onBrowserToolbarAdBlockChanged(it)
+                    browserToolbarView.view.adBlockingEnabled = it
                 },
                 textSize = resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_adblock_textsize)
                     .toFloat(),
             )
 
-        if (!isTablet) {
-            browserToolbarView.view.addAdBlockAction(adBlockAction)
-        } else {
-            browserToolbarView.view.addPageAction(adBlockAction)
+        browserToolbarView.view.adBlockingEnabled = context.settings().adsBlockFeatureEnabled.also {
+            if (it) {
+                if (!isTablet) {
+                    browserToolbarView.view.addAdBlockAction(adBlockAction)
+                } else {
+                    browserToolbarView.view.addPageAction(adBlockAction)
+                }
+            }
         }
+
 
         val readerModeAction =
             BrowserToolbar.ToggleButton(

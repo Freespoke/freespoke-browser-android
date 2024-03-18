@@ -209,7 +209,12 @@ abstract class Settings {
     /**
      * Setting the AdBlock mode for blocking ads requests.
      */
-    open var adBlockEnabled: Boolean by UnsupportedSetting()
+    open var adBlockingEnabled: Boolean by UnsupportedSetting()
+
+    /**
+     * Setting the AdBlock feature enabling.
+     */
+    open var adsBlockEnabled: Boolean by UnsupportedSetting()
 }
 
 /**
@@ -252,7 +257,8 @@ data class DefaultSettings(
     override var cookieBannerHandlingModePrivateBrowsing: CookieBannerHandlingMode =
         CookieBannerHandlingMode.DISABLED,
     override var cookieBannerHandlingDetectOnlyMode: Boolean = false,
-    override var adBlockEnabled: Boolean = false
+    override var adBlockingEnabled: Boolean = false,
+    override var adsBlockEnabled: Boolean = false,
 ) : Settings()
 
 class UnsupportedSetting<T> {

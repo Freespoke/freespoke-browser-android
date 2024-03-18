@@ -13,23 +13,27 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.mozilla.fenix.apiservice.FreespokeApi
-import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
+import org.mozilla.fenix.utils.Settings
 
 class FreespokeProfileViewModel(
     freespokeProfileStore: FreespokeProfileStore,
-    //userRepository: UserPreferenceRepository
+    //userRepository: UserPreferenceRepository,
+    settings: Settings,
 ) : ViewModel() {
 
     private val _profileData: MutableStateFlow<ProfileUiModel?> = MutableStateFlow(null)
     val profileData = _profileData.asStateFlow()
+    private val _adsBlockEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val adsBlockEnabled = _adsBlockEnabled.asStateFlow()
 
     init {
         viewModelScope.launch {
+            _adsBlockEnabled.value = settings.adsBlockFeatureEnabled
             try {
                 val profile = FreespokeApi.getUserProfileData()
                 _profileData.value = profile.mapToUiProfile()
@@ -55,6 +59,12 @@ class FreespokeProfileViewModel(
         }
     }
 
+    fun updateAdsBlockState(isEnabled: Boolean) {
+        viewModelScope.launch {
+            _adsBlockEnabled.emit(isEnabled)
+        }
+    }
+
     companion object {
 
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -67,7 +77,8 @@ class FreespokeProfileViewModel(
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
                 return FreespokeProfileViewModel(
                     application.components.freespokeProfileStore,
-                    //UserPreferenceRepository(context = application.baseContext)
+                    //UserPreferenceRepository(context = application.baseContext),
+                    application.components.settings
                 ) as T
             }
         }

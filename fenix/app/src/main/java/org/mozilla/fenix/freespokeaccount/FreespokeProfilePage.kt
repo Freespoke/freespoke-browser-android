@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -22,7 +23,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -45,6 +48,8 @@ fun FreespokeProfilePage(
     onShare: () -> Unit,
     onSupport: () -> Unit,
     onManageDarkMode: () -> Unit,
+    onManageWhiteList: () -> Unit,
+    onManageAdBlocking: (isEnabled: Boolean) -> Unit,
     onBack: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
@@ -66,7 +71,10 @@ fun FreespokeProfilePage(
     ) {
 
         val profile by viewModel.profileData.collectAsState()
-
+        val adsBlockEnabled by viewModel.adsBlockEnabled.collectAsState()
+        val hasPremium by remember {
+            mutableStateOf(profile?.hasPremium == true)
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -78,7 +86,7 @@ fun FreespokeProfilePage(
                         MutableInteractionSource()
                     },
                     indication = null,
-                    onClick = onBack
+                    onClick = onBack,
                 ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -91,7 +99,7 @@ fun FreespokeProfilePage(
                     text = stringResource(id = R.string.browser_menu_back),
                     color = FirefoxTheme.colors.freespokeDescriptionColor,
                     style = FirefoxTheme.typography.headline7.copy(
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     ),
                 )
             }
@@ -99,7 +107,7 @@ fun FreespokeProfilePage(
             ProfileBubble(
                 profileUiModel = profile,
                 onClick = {},
-                isEnabled = false
+                isEnabled = false,
             )
         }
 
@@ -109,7 +117,7 @@ fun FreespokeProfilePage(
             text = stringResource(id = R.string.freefolk_profile).uppercase(),
             color = FirefoxTheme.colors.freespokeDescriptionColor,
             style = FirefoxTheme.typography.headline6.copy(
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             ),
         )
 
@@ -130,6 +138,26 @@ fun FreespokeProfilePage(
                 text = stringResource(id = R.string.list_item_account),
                 iconPainter = painterResource(id = R.drawable.ic_freespoke_flame),
             )
+            if (hasPremium) {
+                var expanded by remember { mutableStateOf(adsBlockEnabled) }
+                FreespokeProfileListItemWithButton(
+                    type = FreespokeProfileListItemType.Toggle(
+                        adsBlockEnabled,
+                        onToggled = {
+                            viewModel.updateAdsBlockState(it)
+                            expanded = it
+                            onManageAdBlocking(it)
+                        },
+                    ),
+                    text = stringResource(id = R.string.text_block_ads),
+                    iconPainter = painterResource(id = R.drawable.ic_settings_drawer),
+                    buttonText = stringResource(id = R.string.text_manage_whitelist, 0),
+                    onButtonClick = {
+                        onManageWhiteList()
+                    },
+                    expanded = expanded,
+                )
+            }
             FreespokeProfileListItem(
                 type = FreespokeProfileListItemType.Default {
                     onManageDarkMode()

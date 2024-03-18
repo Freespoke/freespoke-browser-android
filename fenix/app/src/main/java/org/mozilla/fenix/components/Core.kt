@@ -135,7 +135,8 @@ class Core(
             cookieBannerHandlingMode = context.settings().getCookieBannerHandling(),
             cookieBannerHandlingDetectOnlyMode = context.settings()
                 .shouldShowCookieBannerReEngagementDialog(),
-            adBlockEnabled = context.settings().adBlockEnabled
+            adBlockingEnabled =  context.settings().adBlockingEnabled,
+            adsBlockEnabled =  context.settings().adsBlockFeatureEnabled
         )
 
         GeckoEngine(
@@ -374,6 +375,9 @@ class Core(
     val lazyRemoteTabsStorage = lazyMonitored { RemoteTabsStorage(context) }
 
     val recentlyClosedTabsStorage =
+        lazyMonitored { RecentlyClosedTabsStorage(context, engine, crashReporter) }
+
+    val lazyWhiteListStorage =
         lazyMonitored { RecentlyClosedTabsStorage(context, engine, crashReporter) }
 
     // For most other application code (non-startup), these wrappers are perfectly fine and more ergonomic.

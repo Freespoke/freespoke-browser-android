@@ -116,6 +116,7 @@ private val darkColorPalette = FirefoxColors(
     textOnColorPrimary = PhotonColors.LightGrey05,
     textOnColorSecondary = PhotonColors.LightGrey40,
     textActionPrimary = PhotonColors.LightGrey05,
+    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor,
     textActionSecondary = PhotonColors.DarkGrey90,
     textActionTertiary = PhotonColors.LightGrey05,
     textActionTertiaryActive = PhotonColors.LightGrey05,
@@ -145,7 +146,6 @@ private val darkColorPalette = FirefoxColors(
     borderAccent = PhotonColors.Violet40,
     borderDisabled = PhotonColors.LightGrey05A40,
     borderWarning = PhotonColors.Red40,
-    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor,
     onboardingTextColor = PhotonColors.White,
     freespokeDescriptionColor = PhotonColors.DarkGreyO4,
     dividerColor = PhotonColors.LightGrey005,
@@ -153,6 +153,7 @@ private val darkColorPalette = FirefoxColors(
     errorColor = PhotonColors.Red400,
     freeSpokeProfileGradientStartColor = PhotonColors.DarkGrey161616,
     freeSpokeProfileGradientEndColor = PhotonColors.DarkGrey161616,
+    manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundDarkColor,
 )
 
 private val lightColorPalette = FirefoxColors(
@@ -228,6 +229,7 @@ private val lightColorPalette = FirefoxColors(
     errorColor = PhotonColors.Red600,
     freeSpokeProfileGradientStartColor = PhotonColors.FreeSpokeProfileGradientStartColor,
     freeSpokeProfileGradientEndColor = PhotonColors.White,
+    manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundLightColor,
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -314,6 +316,7 @@ class FirefoxColors(
     errorColor: Color,
     freeSpokeProfileGradientStartColor: Color,
     freeSpokeProfileGradientEndColor: Color,
+    manageWhiteListButtonBackgroundColor: Color,
 ) {
     // Layers
 
@@ -590,6 +593,9 @@ class FirefoxColors(
     var freeSpokeProfileGradientEndColor by mutableStateOf(freeSpokeProfileGradientEndColor)
         private set
 
+    var manageWhiteListButtonBackgroundColor by mutableStateOf(manageWhiteListButtonBackgroundColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -736,6 +742,7 @@ class FirefoxColors(
         errorColor: Color = this.errorColor,
         freeSpokeProfileGradientStartColor: Color = this.freeSpokeProfileGradientStartColor,
         freeSpokeProfileGradientEndColor: Color = this.freeSpokeProfileGradientEndColor,
+        manageWhiteListButtonBackgroundColor: Color = this.manageWhiteListButtonBackgroundColor
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -772,6 +779,7 @@ class FirefoxColors(
         textOnColorPrimary = textOnColorPrimary,
         textOnColorSecondary = textOnColorSecondary,
         textActionPrimary = textActionPrimary,
+        onboardingButtonColor = buttonOnboarding,
         textActionSecondary = textActionSecondary,
         textActionTertiary = textActionTertiary,
         textActionTertiaryActive = textActionTertiaryActive,
@@ -801,7 +809,6 @@ class FirefoxColors(
         borderAccent = borderAccent,
         borderDisabled = borderDisabled,
         borderWarning = borderWarning,
-        onboardingButtonColor = buttonOnboarding,
         onboardingTextColor = onboardingTextColor,
         freespokeDescriptionColor = freespokeDescriptionColor,
         dividerColor = dividerColor,
@@ -809,6 +816,7 @@ class FirefoxColors(
         errorColor = errorColor,
         freeSpokeProfileGradientStartColor = freeSpokeProfileGradientStartColor,
         freeSpokeProfileGradientEndColor = freeSpokeProfileGradientEndColor,
+        manageWhiteListButtonBackgroundColor = manageWhiteListButtonBackgroundColor,
     )
 }
 

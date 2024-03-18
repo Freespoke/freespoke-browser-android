@@ -2085,5 +2085,9 @@
     <string name="list_item_dark_mode">Manage Light/Dark Mode</string>
     <string name="list_item_default_browser">Manage Default Browser</string>
     <string name="list_item_notifications">Manage Notifications</string>
+    <string name="text_manage_whitelist">Manage Ad Block Whitelist (%s)</string>
+    <string name="text_block_ads">Block Ads</string>
+    <string name="text_title_whitelist">Whitelist</string>
+    <string name="text_description_whitelist">Adding a website to this list will turn ad blocking off. Use this if you want to see ads on a site, or if the ad blocker causes problems with a site.</string>
 
 </resources>
