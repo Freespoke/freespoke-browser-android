@@ -20,8 +20,10 @@ import org.mozilla.fenix.HomeActivity
 import org.mozilla.fenix.R
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.components
+import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.hideToolbar
 import org.mozilla.fenix.theme.FirefoxTheme
+import timber.log.Timber
 
 class SubscriptionManagementFragment : Fragment() {
 
@@ -58,6 +60,14 @@ class SubscriptionManagementFragment : Fragment() {
                                         from = BrowserDirection.FromGlobal,
                                     )
                                     Log.d("manageSubscription", url)
+                                }
+                            }
+                        },
+                        onLogin = {
+                            (context as HomeActivity).components.strictMode.allowDiskReads()
+                            (context as HomeActivity).startLoginFlow { success ->
+                                if (success) {
+                                    Timber.d("Success sign in")
                                 }
                             }
                         },
