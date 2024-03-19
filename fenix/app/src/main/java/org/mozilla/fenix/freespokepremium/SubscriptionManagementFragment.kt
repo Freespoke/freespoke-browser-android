@@ -53,7 +53,7 @@ class SubscriptionManagementFragment : Fragment() {
                             } else {
                                 profileState.profile?.let {
                                     val url = it.manageSubscriptionLink ?: ""
-                                    //todo open web wrapper
+
                                     (context as HomeActivity).openToBrowserAndLoad(
                                         searchTermOrURL = url,
                                         newTab = true,

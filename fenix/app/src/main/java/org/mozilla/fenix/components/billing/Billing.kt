@@ -140,25 +140,6 @@ class Billing(
         billingClient.launchBillingFlow(activity, billingFlowParams)
     }
 
-    private suspend fun registerPurchase(purchase: Purchase): Boolean {
-        //todo
-        val transactionReceipt = TransactionReceipt(
-            productId = purchase.products.first(),
-            transactionId = purchase.orderId ?: "",
-            webOrderLineItemId = purchase.purchaseToken,
-            purchaseDate = purchase.purchaseTime,
-            //todo expiry date is not provided by api response
-            expiresDate = purchase.purchaseTime,
-            isTrialPeriod = false,
-            isInIntroOfferPeriod = false,
-        )
-
-        Log.d("billingResult", transactionReceipt.toString())
-
-        //todo backend request
-        return true
-    }
-
     private suspend fun acknowledgePurchase(purchase: Purchase) {
         if (!purchase.isAcknowledged) {
             val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
@@ -180,10 +161,7 @@ class Billing(
         if (billingResult.responseCode == BillingResponseCode.OK) {
             purchases?.forEach {
                 if (it.purchaseState == PurchaseState.PURCHASED) {
-                    val registerResult = registerPurchase(it)
-                    if (registerResult) {
-                        acknowledgePurchase(it)
-                    }
+                    acknowledgePurchase(it)
                 }
             }
         }

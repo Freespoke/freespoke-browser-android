@@ -23,10 +23,12 @@ import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
+import org.mozilla.fenix.utils.AuthManager
 
 class FreespokeProfileViewModel(
     freespokeProfileStore: FreespokeProfileStore,
-    userRepository: UserPreferenceRepository
+    userRepository: UserPreferenceRepository,
+    authManager: AuthManager
 ) : ViewModel() {
 
     private val _profileData: MutableStateFlow<ProfileUiModel?> = MutableStateFlow(null)
@@ -40,22 +42,29 @@ class FreespokeProfileViewModel(
             .launchIn(viewModelScope)
 
         viewModelScope.launch {
-            try {
-                userRepository.getAccessTokenFlow().collectLatest {
-                    //todo if(!userLoggedIn) profileData.value = null
-                    val profileResponse = FreespokeApi.service.getProfile("Bearer $it")
+            userRepository.getAuthFlow().collectLatest {
+                it ?: run {
+                    _profileData.value = null
+                    return@collectLatest
+                }
 
-                    if (profileResponse.isSuccessful) {
-                        profileResponse.body()?.let { profile ->
-                            _profileData.value = profile.mapToUiProfile()
-                            freespokeProfileStore.dispatch(
-                                UpdateProfileAction(profile)
-                            )
+                authManager.performApiCallWithFreshTokens(this) { accessToken, _ ->
+                    try {
+                        val profileResponse = FreespokeApi.service.getProfile("Bearer $accessToken")
+
+                        if (profileResponse.isSuccessful) {
+                            profileResponse.body()?.let { profile ->
+                                _profileData.value = profile.mapToUiProfile()
+                                freespokeProfileStore.dispatch(
+                                    UpdateProfileAction(profile),
+                                )
+                            }
                         }
+                    } catch (e: Exception) {
+                        _profileData.value = null
+                        Log.e("API", e.localizedMessage ?: "")
                     }
                 }
-            } catch (e: Exception) {
-                Log.e("API", e.localizedMessage ?: "")
             }
         }
     }
@@ -72,7 +81,8 @@ class FreespokeProfileViewModel(
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
                 return FreespokeProfileViewModel(
                     application.components.freespokeProfileStore,
-                    UserPreferenceRepository(context = application.baseContext)
+                    UserPreferenceRepository(context = application.baseContext),
+                    application.components.authManager
                 ) as T
             }
         }
