@@ -5,6 +5,7 @@
 package org.mozilla.fenix.freespokeaccount
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -57,6 +58,7 @@ fun FreespokeProfileListItem(
         modifier = modifier ?: Modifier
             .fillMaxWidth()
             .height(56.dp)
+            .background(color = FirefoxTheme.colors.freeSpokeProfileGradientEndColor)
             .border(1.dp, FirefoxTheme.colors.dividerColor, RoundedCornerShape(4.dp))
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(4.dp))
@@ -166,6 +168,7 @@ fun FreespokeProfileListItemWithButton(
         modifier = Modifier
             .fillMaxWidth()
             .height(if (expanded) 114.dp else 56.dp)
+            .background(color = FirefoxTheme.colors.freeSpokeProfileGradientEndColor)
             .border(1.dp, FirefoxTheme.colors.dividerColor, RoundedCornerShape(4.dp))
             .padding(horizontal = 14.dp)
             .clip(RoundedCornerShape(4.dp)),

@@ -54,6 +54,13 @@ class FreespokeWhiteListViewModel(
         }
     }
 
+    fun addToWhiteList(domainText: String) {
+        val newList = this.whiteListData.value?.toMutableList()?.apply {
+            add(WhiteListData(domainText))
+        }
+        _whiteListData.value = newList
+    }
+
     companion object {
 
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
