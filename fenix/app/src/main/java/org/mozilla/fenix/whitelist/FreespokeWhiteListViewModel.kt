@@ -34,6 +34,7 @@ class FreespokeWhiteListViewModel(
             removeAt(indexOf(urlDomain))
         }
         _whiteListData.value = newList
+        updateWhiteList(newList)
     }
 
     fun updateAdsBlockState(isEnabled: Boolean) {
@@ -47,8 +48,12 @@ class FreespokeWhiteListViewModel(
             add(domainText)
         }
         _whiteListData.value = newList
+        updateWhiteList(newList)
+    }
+
+    private fun updateWhiteList(list: MutableList<String>?) {
         viewModelScope.launch {
-            preferenceRepository.writeWhiteList(newList.orEmpty())
+            preferenceRepository.writeWhiteList(list.orEmpty())
         }
     }
 
