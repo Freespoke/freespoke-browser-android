@@ -189,6 +189,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
     }
 
     private var signInListener: ((Boolean) -> Unit)? = null
+    private var logoutListener: ((Boolean) -> Unit)? = null
 
     private val authManager by lazy {
         components.authManager
@@ -201,6 +202,18 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
                 authManager.processAuthResponse(data) { authResult ->
                     signInListener?.invoke(authResult)
+                }
+            }
+        }
+
+
+    private val logoutLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+
+                authManager.finalizeLogout(data) {
+                    logoutListener?.invoke(it)
                 }
             }
         }
@@ -713,6 +726,11 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
     fun startLoginFlow(onSuccessListener: (Boolean) -> Unit) {
         signInListener = onSuccessListener
         authManager.prepareAuthRequestIntent().let(launcher::launch)
+    }
+
+    fun startLogoutFlow(onLogoutResponse: (Boolean) -> Unit) {
+        logoutListener = onLogoutResponse
+        authManager.prepareLogoutIntent().let(logoutLauncher::launch)
     }
 
     override fun onStart() {

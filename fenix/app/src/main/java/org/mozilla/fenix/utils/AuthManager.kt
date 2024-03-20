@@ -20,6 +20,8 @@ import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.AuthorizationServiceConfiguration
+import net.openid.appauth.EndSessionRequest
+import net.openid.appauth.EndSessionResponse
 import net.openid.appauth.GrantTypeValues
 import net.openid.appauth.ResponseTypeValues
 import net.openid.appauth.TokenRequest
@@ -39,8 +41,9 @@ class AuthManager(
     private val authServiceConfig: AuthorizationServiceConfiguration by lazy {
         AuthorizationServiceConfiguration(
             Uri.parse(BuildConfig.AUTH_URL), // authorization endpoint
-            Uri.parse(BuildConfig.REFRESH_TOKEN_URL) // token endpoint
-            //todo logout endpoint
+            Uri.parse(BuildConfig.REFRESH_TOKEN_URL), // token endpoint
+            null,
+            Uri.parse(BuildConfig.LOGOUT_URL) //logout endpoint
         )
     }
 
@@ -179,6 +182,26 @@ class AuthManager(
                 clearAuthState()
             }
         }
+    }
+
+    fun prepareLogoutIntent(): Intent? {
+        val endSessionRequest = EndSessionRequest.Builder(authServiceConfig)
+            .setPostLogoutRedirectUri(Uri.parse("com.freespoke:/androidappcallbacklogout"))
+            .setIdTokenHint(authState.idToken)
+            .build()
+
+        return authService?.getEndSessionRequestIntent(endSessionRequest)
+    }
+
+    fun finalizeLogout(intent: Intent?, onLogoutResponse: (Boolean) -> Unit) {
+        val endSessionResponse = EndSessionResponse.fromIntent(intent!!)
+        val logoutSuccessful = endSessionResponse != null
+
+        if (logoutSuccessful) {
+            authState = AuthState()
+            clearAuthState()
+        }
+        onLogoutResponse(logoutSuccessful)
     }
 
     suspend fun performApiCallWithFreshTokens(

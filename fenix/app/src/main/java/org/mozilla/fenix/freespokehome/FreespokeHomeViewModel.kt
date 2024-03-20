@@ -29,6 +29,7 @@ import org.mozilla.fenix.components.bookmarks.BookmarksUseCase.Companion.DEFAULT
 import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
+import org.mozilla.fenix.freespokeaccount.store.ClearStore
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
@@ -123,7 +124,10 @@ class FreespokeHomeViewModel(
                     return@collectLatest
                 }
 
-                authManager.performApiCallWithFreshTokens(this) { accessToken, _ ->
+                authManager.performApiCallWithFreshTokens(
+                    this,
+                    { onLogout() }
+                ) { accessToken, _ ->
                     try {
                         val profileResponse = FreespokeApi.service.getProfile("Bearer $accessToken")
 
@@ -142,6 +146,10 @@ class FreespokeHomeViewModel(
                 }
             }
         }
+    }
+
+    private fun onLogout() {
+        freespokeProfileStore.dispatch(ClearStore)
     }
 
     companion object {
