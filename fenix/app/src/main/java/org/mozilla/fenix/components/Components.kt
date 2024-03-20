@@ -28,6 +28,7 @@ import org.mozilla.fenix.components.appstate.AppState
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.metrics.MetricsMiddleware
 import org.mozilla.fenix.datastore.pocketStoriesSelectedCategoriesDataStore
+import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.ext.asRecentTabs
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.filterState
@@ -221,7 +222,12 @@ class Components(private val context: Context) {
     val billing by lazyMonitored { Billing(context) }
     val freespokeProfileStore by lazyMonitored { FreespokeProfileStore() }
 
-    val authManager by lazyMonitored { AuthManager() }
+    val authManager by lazyMonitored {
+        AuthManager(
+            context,
+            UserPreferenceRepository(context.applicationContext)
+        )
+    }
 }
 
 /**

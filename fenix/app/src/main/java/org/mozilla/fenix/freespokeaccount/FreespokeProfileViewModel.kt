@@ -21,12 +21,17 @@ import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
+import org.mozilla.fenix.freespokeaccount.store.ClearStore
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
+import org.mozilla.fenix.utils.AuthManager
 import org.mozilla.fenix.utils.Settings
 import org.mozilla.fenix.whitelist.WhiteListPreferenceRepository
 
 class FreespokeProfileViewModel(
+    private val freespokeProfileStore: FreespokeProfileStore,
+    userRepository: UserPreferenceRepository,
+    authManager: AuthManager
     freespokeProfileStore: FreespokeProfileStore,
     userRepository: UserPreferenceRepository,
     whiteListPreferenceRepository: WhiteListPreferenceRepository,
@@ -50,24 +55,38 @@ class FreespokeProfileViewModel(
         viewModelScope.launch {
             _adsBlockEnabled.value = settings.adsBlockFeatureEnabled
             _whiteListCount.value = whiteListPreferenceRepository.getWhiteList().size
-            try {
-                userRepository.getAccessTokenFlow().collectLatest {
-                    //todo if(!userLoggedIn) profileData.value = null
-                    val profileResponse = FreespokeApi.service.getProfile("Bearer $it")
+            userRepository.getAuthFlow().collectLatest {
+                it ?: run {
+                    _profileData.value = null
+                    return@collectLatest
+                }
 
-                    if (profileResponse.isSuccessful) {
-                        profileResponse.body()?.let { profile ->
-                            _profileData.value = profile.mapToUiProfile()
-                            freespokeProfileStore.dispatch(
-                                UpdateProfileAction(profile)
-                            )
+                authManager.performApiCallWithFreshTokens(
+                    this,
+                    { onLogout() }
+                ) { accessToken, _ ->
+                    try {
+                        val profileResponse = FreespokeApi.service.getProfile("Bearer $accessToken")
+
+                        if (profileResponse.isSuccessful) {
+                            profileResponse.body()?.let { profile ->
+                                _profileData.value = profile.mapToUiProfile()
+                                freespokeProfileStore.dispatch(
+                                    UpdateProfileAction(profile),
+                                )
+                            }
                         }
+                    } catch (e: Exception) {
+                        _profileData.value = null
+                        Log.e("API", e.localizedMessage ?: "")
                     }
                 }
-            } catch (e: Exception) {
-                Log.e("API", e.localizedMessage ?: "")
             }
         }
+    }
+
+    fun onLogout() {
+        freespokeProfileStore.dispatch(ClearStore)
     }
 
     fun updateAdsBlockState(isEnabled: Boolean) {
@@ -88,6 +107,8 @@ class FreespokeProfileViewModel(
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
                 return FreespokeProfileViewModel(
                     application.components.freespokeProfileStore,
+                    UserPreferenceRepository(context = application.baseContext),
+                    application.components.authManager
                     UserPreferenceRepository(context = application.baseContext),
                     WhiteListPreferenceRepository(application.baseContext),
                     application.components.settings

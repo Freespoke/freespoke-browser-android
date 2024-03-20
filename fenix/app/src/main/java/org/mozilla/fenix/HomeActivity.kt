@@ -89,8 +89,6 @@ import mozilla.components.support.webextensions.WebExtensionPopupFeature
 import mozilla.telemetry.glean.private.NoExtras
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationResponse
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.AuthorizationServiceConfiguration
 import org.mozilla.fenix.GleanMetrics.Events
 import org.mozilla.fenix.GleanMetrics.Metrics
 import org.mozilla.fenix.GleanMetrics.StartOnHome
@@ -105,7 +103,6 @@ import org.mozilla.fenix.browser.browsingmode.DefaultBrowsingModeManager
 import org.mozilla.fenix.components.appstate.AppAction
 import org.mozilla.fenix.components.metrics.BreadcrumbsRecorder
 import org.mozilla.fenix.databinding.ActivityHomeBinding
-import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.exceptions.trackingprotection.TrackingProtectionExceptionsFragmentDirections
 import org.mozilla.fenix.ext.*
 import org.mozilla.fenix.freespokehome.FreespokeHomeFragmentDirections
@@ -141,7 +138,6 @@ import org.mozilla.fenix.tabstray.TabsTrayFragmentDirections
 import org.mozilla.fenix.theme.DefaultThemeManager
 import org.mozilla.fenix.theme.ThemeManager
 import org.mozilla.fenix.trackingprotection.TrackingProtectionPanelDialogFragmentDirections
-import org.mozilla.fenix.utils.AuthManager
 import org.mozilla.fenix.utils.BrowsersCache
 import org.mozilla.fenix.utils.Settings
 import timber.log.Timber
@@ -193,34 +189,31 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
     }
 
     private var signInListener: ((Boolean) -> Unit)? = null
+    private var logoutListener: ((Boolean) -> Unit)? = null
 
     private val authManager by lazy {
         components.authManager
     }
 
-    private var authService: AuthorizationService? = null
-
     private val launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
-                val resp = AuthorizationResponse.fromIntent(data!!)
-                //val ex = AuthorizationException.fromIntent(data)
-                //authManager.updateAuthState(resp, ex)
-                authService?.let { service ->
-                    resp?.let { authResponse ->
-                        authManager.requestAccessToken(
-                            service,
-                            authResponse,
-                            UserPreferenceRepository(this),
-                        ) { isSuccess ->
-                            signInListener?.invoke(isSuccess)
-                        }
-                    } ?: run {
-                        signInListener?.invoke(false)
-                    }
-                } ?: run {
-                    signInListener?.invoke(false)
+
+                authManager.processAuthResponse(data) { authResult ->
+                    signInListener?.invoke(authResult)
+                }
+            }
+        }
+
+
+    private val logoutLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+
+                authManager.finalizeLogout(data) {
+                    logoutListener?.invoke(it)
                 }
             }
         }
@@ -371,6 +364,8 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
         }
 
         showNotificationPermissionPromptIfRequired()
+
+        authManager.initAuthManager()
 
         components.backgroundServices.accountManagerAvailableQueue.runIfReadyOrQueue {
             lifecycleScope.launch(IO) {
@@ -730,17 +725,12 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
 
     fun startLoginFlow(onSuccessListener: (Boolean) -> Unit) {
         signInListener = onSuccessListener
-        val serviceConfig = AuthorizationServiceConfiguration(
-            Uri.parse(BuildConfig.AUTH_URL),  // authorization endpoint
-            Uri.parse(BuildConfig.REFRESH_TOKEN_URL),) // token endpoint
+        authManager.prepareAuthRequestIntent().let(launcher::launch)
+    }
 
-        authService = AuthorizationService(this)
-        authService?.let {
-            val authIntent = it.getAuthorizationRequestIntent(
-                authManager.prepareAuthRequest(serviceConfig)
-            )
-            launcher.launch(authIntent)
-        }
+    fun startLogoutFlow(onLogoutResponse: (Boolean) -> Unit) {
+        logoutListener = onLogoutResponse
+        authManager.prepareLogoutIntent().let(logoutLauncher::launch)
     }
 
     override fun onStart() {

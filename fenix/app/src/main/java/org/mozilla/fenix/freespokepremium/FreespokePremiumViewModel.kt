@@ -24,6 +24,7 @@ import org.mozilla.fenix.components.billing.Billing.Companion.filterBaseOffers
 import org.mozilla.fenix.components.billing.Billing.Companion.filterTrialOffers
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
+import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.onboarding.view.SubscriptionInfoBlockType
 
 class FreespokePremiumViewModel(
@@ -85,7 +86,7 @@ class FreespokePremiumViewModel(
         val subscriptionNotExpired =
             System.currentTimeMillis() / 1000 < (profile.attributes.subscription?.subscriptionExpiry ?: 0L)
         val subscriptionNativeToPlatform =
-            profile.attributes.subscription?.subscriptionPaymentSource == "android"
+            profile.attributes.subscription?.subscriptionPaymentSource == "android-native"
         val userHasSubscribed = profile.attributes.subscription != null
 
         return when {

@@ -33,10 +33,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.mozilla.fenix.R
 import org.mozilla.fenix.freespokeaccount.profile.ProfileBubble
+import org.mozilla.fenix.onboarding.view.UpgradeOnboardingState
 import org.mozilla.fenix.theme.FirefoxTheme
 
 @Composable
@@ -52,6 +54,7 @@ fun FreespokeProfilePage(
     onManageWhiteList: () -> Unit,
     onManageAdBlocking: (isEnabled: Boolean) -> Unit,
     onBack: () -> Unit,
+    onLogout: (onLogoutSuccess: (Boolean) -> Unit) -> Unit,
 ) {
     val scrollState = rememberScrollState()
 
@@ -199,6 +202,20 @@ fun FreespokeProfilePage(
                 text = stringResource(id = R.string.share_freespoke),
                 iconPainter = painterResource(id = R.drawable.ic_share_drawer),
             )
+
+            Spacer(Modifier.height(32.dp))
+
+            profile?.let {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { onLogout { if (it) viewModel.onLogout() } },
+                    text = stringResource(id = R.string.log_out),
+                    color = FirefoxTheme.colors.textPrimary,
+                    textAlign = TextAlign.Center,
+                    style = FirefoxTheme.typography.subtitle1,
+                )
+            }
         }
     }
 }

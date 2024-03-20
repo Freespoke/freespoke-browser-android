@@ -85,6 +85,11 @@ class FreespokeProfileFragment : Fragment() {
                         onBack = {
                             findNavController().popBackStack()
                         },
+                        onLogout = { onLogoutSuccess ->
+                            (context as HomeActivity).startLogoutFlow {
+                                onLogoutSuccess(it)
+                            }
+                        }
                         onManageWhiteList =  {
                             findNavController().navigate(
                                 FreespokeProfileFragmentDirections.actionFreespokeProfileFragmentToFreespokeWhiteListFragment()
