@@ -73,6 +73,7 @@ fun FreespokeProfilePage(
 
         val profile by viewModel.profileData.collectAsState()
         val adsBlockEnabled by viewModel.adsBlockEnabled.collectAsState()
+        val whiteListCount by viewModel.whiteListCount.collectAsState()
         //todo uncomment when premium starts working
         /*val hasPremium by remember {
             mutableStateOf(profile?.hasPremium == true)
@@ -156,7 +157,7 @@ fun FreespokeProfilePage(
                     ),
                     text = stringResource(id = R.string.text_block_ads),
                     iconPainter = painterResource(id = R.drawable.ic_settings_drawer),
-                    buttonText = stringResource(id = R.string.text_manage_whitelist, 0),
+                    buttonText = stringResource(id = R.string.text_manage_whitelist, whiteListCount),
                     onButtonClick = {
                         onManageWhiteList()
                     },

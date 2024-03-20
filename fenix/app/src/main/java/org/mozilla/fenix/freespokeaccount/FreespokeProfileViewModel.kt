@@ -24,10 +24,12 @@ import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapTo
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.utils.Settings
+import org.mozilla.fenix.whitelist.WhiteListPreferenceRepository
 
 class FreespokeProfileViewModel(
     freespokeProfileStore: FreespokeProfileStore,
     userRepository: UserPreferenceRepository,
+    whiteListPreferenceRepository: WhiteListPreferenceRepository,
     settings: Settings,
 ) : ViewModel() {
 
@@ -35,6 +37,8 @@ class FreespokeProfileViewModel(
     val profileData = _profileData.asStateFlow()
     private val _adsBlockEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val adsBlockEnabled = _adsBlockEnabled.asStateFlow()
+    private val _whiteListCount: MutableStateFlow<Int> = MutableStateFlow(0)
+    val whiteListCount = _whiteListCount.asStateFlow()
 
     init {
         freespokeProfileStore.flow()
@@ -45,6 +49,7 @@ class FreespokeProfileViewModel(
 
         viewModelScope.launch {
             _adsBlockEnabled.value = settings.adsBlockFeatureEnabled
+            _whiteListCount.value = whiteListPreferenceRepository.getWhiteList().size
             try {
                 userRepository.getAccessTokenFlow().collectLatest {
                     //todo if(!userLoggedIn) profileData.value = null
@@ -84,6 +89,7 @@ class FreespokeProfileViewModel(
                 return FreespokeProfileViewModel(
                     application.components.freespokeProfileStore,
                     UserPreferenceRepository(context = application.baseContext),
+                    WhiteListPreferenceRepository(application.baseContext),
                     application.components.settings
                 ) as T
             }

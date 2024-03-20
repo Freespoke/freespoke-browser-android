@@ -24,6 +24,7 @@ class UserPreferenceRepository(
         val USER_ACCESS_TOKEN = stringPreferencesKey("access_token")
         val USER_REFRESH_TOKEN = stringPreferencesKey("refresh_token")
         val USER_ID = stringPreferencesKey("user_id")
+        val WHITELIST = stringPreferencesKey("white_list")
     }
 
     suspend fun writeUserData(userData: UserData) {
@@ -51,4 +52,21 @@ class UserPreferenceRepository(
         }.filterNotNull()
     }
 
+    suspend fun writeWhiteList(whiteList: List<String>) {
+        context.dataStore.edit { preferences ->
+            val listString = StringBuilder().apply {
+                whiteList.forEach {
+                    this.append(it)
+                    this.append(",")
+                }
+            }
+            preferences[PreferencesKeys.WHITELIST] = listString.toString()
+        }
+    }
+
+    fun getWhiteList(): Flow<String> {
+        return context.dataStore.data.map {
+            it[PreferencesKeys.WHITELIST]
+        }.filterNotNull()
+    }
 }

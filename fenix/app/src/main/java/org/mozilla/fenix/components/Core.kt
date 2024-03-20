@@ -377,9 +377,6 @@ class Core(
     val recentlyClosedTabsStorage =
         lazyMonitored { RecentlyClosedTabsStorage(context, engine, crashReporter) }
 
-    val lazyWhiteListStorage =
-        lazyMonitored { RecentlyClosedTabsStorage(context, engine, crashReporter) }
-
     // For most other application code (non-startup), these wrappers are perfectly fine and more ergonomic.
     val historyStorage: PlacesHistoryStorage get() = lazyHistoryStorage.value
     val bookmarksStorage: PlacesBookmarksStorage get() = lazyBookmarksStorage.value

@@ -7,12 +7,14 @@ import org.mozilla.geckoview.GeckoSession
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-//TODO update class for whitelist and work with UI
 class BlockListHandler(private val context: Context) {
 
     var easyList = emptyList<String>()
     var pplyoyoList = emptyList<String>()
     var urlhausList = emptyList<String>()
+    val whiteList
+        get() = context.getSharedPreferences(WHITE_LIST_PREF_NAME, Context.MODE_PRIVATE)
+            .getString(WHITE_LIST_KEY, "")?.split(",")?.filter { it.isNotBlank() }.orEmpty()
 
     init {
         easyList = getEasyList(R.raw.easylist)
@@ -30,8 +32,14 @@ class BlockListHandler(private val context: Context) {
     }
 
     fun isAdsRequest(request: GeckoSession.NavigationDelegate.LoadRequest) =
-        easyList.any { request.uri.contains(it) }
-                || pplyoyoList.any { request.uri.contains(it) }
-                || urlhausList.any { request.uri.contains(it) }
+        (easyList.any { request.uri.contains(it) }
+            || pplyoyoList.any { request.uri.contains(it) }
+            || urlhausList.any { request.uri.contains(it) })
+            && whiteList.none { request.uri.contains(it) }
+
+    companion object {
+        private const val WHITE_LIST_PREF_NAME = "whitelist_preferences"
+        private const val WHITE_LIST_KEY = "white_list"
+    }
 }
 

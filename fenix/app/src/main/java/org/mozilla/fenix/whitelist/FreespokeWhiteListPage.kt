@@ -53,7 +53,6 @@ import org.mozilla.fenix.compose.annotation.LightDarkPreview
 import org.mozilla.fenix.freespokeaccount.FreespokeProfileListItem
 import org.mozilla.fenix.freespokeaccount.FreespokeProfileListItemType
 import org.mozilla.fenix.theme.FirefoxTheme
-import org.mozilla.fenix.whitelist.store.WhiteListData
 
 @Suppress("DEPRECATION")
 @Composable
@@ -193,7 +192,7 @@ fun FreespokeWhiteListPage(
                 viewModel.addToWhiteList(text)
                 text = ""
             },
-            enabled = false,
+            enabled = isEnabled,
         ) {
             Text(
                 modifier = Modifier.weight(1f),
@@ -234,7 +233,7 @@ fun FreespokeWhiteListPage(
 }
 
 @Composable
-fun WhiteListItem(data: WhiteListData, modifier: Modifier = Modifier) {
+fun WhiteListItem(data: String, modifier: Modifier = Modifier) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -249,7 +248,7 @@ fun WhiteListItem(data: WhiteListData, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .weight(1F)
                 .height(20.dp),
-            text = data.urlDomain,
+            text = data,
             color = FirefoxTheme.colors.freespokeDescriptionColor,
             style = FirefoxTheme.typography.body1.copy(
                 fontWeight = FontWeight.Light,

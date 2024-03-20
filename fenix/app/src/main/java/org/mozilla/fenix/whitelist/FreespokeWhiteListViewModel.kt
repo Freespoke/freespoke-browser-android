@@ -1,6 +1,5 @@
 package org.mozilla.fenix.whitelist
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -8,18 +7,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.mozilla.fenix.ext.application
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.utils.Settings
-import org.mozilla.fenix.whitelist.store.FreespokeWhiteListStore
-import org.mozilla.fenix.whitelist.store.UpdateWhiteListAction
-import org.mozilla.fenix.whitelist.store.WhiteListData
 
 class FreespokeWhiteListViewModel(
-    freespokeWhiteListStore: FreespokeWhiteListStore,
+    private val preferenceRepository: WhiteListPreferenceRepository,
     settings: Settings,
 ) : ViewModel() {
 
-    private val _whiteListData: MutableStateFlow<List<WhiteListData>?> = MutableStateFlow(null)
+    private val _whiteListData: MutableStateFlow<List<String>?> = MutableStateFlow(null)
     val whiteListData = _whiteListData.asStateFlow()
     private val _adsBlockEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val adsBlockEnabled = _adsBlockEnabled.asStateFlow()
@@ -27,23 +24,14 @@ class FreespokeWhiteListViewModel(
     init {
         viewModelScope.launch {
             _adsBlockEnabled.value = settings.adsBlockFeatureEnabled
-            try {
-                val whiteList = /*listOf("domain.com", "site.biz", "url.ru", "domain.com", "domain.com", "domain.com")*/
-                    emptyList<String>()
-                _whiteListData.value = whiteList.mapToWhiteList()
-                freespokeWhiteListStore.dispatch(
-                    UpdateWhiteListAction(whiteList),
-                )
-            } catch (e: Exception) {
-                Log.e("API", e.localizedMessage ?: "")
-            }
+            _whiteListData.value = preferenceRepository.getWhiteList().filterNot { it.isBlank() }
         }
     }
 
 
-    fun removeItem(whiteListData: WhiteListData) {
+    fun removeItem(urlDomain: String) {
         val newList = this.whiteListData.value?.toMutableList()?.apply {
-            removeAt(indexOf(whiteListData))
+            removeAt(indexOf(urlDomain))
         }
         _whiteListData.value = newList
     }
@@ -56,9 +44,12 @@ class FreespokeWhiteListViewModel(
 
     fun addToWhiteList(domainText: String) {
         val newList = this.whiteListData.value?.toMutableList()?.apply {
-            add(WhiteListData(domainText))
+            add(domainText)
         }
         _whiteListData.value = newList
+        viewModelScope.launch {
+            preferenceRepository.writeWhiteList(newList.orEmpty())
+        }
     }
 
     companion object {
@@ -71,16 +62,11 @@ class FreespokeWhiteListViewModel(
             ): T {
                 val application =
                     checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                return FreespokeWhiteListViewModel(FreespokeWhiteListStore(), application.components.settings) as T
+                return FreespokeWhiteListViewModel(
+                    WhiteListPreferenceRepository(application.application),
+                    application.components.settings,
+                ) as T
             }
         }
     }
-}
-
-private fun List<String>?.mapToWhiteList(): List<WhiteListData> {
-    val data = mutableListOf<WhiteListData>()
-    this?.forEach {
-        data.add(WhiteListData(it))
-    }
-    return data
 }
