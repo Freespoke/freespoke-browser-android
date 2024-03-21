@@ -43,12 +43,14 @@ class FreespokeWhiteListViewModel(
         }
     }
 
-    fun addToWhiteList(domainText: String) {
+    fun addToWhiteList(domainText: String): Boolean {
+        if (whiteListData.value?.contains(domainText) == true) return false
         val newList = this.whiteListData.value?.toMutableList()?.apply {
             add(domainText)
         }
         _whiteListData.value = newList
         updateWhiteList(newList)
+        return true
     }
 
     private fun updateWhiteList(list: MutableList<String>?) {

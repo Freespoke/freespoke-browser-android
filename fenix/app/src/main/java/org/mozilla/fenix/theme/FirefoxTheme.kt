@@ -154,6 +154,7 @@ private val darkColorPalette = FirefoxColors(
     freeSpokeProfileGradientStartColor = PhotonColors.DarkGrey161616,
     freeSpokeProfileGradientEndColor = PhotonColors.DarkGrey161616,
     manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundDarkColor,
+    dialogButtonsBlueTextColor = PhotonColors.BlueButtonsTextColor,
 )
 
 private val lightColorPalette = FirefoxColors(
@@ -230,6 +231,7 @@ private val lightColorPalette = FirefoxColors(
     freeSpokeProfileGradientStartColor = PhotonColors.FreeSpokeProfileGradientStartColor,
     freeSpokeProfileGradientEndColor = PhotonColors.White,
     manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundLightColor,
+    dialogButtonsBlueTextColor = PhotonColors.BlueButtonsTextColor
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -317,6 +319,7 @@ class FirefoxColors(
     freeSpokeProfileGradientStartColor: Color,
     freeSpokeProfileGradientEndColor: Color,
     manageWhiteListButtonBackgroundColor: Color,
+    dialogButtonsBlueTextColor: Color,
 ) {
     // Layers
 
@@ -596,6 +599,9 @@ class FirefoxColors(
     var manageWhiteListButtonBackgroundColor by mutableStateOf(manageWhiteListButtonBackgroundColor)
         private set
 
+    var dialogButtonsBlueTextColor by mutableStateOf(dialogButtonsBlueTextColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -742,7 +748,8 @@ class FirefoxColors(
         errorColor: Color = this.errorColor,
         freeSpokeProfileGradientStartColor: Color = this.freeSpokeProfileGradientStartColor,
         freeSpokeProfileGradientEndColor: Color = this.freeSpokeProfileGradientEndColor,
-        manageWhiteListButtonBackgroundColor: Color = this.manageWhiteListButtonBackgroundColor
+        manageWhiteListButtonBackgroundColor: Color = this.manageWhiteListButtonBackgroundColor,
+        dialogButtonsBlueTextColor: Color = this.dialogButtonsBlueTextColor
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -817,6 +824,7 @@ class FirefoxColors(
         freeSpokeProfileGradientStartColor = freeSpokeProfileGradientStartColor,
         freeSpokeProfileGradientEndColor = freeSpokeProfileGradientEndColor,
         manageWhiteListButtonBackgroundColor = manageWhiteListButtonBackgroundColor,
+        dialogButtonsBlueTextColor = dialogButtonsBlueTextColor,
     )
 }
 

@@ -89,7 +89,7 @@ class FreespokeProfileFragment : Fragment() {
                             (context as HomeActivity).startLogoutFlow {
                                 onLogoutSuccess(it)
                             }
-                        }
+                        },
                         onManageWhiteList =  {
                             findNavController().navigate(
                                 FreespokeProfileFragmentDirections.actionFreespokeProfileFragmentToFreespokeWhiteListFragment()

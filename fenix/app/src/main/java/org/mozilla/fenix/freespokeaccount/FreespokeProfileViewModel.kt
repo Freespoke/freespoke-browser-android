@@ -31,9 +31,7 @@ import org.mozilla.fenix.whitelist.WhiteListPreferenceRepository
 class FreespokeProfileViewModel(
     private val freespokeProfileStore: FreespokeProfileStore,
     userRepository: UserPreferenceRepository,
-    authManager: AuthManager
-    freespokeProfileStore: FreespokeProfileStore,
-    userRepository: UserPreferenceRepository,
+    authManager: AuthManager,
     whiteListPreferenceRepository: WhiteListPreferenceRepository,
     settings: Settings,
 ) : ViewModel() {
@@ -108,8 +106,7 @@ class FreespokeProfileViewModel(
                 return FreespokeProfileViewModel(
                     application.components.freespokeProfileStore,
                     UserPreferenceRepository(context = application.baseContext),
-                    application.components.authManager
-                    UserPreferenceRepository(context = application.baseContext),
+                    application.components.authManager,
                     WhiteListPreferenceRepository(application.baseContext),
                     application.components.settings
                 ) as T

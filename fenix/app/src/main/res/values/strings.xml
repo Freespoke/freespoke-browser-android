@@ -2090,5 +2090,12 @@
     <string name="text_title_whitelist">Whitelist</string>
     <string name="text_description_whitelist">Adding a website to this list will turn ad blocking off. Use this if you want to see ads on a site, or if the ad blocker causes problems with a site.</string>
     <string name="text_button_add_whitelist">Add website to whitelist</string>
+    <string name="text_title_dialog_whitelist_remove">Delete Website</string>
+    <string name="text_description_dialog_whitelist_remove">Removing &lt;%s&gt; from the whitelist means you will see no longer see ads on this site unless you add it to your whitelist again.</string>
+    <string name="text_button_confirm">Confirm</string>
+    <string name="text_button_dismiss">Dismiss</string>
+    <string name="text_button_ok">Ok</string>
+    <string name="text_description_dialog_whitelist_already_exist">Domain &lt;%s&gt; has been already added to whitelist</string>
+    <string name="text_add_website">Add website</string>
 
 </resources>

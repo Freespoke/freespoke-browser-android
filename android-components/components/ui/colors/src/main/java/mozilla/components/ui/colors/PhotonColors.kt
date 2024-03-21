@@ -182,4 +182,5 @@ object PhotonColors {
     val FreeSpokeProfileGradientStartColor = Color(0xFFEDF0F5)
     val ManageWhiteListButtonBackgroundLightColor = Color(0xFFEDF0F5)
     val ManageWhiteListButtonBackgroundDarkColor = Color(0xFF2F3644)
+    val BlueButtonsTextColor = Color(0xFF007AFF)
 }
