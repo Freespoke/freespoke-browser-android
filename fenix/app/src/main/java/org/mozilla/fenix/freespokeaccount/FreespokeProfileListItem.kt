@@ -97,13 +97,10 @@ fun FreespokeProfileListItem(
             }
 
             is FreespokeProfileListItemType.Toggle -> {
-                var checked by remember {
-                    mutableStateOf(type.isToggled)
-                }
+                var checked by remember { mutableStateOf(type.isToggled) }
                 Switch(
                     checked = checked,
                     onCheckedChange = {
-                        type.isToggled = it
                         checked = it
                         type.onToggled(it)
                     },

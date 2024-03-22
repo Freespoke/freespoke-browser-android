@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -104,12 +105,17 @@ fun FreespokeWhiteListPage(
                 contentDescription = null,
             )
             Text(
+                modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.browser_menu_back),
                 color = FirefoxTheme.colors.textPrimary,
                 style = FirefoxTheme.typography.headline7.copy(
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.W700,
+                    fontSize = 16.sp,
+                    fontStyle = FontStyle.Normal,
+                    lineHeight = 21.sp
                 ),
             )
+            Image(painter = painterResource(id = R.drawable.ic_premium_badge), contentDescription = null)
         }
         Spacer(modifier = Modifier.height(16.dp))
         FreespokeProfileListItem(

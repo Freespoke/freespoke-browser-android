@@ -15,12 +15,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +30,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import org.mozilla.fenix.R
 import org.mozilla.fenix.freespokeaccount.profile.ProfileBubble
 import org.mozilla.fenix.onboarding.view.UpgradeOnboardingState
@@ -56,8 +60,9 @@ fun FreespokeProfilePage(
     onBack: () -> Unit,
     onLogout: (onLogoutSuccess: (Boolean) -> Unit) -> Unit,
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by MutableStateFlow(lifecycleOwner.lifecycle.currentState).collectAsState()
     val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,6 +82,11 @@ fun FreespokeProfilePage(
         val profile by viewModel.profileData.collectAsState()
         val adsBlockEnabled by viewModel.adsBlockEnabled.collectAsState()
         val whiteListCount by viewModel.whiteListCount.collectAsState()
+        LaunchedEffect(lifecycleState) {
+            if (lifecycleState == Lifecycle.State.RESUMED) {
+                viewModel.updateAdsState()
+            }
+        }
         //todo uncomment when premium starts working
         /*val hasPremium by remember {
             mutableStateOf(profile?.hasPremium == true)
@@ -151,7 +161,7 @@ fun FreespokeProfilePage(
                 var expanded by remember { mutableStateOf(adsBlockEnabled) }
                 FreespokeProfileListItemWithButton(
                     type = FreespokeProfileListItemType.Toggle(
-                        adsBlockEnabled,
+                        expanded,
                         onToggled = {
                             viewModel.updateAdsBlockState(it)
                             expanded = it
@@ -164,7 +174,7 @@ fun FreespokeProfilePage(
                     onButtonClick = {
                         onManageWhiteList()
                     },
-                    expanded = expanded,
+                    expanded = adsBlockEnabled,
                 )
 //            }
             FreespokeProfileListItem(

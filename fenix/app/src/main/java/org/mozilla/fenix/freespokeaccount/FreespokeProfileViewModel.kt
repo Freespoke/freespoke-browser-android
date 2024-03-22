@@ -33,12 +33,12 @@ class FreespokeProfileViewModel(
     userRepository: UserPreferenceRepository,
     authManager: AuthManager,
     whiteListPreferenceRepository: WhiteListPreferenceRepository,
-    settings: Settings,
+    private val settings: Settings,
 ) : ViewModel() {
 
     private val _profileData: MutableStateFlow<ProfileUiModel?> = MutableStateFlow(null)
     val profileData = _profileData.asStateFlow()
-    private val _adsBlockEnabled: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val _adsBlockEnabled: MutableStateFlow<Boolean> = MutableStateFlow(settings.adsBlockFeatureEnabled)
     val adsBlockEnabled = _adsBlockEnabled.asStateFlow()
     private val _whiteListCount: MutableStateFlow<Int> = MutableStateFlow(0)
     val whiteListCount = _whiteListCount.asStateFlow()
@@ -51,7 +51,7 @@ class FreespokeProfileViewModel(
             .launchIn(viewModelScope)
 
         viewModelScope.launch {
-            _adsBlockEnabled.value = settings.adsBlockFeatureEnabled
+            updateAdsState()
             _whiteListCount.value = whiteListPreferenceRepository.getWhiteList().size
             userRepository.getAuthFlow().collectLatest {
                 it ?: run {
@@ -83,12 +83,19 @@ class FreespokeProfileViewModel(
         }
     }
 
+    fun updateAdsState() {
+        viewModelScope.launch {
+            _adsBlockEnabled.emit(settings.adsBlockFeatureEnabled)
+        }
+    }
+
     fun onLogout() {
         freespokeProfileStore.dispatch(ClearStore)
     }
 
     fun updateAdsBlockState(isEnabled: Boolean) {
         viewModelScope.launch {
+            settings.adsBlockFeatureEnabled = isEnabled
             _adsBlockEnabled.emit(isEnabled)
         }
     }

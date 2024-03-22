@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.findNavController
 import org.mozilla.fenix.R
 import org.mozilla.fenix.ext.hideToolbar
+import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.theme.FirefoxTheme
 
 class FreespokeWhiteListFragment : Fragment() {
@@ -26,7 +27,7 @@ class FreespokeWhiteListFragment : Fragment() {
                 FirefoxTheme {
                     FreespokeWhiteListPage(
                         onAdBlockStatusChange = {
-                            //todo add change status
+                            context.settings().adsBlockFeatureEnabled = it
                         },
                         onBack = {
                             findNavController().popBackStack()
