@@ -58,10 +58,16 @@ fun BaseOnboardingView(
         Spacer(modifier = Modifier.height(32.dp))
 
         if (pageState.image != null) {
+            val paddingModifier = if (pageState.type == UpgradeOnboardingState.CompleteOnboarding) {
+                Modifier
+            } else {
+                Modifier.padding(horizontal = 40.dp)
+            }
+
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 40.dp),
+                    .then(paddingModifier),
                 painter = painterResource(id = pageState.image),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
@@ -91,13 +97,17 @@ fun BaseOnboardingView(
                 .padding(horizontal = 40.dp),
             text = pageState.primaryButtonText,
             onClick = {
-                updatedOnboardingState(
-                    when(pageState.type) {
-                        UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> UpgradeOnboardingState.DefaultBrowserShow
-                        UpgradeOnboardingState.Notifications, UpgradeOnboardingState.NotificationsSetup -> UpgradeOnboardingState.NotificationsSetup
-                        else -> UpgradeOnboardingState.CompleteOnboarding
-                    }
-                )
+                if (pageState.type == UpgradeOnboardingState.CompleteOnboarding) {
+                    onDismiss()
+                } else {
+                    updatedOnboardingState(
+                        when(pageState.type) {
+                            UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> UpgradeOnboardingState.DefaultBrowserShow
+                            UpgradeOnboardingState.Notifications, UpgradeOnboardingState.NotificationsSetup -> UpgradeOnboardingState.NotificationsSetup
+                            else -> UpgradeOnboardingState.CompleteOnboarding
+                        }
+                    )
+                }
             },
         )
 

@@ -134,7 +134,7 @@ private fun UpgradeOnboardingContent(
                 )
                 UpgradeOnboardingState.CompleteOnboarding -> OnboardingPageState(
                     type = onboardingState,
-                    image = R.drawable.ic_onboarding_tabs,
+                    image = R.drawable.ic_onboarding_completion,
                     title = stringResource(id = R.string.onboarding_complete_title),
                     description = stringResource(id = R.string.onboarding_complete_description),
                     primaryButtonText = stringResource(id = R.string.onboarding_finish),

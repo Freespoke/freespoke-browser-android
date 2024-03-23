@@ -5,6 +5,7 @@
 package org.mozilla.fenix.onboarding
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -84,6 +85,13 @@ class HomeOnboardingDialogFragment : DialogFragment() {
                 }
             }
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        context?.settings()?.showHomeOnboardingDialog = false
+        (activity as HomeActivity).binding.bottomNavigation.selectedItemId = R.id.action_home
+
+        super.onDismiss(dialog)
     }
 
     private fun onDismiss() {
