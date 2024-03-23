@@ -97,7 +97,7 @@ fun SubscriptionManagementPage(
                         }
                     },
                     viewModel = viewModel,
-                    modifier = Modifier.align(Alignment.BottomCenter),
+                    forcePadding = true,
                 )
 
                 else -> {}

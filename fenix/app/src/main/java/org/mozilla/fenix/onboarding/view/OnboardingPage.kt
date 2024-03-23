@@ -58,7 +58,6 @@ fun OnboardingPage(
                     onDismiss = onDismiss,
                     updatedOnboardingState = updatedOnboardingState,
                     viewModel = it,
-                    modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
             UpgradeOnboardingState.Subscriptions -> SubscriptionsView(
