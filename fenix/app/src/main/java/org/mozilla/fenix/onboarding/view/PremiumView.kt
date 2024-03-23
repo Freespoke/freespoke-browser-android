@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,41 +39,41 @@ fun PremiumView(
     ) {
         createCloseIcon(modifier = Modifier.align(Alignment.End), onDismiss)
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+
+        addFreespokeLogo()
 
         Text(
-            modifier = Modifier.padding(horizontal = 45.dp),
-            text = pageState.title,
+            modifier = Modifier.padding(horizontal = 40.dp),
+            text = stringResource(id = R.string.premium_unlocked),
             color = FirefoxTheme.colors.onboardingTextColor,
             textAlign = TextAlign.Center,
-            style = FirefoxTheme.typography.headLine3,
+            style = FirefoxTheme.typography.onboardingHeadLine2,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             modifier = Modifier.padding(horizontal = 30.dp),
-            text = pageState.description,
-            color = FirefoxTheme.colors.textSecondary,
+            text = stringResource(id = R.string.enjoy_premium),
+            color = FirefoxTheme.colors.freespokeDescriptionColor,
             textAlign = TextAlign.Center,
             style = FirefoxTheme.typography.body1,
         )
 
-        Spacer(modifier = Modifier.height(78.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
-        if (pageState.image != null) {
-            Image(
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(200.dp),
-                painter = painterResource(id = pageState.image),
-                contentDescription = null,
-                contentScale = ContentScale.Inside,
-            )
+        Image(
+            modifier = Modifier
+                .height(200.dp)
+                .width(200.dp),
+            painter = painterResource(id = R.drawable.ic_premium_big),
+            contentDescription = null,
+            contentScale = ContentScale.Inside,
+        )
 
-            LaunchedEffect(pageState) {
-                pageState.onRecordImpressionEvent()
-            }
+        LaunchedEffect(pageState) {
+            pageState.onRecordImpressionEvent()
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -80,7 +81,7 @@ fun PremiumView(
         Text(
             modifier = Modifier.padding(horizontal = 30.dp),
             text = stringResource(id = R.string.premium_badge_example),
-            color = FirefoxTheme.colors.textSecondary,
+            color = FirefoxTheme.colors.freespokeDescriptionColor,
             textAlign = TextAlign.Center,
             style = FirefoxTheme.typography.body1,
         )
@@ -89,14 +90,21 @@ fun PremiumView(
 
     Column(modifier = modifier
         .fillMaxWidth()
-        .background(FirefoxTheme.colors.layerOnboarding)
-        .shadow(2.dp)
-        .padding(vertical = 40.dp, horizontal = 30.dp)
+        .background(FirefoxTheme.colors.layer2)
+        .padding(bottom = 40.dp)
     ) {
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            color = FirefoxTheme.colors.dividerColor,
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
+
         PrimaryButtonOnboarding(
             modifier = Modifier
-                .fillMaxWidth(),
-            text = pageState.primaryButtonText,
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
+            text = stringResource(id = R.string.onboarding_next_button),
             onClick = {
                 updatedOnboardingState(UpgradeOnboardingState.DefaultBrowser)
             },

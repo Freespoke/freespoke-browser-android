@@ -42,7 +42,7 @@ fun BaseOnboardingView(
             text = pageState.title,
             color = FirefoxTheme.colors.onboardingTextColor,
             textAlign = TextAlign.Center,
-            style = FirefoxTheme.typography.headLine3,
+            style = FirefoxTheme.typography.onboardingHeadLine2,
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -50,7 +50,7 @@ fun BaseOnboardingView(
         Text(
             modifier = Modifier.padding(horizontal = 30.dp),
             text = pageState.description,
-            color = FirefoxTheme.colors.textSecondary,
+            color = FirefoxTheme.colors.freespokeDescriptionColor,
             textAlign = TextAlign.Center,
             style = FirefoxTheme.typography.body1,
         )
@@ -60,7 +60,8 @@ fun BaseOnboardingView(
         if (pageState.image != null) {
             Image(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp),
                 painter = painterResource(id = pageState.image),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
@@ -72,10 +73,12 @@ fun BaseOnboardingView(
         }
     }
 
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .padding(bottom = 40.dp)
-        .background(FirefoxTheme.colors.layerOnboarding)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 40.dp)
+            .background(FirefoxTheme.colors.layerOnboarding),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Divider(modifier = Modifier.fillMaxWidth(),
             color = FirefoxTheme.colors.dividerColor)
@@ -85,7 +88,7 @@ fun BaseOnboardingView(
         PrimaryButtonOnboarding(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = 40.dp),
             text = pageState.primaryButtonText,
             onClick = {
                 updatedOnboardingState(
@@ -104,7 +107,6 @@ fun BaseOnboardingView(
 
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .padding(horizontal = 30.dp)
                     .clickable {
                         updatedOnboardingState(

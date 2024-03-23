@@ -6,7 +6,10 @@ package org.mozilla.fenix.freespokepremium
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,49 +50,58 @@ fun SubscriptionManagementPage(
         mutableStateOf(initialState)
     }
 
-    BoxWithConstraints(
+    Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(FirefoxTheme.colors.layerOnboarding),
+            .background(FirefoxTheme.colors.layer1)
+            .systemBarsPadding()
+            .imePadding()
+            .fillMaxSize(),
     ) {
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(FirefoxTheme.colors.layerOnboarding)
+                .weight(1f)
+        ) {
 
-        when (type) {
-            UpgradeOnboardingState.Subscriptions -> SubscriptionsView(
-                onDismiss = onDismiss,
-                updatedOnboardingState = { type = it },
-                modifier = Modifier.align(Alignment.BottomCenter),
-                onUpgradePlan = onUpgradePlan,
-                onCancelPlan = onCancelPlan,
-            )
+            when (type) {
+                UpgradeOnboardingState.Subscriptions -> SubscriptionsView(
+                    onDismiss = onDismiss,
+                    updatedOnboardingState = { type = it },
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    onUpgradePlan = onUpgradePlan,
+                    onCancelPlan = onCancelPlan,
+                )
 
-            UpgradeOnboardingState.Premium -> PremiumView(
-                onDismiss,
-                { type = it },
-                OnboardingPageState(
-                    type = type,
-                    onRecordImpressionEvent = {
-                        Onboarding.syncCardImpression.record(NoExtras())
-                    },
-                ),
-                Modifier.align(Alignment.BottomCenter),
-            )
+                UpgradeOnboardingState.Premium -> PremiumView(
+                    onDismiss,
+                    { type = it },
+                    OnboardingPageState(
+                        type = type,
+                        onRecordImpressionEvent = {
+                            Onboarding.syncCardImpression.record(NoExtras())
+                        },
+                    ),
+                    Modifier.align(Alignment.BottomCenter),
+                )
 
-            UpgradeOnboardingState.Registration -> SignUpView(
-                onDismiss = onDismiss,
-                updatedOnboardingState = {
-                    if (it == UpgradeOnboardingState.Login) {
-                        onLogin {
-                            type = UpgradeOnboardingState.Subscriptions
+                UpgradeOnboardingState.Registration -> SignUpView(
+                    onDismiss = onDismiss,
+                    updatedOnboardingState = {
+                        if (it == UpgradeOnboardingState.Login) {
+                            onLogin {
+                                type = UpgradeOnboardingState.Subscriptions
+                            }
+                        } else {
+                            type = it
                         }
-                    } else {
-                        type = it
-                    }
-                },
-                viewModel = viewModel,
-                modifier = Modifier.align(Alignment.BottomCenter),
-            )
+                    },
+                    viewModel = viewModel,
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                )
 
-            else -> {}
+                else -> {}
+            }
         }
     }
 }

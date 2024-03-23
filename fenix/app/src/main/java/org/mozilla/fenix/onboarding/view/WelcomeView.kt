@@ -2,18 +2,22 @@ package org.mozilla.fenix.onboarding.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,11 +42,11 @@ fun WelcomeView(onDismiss: () -> Unit, updatedOnboardingState: (UpgradeOnboardin
         Spacer(modifier = Modifier.height(32.dp))
 
         Text(
-            modifier = Modifier.padding(horizontal = 45.dp),
+            modifier = Modifier.padding(horizontal = 40.dp),
             text = stringResource(id = R.string.onboarding_home_welcome_new_title),
             color = FirefoxTheme.colors.onboardingTextColor,
             textAlign = TextAlign.Center,
-            style = FirefoxTheme.typography.headLine2,
+            style = FirefoxTheme.typography.onboardingHeadLine1,
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -50,7 +54,7 @@ fun WelcomeView(onDismiss: () -> Unit, updatedOnboardingState: (UpgradeOnboardin
         Text(
             modifier = Modifier.padding(horizontal = 30.dp),
             text = stringResource(id = R.string.onboarding_home_welcome_subtitle),
-            color = FirefoxTheme.colors.textSecondary,
+            color = FirefoxTheme.colors.freespokeDescriptionColor,
             textAlign = TextAlign.Center,
             style = FirefoxTheme.typography.body1,
         )
@@ -60,7 +64,7 @@ fun WelcomeView(onDismiss: () -> Unit, updatedOnboardingState: (UpgradeOnboardin
         Text(
             modifier = Modifier.padding(horizontal = 30.dp),
             text = stringResource(id = R.string.onboarding_home_welcome_subtitle2),
-            color = FirefoxTheme.colors.textSecondary,
+            color = FirefoxTheme.colors.freespokeDescriptionColor,
             textAlign = TextAlign.Center,
             style = FirefoxTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
         )
@@ -72,17 +76,19 @@ fun WelcomeView(onDismiss: () -> Unit, updatedOnboardingState: (UpgradeOnboardin
     }*/
 
 
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .height(260.dp)
-        .background(FirefoxTheme.colors.layerOnboarding)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(260.dp)
+            .background(FirefoxTheme.colors.layerOnboarding),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Divider(modifier = Modifier.fillMaxWidth(), color = FirefoxTheme.colors.dividerColor)
         Spacer(modifier = Modifier.height(32.dp))
         PrimaryButtonOnboarding(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = 40.dp),
             text = stringResource(id = R.string.continue_without_account),
             onClick = {
                 updatedOnboardingState(UpgradeOnboardingState.DefaultBrowser)
@@ -94,7 +100,7 @@ fun WelcomeView(onDismiss: () -> Unit, updatedOnboardingState: (UpgradeOnboardin
         PrimaryButtonOnboarding(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 30.dp),
+                .padding(horizontal = 40.dp),
             text = stringResource(id = R.string.create_account),
             onClick = {
                 updatedOnboardingState(UpgradeOnboardingState.Registration)
@@ -105,12 +111,13 @@ fun WelcomeView(onDismiss: () -> Unit, updatedOnboardingState: (UpgradeOnboardin
 
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable { updatedOnboardingState(UpgradeOnboardingState.Login) },
+                .clickable {
+                    updatedOnboardingState(UpgradeOnboardingState.Login)
+                },
             text = stringResource(id = R.string.login_with_account),
-            color = FirefoxTheme.colors.textPrimary,
+            color = FirefoxTheme.colors.freespokeDescriptionColor,
             textAlign = TextAlign.Center,
-            style = FirefoxTheme.typography.subtitle1,
+            style = FirefoxTheme.typography.body1,
         )
     }
 }

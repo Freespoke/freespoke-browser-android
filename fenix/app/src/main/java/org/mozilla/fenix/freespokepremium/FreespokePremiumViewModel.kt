@@ -32,7 +32,7 @@ class FreespokePremiumViewModel(
     private val freespokeProfileStore: FreespokeProfileStore
 ) : ViewModel() {
 
-    private val cachedProductDetails: MutableStateFlow<ProductDetails?> = MutableStateFlow(null)
+    private val cachedProductDetails: MutableStateFlow<List<ProductDetails>?> = MutableStateFlow(null)
 
     private val _subscriptionUiStateFlow: MutableStateFlow<SubscriptionsUiModel?> =
         MutableStateFlow(null)
@@ -45,9 +45,10 @@ class FreespokePremiumViewModel(
     init {
         viewModelScope.launch {
             val subscription = billing.querySubscriptionOffers() ?: return@launch
-            val subscriptionOffers = subscription.filterTrialOffers().takeIf {
+            val trialOffers = subscription.filterTrialOffers()
+            val subscriptionOffers = trialOffers.takeIf {
                 it.isNotEmpty()
-            } ?: subscription.filterBaseOffers()
+            } ?: (trialOffers + subscription.filterBaseOffers())
 
             val monthlyOffer = subscriptionOffers.find {
                 it.basePlanId == Billing.PREMIUM_MONTHLY_PLAN_ID
@@ -102,13 +103,21 @@ class FreespokePremiumViewModel(
             viewModelScope.launch {
                 val accountId = freespokeProfileStore.flow().mapNotNull { it.profile?.id }.first()
 
-                withContext(Dispatchers.Main) {
-                    billing.launchBillingFlow(
-                        activity,
-                        productDetails,
-                        offerToken,
-                        accountId,
-                    )
+                val product = productDetails.firstOrNull {
+                    it.subscriptionOfferDetails?.firstOrNull { offer ->
+                        offer.offerToken == offerToken
+                    } != null
+                }
+
+                product?.let {
+                    withContext(Dispatchers.Main) {
+                        billing.launchBillingFlow(
+                            activity,
+                            it,
+                            offerToken,
+                            accountId,
+                        )
+                    }
                 }
             }
 

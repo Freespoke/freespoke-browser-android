@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -78,7 +79,7 @@ fun SubscriptionsView(
             text = stringResource(id = R.string.start_free_trial),
             color = FirefoxTheme.colors.onboardingTextColor,
             textAlign = TextAlign.Center,
-            style = FirefoxTheme.typography.headLine3,
+            style = FirefoxTheme.typography.onboardingHeadLine2,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -98,7 +99,9 @@ fun SubscriptionsView(
                     text = stringResource(id = R.string.ad_free_search),
                     color = FirefoxTheme.colors.freespokeDescriptionColor,
                     textAlign = TextAlign.Start,
-                    style = FirefoxTheme.typography.headline5,
+                    style = FirefoxTheme.typography.headline5.copy(
+                        fontWeight = FontWeight.W600
+                    ),
                 )
                 Text(
                     text = stringResource(id = R.string.ad_free_search_description),
@@ -124,7 +127,9 @@ fun SubscriptionsView(
                     text = stringResource(id = R.string.without_bias),
                     color = FirefoxTheme.colors.freespokeDescriptionColor,
                     textAlign = TextAlign.Start,
-                    style = FirefoxTheme.typography.headline5,
+                    style = FirefoxTheme.typography.headline5.copy(
+                        fontWeight = FontWeight.W600
+                    ),
                 )
                 Text(
                     text = stringResource(id = R.string.without_bias_description),
@@ -150,7 +155,9 @@ fun SubscriptionsView(
                     text = stringResource(id = R.string.porn_free),
                     color = FirefoxTheme.colors.freespokeDescriptionColor,
                     textAlign = TextAlign.Start,
-                    style = FirefoxTheme.typography.headline5,
+                    style = FirefoxTheme.typography.headline5.copy(
+                        fontWeight = FontWeight.W600
+                    ),
                 )
                 Text(
                     text = stringResource(id = R.string.porn_free_description),
@@ -206,16 +213,21 @@ fun SubscriptionInfoBlock(
     onCancelPlan: ((Boolean) -> Unit)? = null,
 ) {
 
-    subscriptionsUiModel?.let { uiModel ->
-        Column(modifier = modifier
+    Column(
+        modifier = modifier
             .fillMaxWidth()
             .background(colors.layerOnboarding)
-            .padding(bottom = 32.dp)
-        ) {
-            Divider(modifier = Modifier.fillMaxWidth(),
-                color = FirefoxTheme.colors.dividerColor)
+            .padding(bottom = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Divider(
+            modifier = Modifier.fillMaxWidth(),
+            color = FirefoxTheme.colors.dividerColor,
+        )
 
-            Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+
+        subscriptionsUiModel?.let { uiModel ->
             if (type == SubscriptionInfoBlockType.Trial) {
                 Text(
                     modifier = Modifier
@@ -224,7 +236,8 @@ fun SubscriptionInfoBlock(
                     text = stringResource(id = R.string.subscriptions_rules),
                     color = FirefoxTheme.colors.freespokeDescriptionColor,
                     textAlign = TextAlign.Center,
-                    style = FirefoxTheme.typography.subtitle2)
+                    style = FirefoxTheme.typography.subtitle2,
+                )
                 Spacer(modifier = Modifier.height(32.dp))
             }
 
@@ -239,42 +252,43 @@ fun SubscriptionInfoBlock(
                 },
                 onCancelPlan = {
                     onCancelPlan?.invoke(type == SubscriptionInfoBlockType.Upgrade)
-                }
+                },
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
                 modifier = Modifier
-                    .fillMaxWidth()
                     .clickable { },
                 text = stringResource(id = R.string.restore_purchase),
-                color = FirefoxTheme.colors.textPrimary,
+                color = FirefoxTheme.colors.freespokeDescriptionColor,
                 textAlign = TextAlign.Center,
                 style = FirefoxTheme.typography.subtitle1,
             )
             Spacer(modifier = Modifier.height(32.dp))
 
-            val continueActionText = when(type) {
-                SubscriptionInfoBlockType.Trial, SubscriptionInfoBlockType.Regular -> {
-                    stringResource(id = R.string.continue_without_premium)
-                }
-                else -> {
-                    stringResource(id = R.string.continue_without_updating)
-                }
+        }
+
+        val continueActionText = when (type) {
+            SubscriptionInfoBlockType.Trial, SubscriptionInfoBlockType.Regular -> {
+                stringResource(id = R.string.continue_without_premium)
             }
 
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { updatedOnboardingState(UpgradeOnboardingState.DefaultBrowser) },
-                text = continueActionText,
-                color = FirefoxTheme.colors.textPrimary,
-                textAlign = TextAlign.Center,
-                style = FirefoxTheme.typography.subtitle1,
-            )
+            else -> {
+                stringResource(id = R.string.continue_without_updating)
+            }
         }
+
+        Text(
+            modifier = Modifier
+                .clickable { updatedOnboardingState(UpgradeOnboardingState.DefaultBrowser) },
+            text = continueActionText,
+            color = FirefoxTheme.colors.freespokeDescriptionColor,
+            textAlign = TextAlign.Center,
+            style = FirefoxTheme.typography.subtitle1,
+        )
     }
+
 }
 
 @Composable

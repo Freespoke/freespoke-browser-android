@@ -176,7 +176,7 @@ android {
     productFlavors {
         staging {
             dimension "developer"
-            applicationIdSuffix ".debug"
+            //applicationIdSuffix ".debug"
             buildConfigField "String","ONE_SIGNAL_APP_ID",'"de8ebc15-f8ef-427a-b1c1-f312ce831eea"'
             buildConfigField "Integer","MATOMO_APP_ID",'7'
             buildConfigField "String","BASE_URL",'"https://api.staging.freespoke.com"'

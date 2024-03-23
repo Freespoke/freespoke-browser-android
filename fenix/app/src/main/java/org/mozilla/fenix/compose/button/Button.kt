@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import mozilla.components.ui.colors.PhotonColors
 import org.mozilla.fenix.R
@@ -36,6 +37,7 @@ private fun Button(
     modifier: Modifier? = null,
     text: String,
     textColor: Color,
+    textStyle: TextStyle = FirefoxTheme.typography.button,
     backgroundColor: Color,
     borderStroke: BorderStroke? = null,
     icon: Painter? = null,
@@ -65,7 +67,7 @@ private fun Button(
         Text(
             text = text,
             color = textColor,
-            style = FirefoxTheme.typography.button,
+            style = textStyle,
             maxLines = 1,
         )
     }
@@ -189,9 +191,10 @@ fun PrimaryButtonOnboarding(
     onClick: () -> Unit,
 ) {
     Button(
-        modifier,
+        modifier = Modifier.height(56.dp).then(modifier),
         text = text,
         textColor = textColor,
+        textStyle = FirefoxTheme.typography.onboardingButton,
         backgroundColor = backgroundColor,
         icon = icon,
         tint = FirefoxTheme.colors.iconActionPrimary,
@@ -209,9 +212,10 @@ fun SecondaryButtonOnboarding(
     onClick: () -> Unit,
 ) {
     Button(
-        modifier,
+        modifier = Modifier.height(56.dp).then(modifier),
         text = text,
         textColor = textColor,
+        textStyle = FirefoxTheme.typography.onboardingButton,
         backgroundColor = backgroundColor,
         icon = icon,
         tint = FirefoxTheme.colors.iconActionPrimary,

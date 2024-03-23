@@ -5,9 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -77,7 +80,7 @@ fun SignUpView(
                 text = stringResource(id = R.string.join_freespoke_revolution),
                 color = FirefoxTheme.colors.onboardingTextColor,
                 textAlign = TextAlign.Center,
-                style = FirefoxTheme.typography.headLine3,
+                style = FirefoxTheme.typography.onboardingHeadLine2,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -85,7 +88,7 @@ fun SignUpView(
             Text(
                 modifier = Modifier.padding(horizontal = 40.dp),
                 text = stringResource(id = R.string.signup_subtitle),
-                color = FirefoxTheme.colors.textSecondary,
+                color = FirefoxTheme.colors.freespokeDescriptionColor,
                 textAlign = TextAlign.Center,
                 style = FirefoxTheme.typography.body1,
             )
@@ -231,13 +234,15 @@ fun SignUpView(
             }
         }
 
-        Column (modifier = Modifier
-            .background(FirefoxTheme.colors.layer2)
-            .padding(bottom = 40.dp)
-            .then(modifier)) {
+        Column(
+            modifier = Modifier
+                .background(FirefoxTheme.colors.layer2)
+                .padding(bottom = 40.dp)
+                .then(modifier),
+        ) {
             Divider(
                 modifier = Modifier.fillMaxWidth(),
-                color = FirefoxTheme.colors.dividerColor
+                color = FirefoxTheme.colors.dividerColor,
             )
 
             Spacer(modifier = Modifier.height(40.dp))
