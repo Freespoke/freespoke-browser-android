@@ -82,6 +82,7 @@ private fun UpgradeOnboardingContent(
             .background(FirefoxTheme.colors.layer1)
             .statusBarsPadding()
             .navigationBarsPadding()
+            .imePadding()
             .fillMaxSize(),
     ) {
         OnboardingPage(
@@ -137,7 +138,7 @@ private fun UpgradeOnboardingContent(
                 )
                 UpgradeOnboardingState.CompleteOnboarding -> OnboardingPageState(
                     type = onboardingState,
-                    image = R.drawable.ic_onboarding_tabs,
+                    image = R.drawable.ic_onboarding_completion,
                     title = stringResource(id = R.string.onboarding_complete_title),
                     description = stringResource(id = R.string.onboarding_complete_description),
                     primaryButtonText = stringResource(id = R.string.onboarding_finish),
@@ -163,9 +164,11 @@ private fun UpgradeOnboardingContent(
             },
             updatedOnboardingState = {
                 when (it) {
-                    UpgradeOnboardingState.DefaultBrowserShow -> onSetupSettingsClick?.invoke(
-                        OnboardingAppSettings.SetupDefaultBrowser, null
-                    )
+                    UpgradeOnboardingState.DefaultBrowserShow -> {
+                        onSetupSettingsClick?.invoke(OnboardingAppSettings.SetupDefaultBrowser) {
+                            onboardingState = UpgradeOnboardingState.Notifications
+                        }
+                    }
                     UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(
                         OnboardingAppSettings.Notifications, null
                     )

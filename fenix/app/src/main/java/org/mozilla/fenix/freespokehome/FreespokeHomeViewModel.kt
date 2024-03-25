@@ -10,10 +10,15 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import mozilla.components.browser.storage.sync.PlacesHistoryStorage
 import mozilla.components.concept.storage.HistoryMetadata
+import mozilla.components.lib.state.ext.flow
+import net.openid.appauth.AuthState
 import org.mozilla.fenix.FenixApplication
 import org.mozilla.fenix.apiservice.FreespokeApi
 import org.mozilla.fenix.apiservice.model.QuickLinkObject
@@ -24,6 +29,7 @@ import org.mozilla.fenix.components.bookmarks.BookmarksUseCase.Companion.DEFAULT
 import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel
 import org.mozilla.fenix.freespokeaccount.profile.ProfileUiModel.Companion.mapToUiProfile
+import org.mozilla.fenix.freespokeaccount.store.ClearStore
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.home.recentbookmarks.RecentBookmark
@@ -35,7 +41,7 @@ class FreespokeHomeViewModel(
     val historyStorage: PlacesHistoryStorage,
     val freespokeProfileStore: FreespokeProfileStore,
     val userRepository: UserPreferenceRepository,
-    //val authManager: AuthManager
+    val authManager: AuthManager
 ): ViewModel() {
 
     val newsData = MutableLiveData<List<TrendingNews>>()
@@ -105,26 +111,45 @@ class FreespokeHomeViewModel(
     }
 
     fun getProfileData() {
-        viewModelScope.launch {
-            try {
-                userRepository.getAccessTokenFlow().collectLatest {
-                    //todo if(!userLoggedIn) profileData.value = null
-                    val profileResponse = FreespokeApi.service.getProfile("Bearer $it")
+        freespokeProfileStore.flow()
+            .onEach {
+                profileData.value = it.profile?.mapToUiProfile()
+            }
+            .launchIn(viewModelScope)
 
-                    if (profileResponse.isSuccessful) {
-                        profileResponse.body()?.let { profile ->
-                            profileData.value = profile.mapToUiProfile()
-                            freespokeProfileStore.dispatch(
-                                UpdateProfileAction(profile)
-                            )
+        viewModelScope.launch {
+            userRepository.getAuthFlow().collectLatest {
+                it ?: run {
+                    profileData.value = null
+                    return@collectLatest
+                }
+
+                authManager.performApiCallWithFreshTokens(
+                    this,
+                    { onLogout() }
+                ) { accessToken, _ ->
+                    try {
+                        val profileResponse = FreespokeApi.service.getProfile("Bearer $accessToken")
+
+                        if (profileResponse.isSuccessful) {
+                            profileResponse.body()?.let { profile ->
+                                profileData.value = profile.mapToUiProfile()
+                                freespokeProfileStore.dispatch(
+                                    UpdateProfileAction(profile),
+                                )
+                            }
                         }
+                    } catch (e: Exception) {
+                        profileData.value = null
+                        Log.e("API", e.localizedMessage ?: "")
                     }
                 }
-            } catch (e: Exception) {
-                profileData.value = null
-                Log.e("API", e.localizedMessage ?: "")
             }
         }
+    }
+
+    private fun onLogout() {
+        freespokeProfileStore.dispatch(ClearStore)
     }
 
     companion object {
@@ -143,7 +168,7 @@ class FreespokeHomeViewModel(
                     application.components.core.historyStorage,
                     application.components.freespokeProfileStore,
                     UserPreferenceRepository(context = application.baseContext),
-                    //application.components.authManager
+                    application.components.authManager
                 ) as T
             }
         }

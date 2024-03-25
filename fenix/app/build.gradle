@@ -183,6 +183,7 @@ android {
             buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
             buildConfigField "String","AUTH_URL", '"https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/auth"'
             buildConfigField "String","REFRESH_TOKEN_URL", '"https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/token"'
+            buildConfigField "String","LOGOUT_URL", '"https://auth.staging.freespoke.com/realms/freespoke-staging/protocol/openid-connect/logout"'
             buildConfigField "String","PROFILE_URL", '"https://staging.freespoke.com/account/profile"'
             resValue "string", "app_name", "Freespoke (Staging)"
             manifestPlaceholders = [
@@ -198,6 +199,7 @@ android {
             buildConfigField "String","MATOMO_URL",'"https://matomo.freespoke.com/matomo.php"'
             buildConfigField "String","AUTH_URL", '"https://auth.freespoke.com/realms/freespoke-staging/protocol/openid-connect/auth"'
             buildConfigField "String","REFRESH_TOKEN_URL", '"https://auth.freespoke.com/realms/freespoke-staging/protocol/openid-connect/token"'
+            buildConfigField "String","LOGOUT_URL", '"https://auth.freespoke.com/realms/freespoke-staging/protocol/openid-connect/logout"'
             buildConfigField "String","PROFILE_URL", '"https://freespoke.com/account/profile"'
             resValue "string", "app_name", "Freespoke"
             manifestPlaceholders = [

@@ -22,6 +22,8 @@ import org.mozilla.fenix.apiservice.model.UserProfileData
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.billing.Billing.Companion.filterBaseOffers
 import org.mozilla.fenix.components.billing.Billing.Companion.filterTrialOffers
+import org.mozilla.fenix.components.billing.Billing.Companion.findMonthlyPlan
+import org.mozilla.fenix.components.billing.Billing.Companion.findYearlyPlan
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.onboarding.view.SubscriptionInfoBlockType
@@ -31,7 +33,7 @@ class FreespokePremiumViewModel(
     private val freespokeProfileStore: FreespokeProfileStore
 ) : ViewModel() {
 
-    private val cachedProductDetails: MutableStateFlow<ProductDetails?> = MutableStateFlow(null)
+    private val cachedProductDetails: MutableStateFlow<List<ProductDetails>?> = MutableStateFlow(null)
 
     private val _subscriptionUiStateFlow: MutableStateFlow<SubscriptionsUiModel?> =
         MutableStateFlow(null)
@@ -44,17 +46,14 @@ class FreespokePremiumViewModel(
     init {
         viewModelScope.launch {
             val subscription = billing.querySubscriptionOffers() ?: return@launch
-            val subscriptionOffers = subscription.filterTrialOffers().takeIf {
-                it.isNotEmpty()
-            } ?: subscription.filterBaseOffers()
+            val trialOffers = subscription.filterTrialOffers()
+            val baseOffers = subscription.filterBaseOffers()
 
-            val monthlyOffer = subscriptionOffers.find {
-                it.basePlanId == Billing.PREMIUM_MONTHLY_PLAN_ID
-            } ?: return@launch
+            val monthlyOffer = trialOffers.findMonthlyPlan()
+                ?: baseOffers.findMonthlyPlan() ?: return@launch
 
-            val yearlyOffer = subscriptionOffers.find {
-                it.basePlanId == Billing.PREMIUM_YEARLY_PLAN_ID
-            } ?: return@launch
+            val yearlyOffer = trialOffers.findYearlyPlan()
+                ?: baseOffers.findYearlyPlan() ?: return@launch
 
             val uiModel = SubscriptionsUiModel(
                 monthlyPrice = monthlyOffer.pricingPhases.pricingPhaseList.find {
@@ -74,8 +73,6 @@ class FreespokePremiumViewModel(
             freespokeProfileStore.flow().collect {
                 it.profile?.let { profile ->
                     _uiTypeFlow.value = resolveUiType(profile)
-                } ?: run {
-                    _uiTypeFlow.value = SubscriptionInfoBlockType.Trial
                 }
             }
         }
@@ -85,7 +82,7 @@ class FreespokePremiumViewModel(
         val subscriptionNotExpired =
             System.currentTimeMillis() / 1000 < (profile.attributes.subscription?.subscriptionExpiry ?: 0L)
         val subscriptionNativeToPlatform =
-            profile.attributes.subscription?.subscriptionPaymentSource == "android"
+            profile.attributes.subscription?.subscriptionPaymentSource == "android-native"
         val userHasSubscribed = profile.attributes.subscription != null
 
         return when {
@@ -101,13 +98,21 @@ class FreespokePremiumViewModel(
             viewModelScope.launch {
                 val accountId = freespokeProfileStore.flow().mapNotNull { it.profile?.id }.first()
 
-                withContext(Dispatchers.Main) {
-                    billing.launchBillingFlow(
-                        activity,
-                        productDetails,
-                        offerToken,
-                        accountId,
-                    )
+                val product = productDetails.firstOrNull {
+                    it.subscriptionOfferDetails?.firstOrNull { offer ->
+                        offer.offerToken == offerToken
+                    } != null
+                }
+
+                product?.let {
+                    withContext(Dispatchers.Main) {
+                        billing.launchBillingFlow(
+                            activity,
+                            it,
+                            offerToken,
+                            accountId,
+                        )
+                    }
                 }
             }
 

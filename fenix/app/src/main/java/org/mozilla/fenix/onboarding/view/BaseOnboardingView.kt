@@ -77,7 +77,7 @@ fun BaseOnboardingView(
                 text = pageState.title,
                 color = FirefoxTheme.colors.onboardingTextColor,
                 textAlign = TextAlign.Center,
-                style = FirefoxTheme.typography.headLine3,
+                style = FirefoxTheme.typography.onboardingHeadLine2,
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -85,7 +85,7 @@ fun BaseOnboardingView(
             Text(
                 modifier = Modifier.padding(horizontal = 30.dp),
                 text = pageState.description,
-                color = FirefoxTheme.colors.textSecondary,
+                color = FirefoxTheme.colors.freespokeDescriptionColor,
                 textAlign = TextAlign.Center,
                 style = FirefoxTheme.typography.body1,
             )
@@ -93,9 +93,17 @@ fun BaseOnboardingView(
             Spacer(modifier = Modifier.height(32.dp))
 
             if (pageState.image != null) {
+                val paddingModifier =
+                    if (pageState.type == UpgradeOnboardingState.CompleteOnboarding) {
+                        Modifier
+                    } else {
+                        Modifier.padding(horizontal = 40.dp)
+                    }
+
                 Image(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .then(paddingModifier),
                     painter = painterResource(id = pageState.image),
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
@@ -112,6 +120,7 @@ fun BaseOnboardingView(
                 .fillMaxWidth()
                 .padding(bottom = 40.dp)
                 .background(FirefoxTheme.colors.layerOnboarding),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Divider(
                 modifier = Modifier.fillMaxWidth(),
@@ -123,12 +132,16 @@ fun BaseOnboardingView(
             PrimaryButtonOnboarding(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 30.dp),
+                    .padding(horizontal = 40.dp),
                 text = pageState.primaryButtonText,
                 onClick = {
-                    updatedOnboardingState(
-                        getNextStep(pageState.type),
-                    )
+                    if (pageState.type == UpgradeOnboardingState.CompleteOnboarding) {
+                        onDismiss()
+                    } else {
+                        updatedOnboardingState(
+                            getNextStep(pageState.type),
+                        )
+                    }
                 },
             )
 
@@ -138,7 +151,6 @@ fun BaseOnboardingView(
 
                 Text(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(horizontal = 30.dp)
                         .clickable {
                             updatedOnboardingState(
@@ -160,9 +172,12 @@ fun BaseOnboardingView(
 
 fun shouldSkipScreen(context: Context?, type: UpgradeOnboardingState?): Boolean {
     return if (type == UpgradeOnboardingState.DefaultBrowser || type == UpgradeOnboardingState.DefaultBrowserShow) {
-    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))
-    val resolveInfo: ResolveInfo? =
-        context?.packageManager?.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))
+        val resolveInfo: ResolveInfo? =
+            context?.packageManager?.resolveActivity(
+                browserIntent,
+                PackageManager.MATCH_DEFAULT_ONLY,
+            )
         var defaultBrowserPkg: String? = null
         if (resolveInfo?.activityInfo != null) {
             defaultBrowserPkg = resolveInfo.activityInfo.packageName
@@ -174,7 +189,7 @@ fun shouldSkipScreen(context: Context?, type: UpgradeOnboardingState?): Boolean 
 }
 
 fun getNextStep(type: UpgradeOnboardingState?): UpgradeOnboardingState {
-    return when(type) {
+    return when (type) {
         UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> UpgradeOnboardingState.DefaultBrowserShow
         UpgradeOnboardingState.Notifications, UpgradeOnboardingState.NotificationsSetup -> UpgradeOnboardingState.NotificationsSetup
         else -> UpgradeOnboardingState.CompleteOnboarding
@@ -184,7 +199,7 @@ fun getNextStep(type: UpgradeOnboardingState?): UpgradeOnboardingState {
 @Composable
 fun ComposableLifecycle(
     lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit
+    onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit,
 ) {
     DisposableEffect(lifeCycleOwner) {
         val observer = LifecycleEventObserver { source, event ->

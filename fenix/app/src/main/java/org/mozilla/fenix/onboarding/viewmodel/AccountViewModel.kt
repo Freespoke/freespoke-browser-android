@@ -13,8 +13,13 @@ import org.mozilla.fenix.apiservice.ErrorUtils
 import org.mozilla.fenix.apiservice.FreespokeApi
 import org.mozilla.fenix.apiservice.model.SignUpUserModel
 import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
+import org.mozilla.fenix.ext.components
+import org.mozilla.fenix.utils.AuthManager
 
-class AccountViewModel(val repository: UserPreferenceRepository): ViewModel() {
+class AccountViewModel(
+    private val repository: UserPreferenceRepository,
+    private val authManager: AuthManager,
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
@@ -25,6 +30,7 @@ class AccountViewModel(val repository: UserPreferenceRepository): ViewModel() {
             if (userDataResponse.isSuccessful) {
                 userDataResponse.body()?.let {
                     repository.writeUserData(it)
+                    authManager.refreshTokenAfterSignUp(it)
                 }
                 _uiState.value = SignUpUiState(isSuccessfulSignUp = true)
             } else {
@@ -56,7 +62,10 @@ class AccountViewModel(val repository: UserPreferenceRepository): ViewModel() {
             ): T {
                 // Get the Application object from extras
                 val application = checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-                return AccountViewModel(UserPreferenceRepository(context = application.baseContext)) as T
+                return AccountViewModel(
+                    UserPreferenceRepository(context = application.baseContext),
+                    application.components.authManager
+                ) as T
             }
         }
     }

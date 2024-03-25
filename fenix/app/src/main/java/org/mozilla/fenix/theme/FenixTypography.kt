@@ -13,10 +13,15 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.Typeface
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.mozilla.fenix.R
 
 /**
  * A custom typography for Mozilla Firefox for Android (Fenix).
@@ -50,6 +55,31 @@ class FenixTypography(
     val overline: TextStyle,
     val headLine3: TextStyle,
     val headLine2: TextStyle,
+    val onboardingHeadLine1: TextStyle,
+    val onboardingHeadLine2: TextStyle,
+    val onboardingBody: TextStyle,
+    val onboardingSubtitle: TextStyle,
+    val onboardingButton: TextStyle,
+)
+
+val onboardingFontFamily = FontFamily(
+    fonts = listOf(
+        Font(
+            resId = R.font.source_serif_regular,
+            style = FontStyle.Normal,
+            weight = FontWeight.W400
+        ),
+        Font(
+            resId = R.font.source_serif_semibold,
+            style = FontStyle.Normal,
+            weight = FontWeight.W600
+        ),
+        Font(
+            resId = R.font.source_serif_bold,
+            style = FontStyle.Normal,
+            weight = FontWeight.W700
+        ),
+    )
 )
 
 val defaultTypography = FenixTypography(
@@ -155,7 +185,42 @@ val defaultTypography = FenixTypography(
         fontWeight = FontWeight.W400,
         letterSpacing = 0.18.sp,
         lineHeight = 40.sp,
-    )
+    ),
+
+    onboardingHeadLine1 = TextStyle(
+        fontFamily = onboardingFontFamily,
+        fontWeight = FontWeight.W600,
+        fontSize = 36.sp,
+        lineHeight = 40.sp
+    ),
+
+    onboardingHeadLine2 = TextStyle(
+        fontFamily = onboardingFontFamily,
+        fontWeight = FontWeight.W600,
+        fontSize = 28.sp,
+        lineHeight = 34.sp
+    ),
+
+    onboardingBody = TextStyle(
+        fontFamily = onboardingFontFamily,
+        fontWeight = FontWeight.W400,
+        fontSize = 16.sp,
+        lineHeight = 26.sp
+    ),
+
+    onboardingSubtitle = TextStyle(
+        fontFamily = onboardingFontFamily,
+        fontWeight = FontWeight.W700,
+        fontSize = 16.sp,
+        lineHeight = 26.sp
+    ),
+
+    onboardingButton = TextStyle(
+        fontSize = 18.sp,
+        fontWeight = FontWeight.W600,
+        letterSpacing = 0.5.sp,
+        lineHeight = 24.sp,
+    ),
 )
 
 @Composable
