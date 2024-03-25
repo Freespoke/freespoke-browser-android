@@ -80,6 +80,7 @@ class HomeOnboardingDialogFragment : DialogFragment() {
                             }
                         },
                         viewModel = viewModel,
+                        context = context
                     )
                 }
             }
