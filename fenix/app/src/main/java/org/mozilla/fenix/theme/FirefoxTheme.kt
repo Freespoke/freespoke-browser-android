@@ -153,6 +153,7 @@ private val darkColorPalette = FirefoxColors(
     errorColor = PhotonColors.Red400,
     freeSpokeProfileGradientStartColor = PhotonColors.DarkGrey161616,
     freeSpokeProfileGradientEndColor = PhotonColors.DarkGrey161616,
+    freespokeBorderColor = PhotonColors.FreespokeGrayTextColor
 )
 
 private val lightColorPalette = FirefoxColors(
@@ -228,6 +229,7 @@ private val lightColorPalette = FirefoxColors(
     errorColor = PhotonColors.Red600,
     freeSpokeProfileGradientStartColor = PhotonColors.FreeSpokeProfileGradientStartColor,
     freeSpokeProfileGradientEndColor = PhotonColors.White,
+    freespokeBorderColor = PhotonColors.LightGrey005
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -314,6 +316,7 @@ class FirefoxColors(
     errorColor: Color,
     freeSpokeProfileGradientStartColor: Color,
     freeSpokeProfileGradientEndColor: Color,
+    freespokeBorderColor: Color,
 ) {
     // Layers
 
@@ -590,6 +593,9 @@ class FirefoxColors(
     var freeSpokeProfileGradientEndColor by mutableStateOf(freeSpokeProfileGradientEndColor)
         private set
 
+    var freespokeBorderColor by mutableStateOf(freespokeBorderColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -658,6 +664,7 @@ class FirefoxColors(
         dividerColor = other.dividerColor
         subtitleColor = other.subtitleColor
         errorColor = other.errorColor
+        freespokeBorderColor = other.freespokeBorderColor
     }
 
     /**
@@ -736,6 +743,7 @@ class FirefoxColors(
         errorColor: Color = this.errorColor,
         freeSpokeProfileGradientStartColor: Color = this.freeSpokeProfileGradientStartColor,
         freeSpokeProfileGradientEndColor: Color = this.freeSpokeProfileGradientEndColor,
+        freespokeBorderColor: Color = this.freespokeBorderColor,
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -809,6 +817,7 @@ class FirefoxColors(
         errorColor = errorColor,
         freeSpokeProfileGradientStartColor = freeSpokeProfileGradientStartColor,
         freeSpokeProfileGradientEndColor = freeSpokeProfileGradientEndColor,
+        freespokeBorderColor = freespokeBorderColor,
     )
 }
 
