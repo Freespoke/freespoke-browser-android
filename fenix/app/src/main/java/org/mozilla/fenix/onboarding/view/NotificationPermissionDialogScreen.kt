@@ -45,7 +45,8 @@ fun NotificationPermissionDialogScreen(
             grantNotificationPermission()
             Onboarding.notifPppPositiveBtnClick.record(NoExtras())
         },
-        viewModel = null
+        viewModel = null,
+        context = null
     )
 }
 

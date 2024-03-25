@@ -120,8 +120,12 @@ fun SignUpView(
                         firstName = it
                     },
                     isError = signUpUiState.errorData.firstName.isNotEmpty(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layer2),
-                    label = { Text(stringResource(id = R.string.addresses_first_name)) },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layerOnboarding,
+                        textColor = FirefoxTheme.colors.onboardingTextColor,
+                        focusedBorderColor = FirefoxTheme.colors.dividerColor,
+                        cursorColor = FirefoxTheme.colors.onboardingTextColor,
+                        unfocusedBorderColor = FirefoxTheme.colors.freespokeBorderColor),
+                    label = { Text(stringResource(id = R.string.addresses_first_name), color = FirefoxTheme.colors.onboardingTextColor) },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_person),
@@ -154,8 +158,12 @@ fun SignUpView(
                         lastName = it
                     },
                     isError = signUpUiState.errorData.lastName.isNotEmpty(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layer2),
-                    label = { Text(stringResource(id = R.string.addresses_last_name)) },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layerOnboarding,
+                        textColor = FirefoxTheme.colors.onboardingTextColor,
+                        focusedBorderColor = FirefoxTheme.colors.dividerColor,
+                        cursorColor = FirefoxTheme.colors.onboardingTextColor,
+                        unfocusedBorderColor = FirefoxTheme.colors.freespokeBorderColor),
+                    label = { Text(stringResource(id = R.string.addresses_last_name), color = FirefoxTheme.colors.onboardingTextColor) },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_person),
@@ -190,8 +198,12 @@ fun SignUpView(
                         email = it
                     },
                     isError = signUpUiState.errorData.email.isNotEmpty(),
-                    label = { Text(stringResource(id = R.string.addresses_email)) },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layer2),
+                    label = { Text(stringResource(id = R.string.addresses_email), color = FirefoxTheme.colors.onboardingTextColor) },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layerOnboarding,
+                        textColor = FirefoxTheme.colors.onboardingTextColor,
+                        focusedBorderColor = FirefoxTheme.colors.dividerColor,
+                        cursorColor = FirefoxTheme.colors.onboardingTextColor,
+                        unfocusedBorderColor = FirefoxTheme.colors.freespokeBorderColor),
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_email),
@@ -226,8 +238,12 @@ fun SignUpView(
                         password = it
                     },
                     isError = signUpUiState.errorData.password.isNotEmpty(),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layer2),
-                    label = { Text(stringResource(id = R.string.password)) },
+                    colors = TextFieldDefaults.outlinedTextFieldColors(backgroundColor = FirefoxTheme.colors.layerOnboarding,
+                        textColor = FirefoxTheme.colors.onboardingTextColor,
+                        focusedBorderColor = FirefoxTheme.colors.dividerColor,
+                        cursorColor = FirefoxTheme.colors.onboardingTextColor,
+                        unfocusedBorderColor = FirefoxTheme.colors.freespokeBorderColor),
+                    label = { Text(stringResource(id = R.string.password), color = FirefoxTheme.colors.onboardingTextColor) },
                     leadingIcon = {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_password),
@@ -258,7 +274,7 @@ fun SignUpView(
             Column(
                 modifier = Modifier
                     .height(180.dp)
-                    .background(FirefoxTheme.colors.layer2),
+                    .background(FirefoxTheme.colors.layerOnboarding),
             ) {
                 Divider(
                     modifier = Modifier.fillMaxWidth(),

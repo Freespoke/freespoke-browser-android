@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix.onboarding.view
 
+import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -54,13 +55,15 @@ enum class OnboardingAppSettings {
 fun UpgradeOnboarding(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
-    onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)? = null,
+    onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)?,
+    context: Context? = null
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection()) {
         UpgradeOnboardingContent(
             onDismiss = onDismiss,
             viewModel = viewModel,
             onSetupSettingsClick,
+            context
         )
     }
 }
@@ -70,6 +73,7 @@ private fun UpgradeOnboardingContent(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
     onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)?,
+    context: Context? = null,
 ) {
     var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Welcome) }
 
@@ -178,6 +182,7 @@ private fun UpgradeOnboardingContent(
             },
             viewModel = viewModel,
             modifier = Modifier.weight(1f),
+            context
         )
     }
 }

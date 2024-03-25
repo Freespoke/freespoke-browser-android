@@ -80,7 +80,7 @@ fun FreespokeProfileListItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-            .border(1.dp, FirefoxTheme.colors.dividerColor, RoundedCornerShape(6.dp))
+            .border(1.dp, FirefoxTheme.colors.freespokeBorderColor, RoundedCornerShape(6.dp))
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(6.dp))
             .then(clickableModifier),

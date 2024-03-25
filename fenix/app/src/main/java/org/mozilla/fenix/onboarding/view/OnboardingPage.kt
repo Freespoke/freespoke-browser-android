@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix.onboarding.view
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -42,7 +43,8 @@ fun OnboardingPage(
     onDismiss: () -> Unit,
     updatedOnboardingState: (UpgradeOnboardingState) -> Unit,
     viewModel: AccountViewModel?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    context: Context? = null
 ) {
     BoxWithConstraints(
         modifier = Modifier
@@ -75,7 +77,8 @@ fun OnboardingPage(
                 onDismiss,
                 pageState,
                 Modifier.align(Alignment.BottomCenter),
-                updatedOnboardingState
+                updatedOnboardingState,
+                context
             )
         }
     }
@@ -134,6 +137,7 @@ private fun OnboardingPagePreview() {
             onDismiss = {},
             updatedOnboardingState = {},
             viewModel = null,
+            context = null,
         )
     }
 }
