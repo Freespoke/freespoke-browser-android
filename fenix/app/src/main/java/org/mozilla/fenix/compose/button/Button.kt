@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix.compose.button
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ButtonDefaults
@@ -14,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import mozilla.components.ui.colors.PhotonColors
 import org.mozilla.fenix.R
 import org.mozilla.fenix.compose.annotation.LightDarkPreview
 import org.mozilla.fenix.theme.FirefoxTheme
@@ -31,21 +34,25 @@ import org.mozilla.fenix.theme.FirefoxTheme
  */
 @Composable
 private fun Button(
+    modifier: Modifier? = null,
     text: String,
     textColor: Color,
+    textStyle: TextStyle = FirefoxTheme.typography.button,
     backgroundColor: Color,
+    borderStroke: BorderStroke? = null,
     icon: Painter? = null,
     tint: Color,
     onClick: () -> Unit,
 ) {
     androidx.compose.material.Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier ?: Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor = backgroundColor,
         ),
+        border = borderStroke,
     ) {
         icon?.let { painter ->
             Icon(
@@ -60,7 +67,7 @@ private fun Button(
         Text(
             text = text,
             color = textColor,
-            style = FirefoxTheme.typography.button,
+            style = textStyle,
             maxLines = 1,
         )
     }
@@ -176,6 +183,7 @@ fun DestructiveButton(
 
 @Composable
 fun PrimaryButtonOnboarding(
+    modifier: Modifier = Modifier,
     text: String,
     textColor: Color = FirefoxTheme.colors.textActionPrimary,
     backgroundColor: Color = FirefoxTheme.colors.onboardingButtonColor,
@@ -183,12 +191,36 @@ fun PrimaryButtonOnboarding(
     onClick: () -> Unit,
 ) {
     Button(
+        modifier = Modifier.height(56.dp).then(modifier),
         text = text,
         textColor = textColor,
+        textStyle = FirefoxTheme.typography.onboardingButton,
         backgroundColor = backgroundColor,
         icon = icon,
         tint = FirefoxTheme.colors.iconActionPrimary,
         onClick = onClick,
+    )
+}
+
+@Composable
+fun SecondaryButtonOnboarding(
+    modifier: Modifier = Modifier,
+    text: String,
+    textColor: Color = FirefoxTheme.colors.textActionSecondary,
+    backgroundColor: Color = PhotonColors.White,
+    icon: Painter? = null,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = Modifier.height(56.dp).then(modifier),
+        text = text,
+        textColor = textColor,
+        textStyle = FirefoxTheme.typography.onboardingButton,
+        backgroundColor = backgroundColor,
+        icon = icon,
+        tint = FirefoxTheme.colors.iconActionPrimary,
+        onClick = onClick,
+        borderStroke = BorderStroke(1.dp, FirefoxTheme.colors.dividerColor)
     )
 }
 
@@ -207,6 +239,11 @@ private fun ButtonPreview() {
                 text = "Continue",
                 icon = painterResource(R.drawable.ic_tab_collection),
                 onClick = {},
+            )
+            SecondaryButtonOnboarding(
+                text = "Cancel",
+                icon = null,
+                onClick = {}
             )
             PrimaryButton(
                 text = "Label",

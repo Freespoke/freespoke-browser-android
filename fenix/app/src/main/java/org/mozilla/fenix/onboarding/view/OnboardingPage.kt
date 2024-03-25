@@ -4,28 +4,23 @@
 
 package org.mozilla.fenix.onboarding.view
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.mozilla.fenix.R
-import org.mozilla.fenix.compose.annotation.LightDarkPreview
-import org.mozilla.fenix.compose.button.PrimaryButtonOnboarding
+import org.mozilla.fenix.onboarding.viewmodel.AccountViewModel
 import org.mozilla.fenix.theme.FirefoxTheme
+import org.mozilla.fenix.theme.FirefoxTheme.colors
 
 /**
  * The ratio of the image height to the window height. This was determined from the designs in figma
@@ -38,7 +33,7 @@ private const val IMAGE_HEIGHT_RATIO = 0.4f
  *
  * @param pageState [OnboardingPageState] The page content that's displayed.
  * @param onDismiss Invoked when the user clicks the close button.
- * @param onPrimaryButtonClick Invoked when the user clicks the primary button.
+ * @param updatedOnboardingState Invoked when the user clicks the primary button.
  * @param onSecondaryButtonClick Invoked when the user clicks the secondary button.
  * @param modifier The modifier to be applied to the Composable.
  */
@@ -46,136 +41,91 @@ private const val IMAGE_HEIGHT_RATIO = 0.4f
 fun OnboardingPage(
     pageState: OnboardingPageState,
     onDismiss: () -> Unit,
-    onPrimaryButtonClick: () -> Unit,
+    updatedOnboardingState: (UpgradeOnboardingState) -> Unit,
+    viewModel: AccountViewModel?,
     modifier: Modifier = Modifier,
-    contentScale: ContentScale = ContentScale.Crop
+    context: Context? = null
 ) {
     BoxWithConstraints(
         modifier = Modifier
-            .background(FirefoxTheme.colors.layerOnboarding)
-            .padding(bottom = if (pageState.secondaryButtonText == null) 32.dp else 24.dp)
-            .then(modifier),
+            .fillMaxSize()
+            .background(colors.layerOnboarding)
+            .then(modifier)
     ) {
-        val isVisible = pageState.title.isNotEmpty()
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            if (isVisible) {
-                IconButton(
-                    onClick = onDismiss,
-                    modifier = Modifier.align(Alignment.End),
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.mozac_ic_close),
-                        contentDescription = stringResource(R.string.onboarding_home_content_description_close_button),
-                        tint = FirefoxTheme.colors.iconPrimary,
-                    )
-                }
 
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Box(modifier = Modifier.padding(start = 42.dp, end = 42.dp)) {
-                        Text(
-                            text = pageState.title,
-                            color = FirefoxTheme.colors.textPrimary,
-                            textAlign = TextAlign.Center,
-                            style = FirefoxTheme.typography.headline4,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Box(modifier = Modifier.padding(start = 42.dp, end = 42.dp)) {
-                        Text(
-                            text = pageState.description,
-                            color = FirefoxTheme.colors.textSecondary,
-                            textAlign = TextAlign.Center,
-                            style = FirefoxTheme.typography.body1,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    if (pageState.image != null) {
-                        Image(
-                            painter = painterResource(id = pageState.image),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxWidth(),
-                            contentScale = contentScale,
-                        )
-                    }
-
-                }
-            }
-
-            if (isVisible.not()) {
-                Image(
-                    painter = painterResource(id = pageState.image!!),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(),
-                    contentScale = ContentScale.Crop
+        when (pageState.type) {
+            UpgradeOnboardingState.Welcome -> WelcomeView(onDismiss, updatedOnboardingState, Modifier.align(Alignment.BottomCenter))
+            UpgradeOnboardingState.Registration -> viewModel?.let {
+                SignUpView(
+                    onDismiss = onDismiss,
+                    updatedOnboardingState = updatedOnboardingState,
+                    viewModel = it,
                 )
             }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(horizontal = 42.dp),
-            ) {
-                PrimaryButtonOnboarding(
-                    text = stringResource(id = R.string.onboarding_next_button),
-                    onClick = onPrimaryButtonClick,
-                )
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(horizontal = 16.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.search_better_browse_better),
-                    color = FirefoxTheme.colors.textPrimary,
-                    textAlign = TextAlign.Center,
-                    style = FirefoxTheme.typography.subtitle3,
-                )
-
-                Spacer(modifier = Modifier.height(2.dp))
-
-                Text(
-                    text = stringResource(id = R.string.set_freespoke_as_your_default_browser),
-                    textDecoration = TextDecoration.Underline,
-                    color = FirefoxTheme.colors.textSecondary,
-                    textAlign = TextAlign.Center,
-                    style = FirefoxTheme.typography.subtitle1,
-                )
-            }
-
-            LaunchedEffect(pageState) {
-                pageState.onRecordImpressionEvent()
-            }
+            UpgradeOnboardingState.Subscriptions -> SubscriptionsView(
+                onDismiss,
+                updatedOnboardingState,
+                Modifier.align(Alignment.BottomCenter)
+            )
+            UpgradeOnboardingState.Premium -> PremiumView(
+                onDismiss,
+                updatedOnboardingState,
+                pageState,
+                Modifier.align(Alignment.BottomCenter)
+            )
+            else -> BaseOnboardingView(
+                onDismiss,
+                pageState,
+                Modifier.align(Alignment.BottomCenter),
+                updatedOnboardingState,
+                context
+            )
         }
     }
 }
 
-@LightDarkPreview
+@Composable
+fun createCloseIcon(modifier: Modifier, onDismiss: () -> Unit) {
+    Spacer(modifier = Modifier.height(20.dp))
+
+    IconButton(
+        onClick = onDismiss,
+        modifier = modifier,
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.mozac_ic_close),
+            contentDescription = stringResource(R.string.onboarding_home_content_description_close_button),
+            tint = colors.iconPrimary,
+        )
+    }
+}
+
+@Composable
+fun addFreespokeLogo() {
+    Image(
+        painter = painterResource(id = R.drawable.ic_freespoke),
+        contentDescription = "",
+        modifier = Modifier
+            .height(64.dp)
+            .width(64.dp),
+    )
+}
+
+@Preview
 @Composable
 private fun OnboardingPagePreview() {
     FirefoxTheme {
         OnboardingPage(
             pageState = OnboardingPageState(
-                image = null,
+                type = UpgradeOnboardingState.Welcome,
+                image = R.drawable.ic_premium_big,
                 title = stringResource(
                     id = R.string.onboarding_home_enable_notifications_title,
-                    formatArgs = arrayOf(stringResource(R.string.app_name)),
+                    formatArgs = arrayOf(stringResource(R.string.freespoke)),
                 ),
                 description = stringResource(
                     id = R.string.onboarding_home_enable_notifications_description,
-                    formatArgs = arrayOf(stringResource(R.string.app_name)),
+                    formatArgs = arrayOf(stringResource(R.string.freespoke)),
                 ),
                 primaryButtonText = stringResource(
                     id = R.string.onboarding_home_enable_notifications_positive_button,
@@ -183,10 +133,11 @@ private fun OnboardingPagePreview() {
                 secondaryButtonText = stringResource(
                     id = R.string.onboarding_home_enable_notifications_negative_button,
                 ),
-                onRecordImpressionEvent = {},
-            ),
-            onPrimaryButtonClick = {},
+            ) {},
             onDismiss = {},
+            updatedOnboardingState = {},
+            viewModel = null,
+            context = null,
         )
     }
 }

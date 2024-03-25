@@ -5,10 +5,7 @@
 package org.mozilla.fenix.onboarding.view
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.statusBarsPadding
 import mozilla.components.service.glean.private.NoExtras
 import org.mozilla.fenix.GleanMetrics.Onboarding
 import org.mozilla.fenix.R
@@ -39,19 +36,17 @@ fun NotificationPermissionDialogScreen(
             ),
             primaryButtonText = stringResource(id = R.string.onboarding_home_enable_notifications_positive_button),
             secondaryButtonText = stringResource(id = R.string.onboarding_home_enable_notifications_negative_button),
-            onRecordImpressionEvent = { Onboarding.notifPppImpression.record(NoExtras()) },
-        ),
+        ) { Onboarding.notifPppImpression.record(NoExtras()) },
         onDismiss = {
             onDismiss()
             Onboarding.notifPppCloseClick.record(NoExtras())
         },
-        onPrimaryButtonClick = {
+        updatedOnboardingState = {
             grantNotificationPermission()
             Onboarding.notifPppPositiveBtnClick.record(NoExtras())
         },
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+        viewModel = null,
+        context = null
     )
 }
 
