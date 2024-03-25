@@ -22,9 +22,10 @@ import org.mozilla.fenix.apiservice.model.UserProfileData
 import org.mozilla.fenix.components.billing.Billing
 import org.mozilla.fenix.components.billing.Billing.Companion.filterBaseOffers
 import org.mozilla.fenix.components.billing.Billing.Companion.filterTrialOffers
+import org.mozilla.fenix.components.billing.Billing.Companion.findMonthlyPlan
+import org.mozilla.fenix.components.billing.Billing.Companion.findYearlyPlan
 import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
-import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.onboarding.view.SubscriptionInfoBlockType
 
 class FreespokePremiumViewModel(
@@ -46,17 +47,13 @@ class FreespokePremiumViewModel(
         viewModelScope.launch {
             val subscription = billing.querySubscriptionOffers() ?: return@launch
             val trialOffers = subscription.filterTrialOffers()
-            val subscriptionOffers = trialOffers.takeIf {
-                it.isNotEmpty()
-            } ?: (trialOffers + subscription.filterBaseOffers())
+            val baseOffers = subscription.filterBaseOffers()
 
-            val monthlyOffer = subscriptionOffers.find {
-                it.basePlanId == Billing.PREMIUM_MONTHLY_PLAN_ID
-            } ?: return@launch
+            val monthlyOffer = trialOffers.findMonthlyPlan()
+                ?: baseOffers.findMonthlyPlan() ?: return@launch
 
-            val yearlyOffer = subscriptionOffers.find {
-                it.basePlanId == Billing.PREMIUM_YEARLY_PLAN_ID
-            } ?: return@launch
+            val yearlyOffer = trialOffers.findYearlyPlan()
+                ?: baseOffers.findYearlyPlan() ?: return@launch
 
             val uiModel = SubscriptionsUiModel(
                 monthlyPrice = monthlyOffer.pricingPhases.pricingPhaseList.find {
@@ -76,8 +73,6 @@ class FreespokePremiumViewModel(
             freespokeProfileStore.flow().collect {
                 it.profile?.let { profile ->
                     _uiTypeFlow.value = resolveUiType(profile)
-                } ?: run {
-                    _uiTypeFlow.value = SubscriptionInfoBlockType.Trial
                 }
             }
         }

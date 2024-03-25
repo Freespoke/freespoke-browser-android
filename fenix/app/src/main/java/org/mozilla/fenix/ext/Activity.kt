@@ -80,7 +80,6 @@ fun Activity.breadcrumb(
 fun Activity.openSetDefaultBrowserOption(
     from: BrowserDirection = BrowserDirection.FromSettings,
     flags: EngineSession.LoadUrlFlags = EngineSession.LoadUrlFlags.none(),
-    //onRoleGranted: () -> Unit = {},
 ) {
     when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {
@@ -89,24 +88,6 @@ fun Activity.openSetDefaultBrowserOption(
                         RoleManager.ROLE_BROWSER,
                     )
                 ) {
-//                    val launcher = (this as? HomeActivity)?.registerForActivityResult(
-//                        ActivityResultContracts.StartActivityForResult(),
-//                    ) { result ->
-//                        if (result.resultCode == Activity.RESULT_OK) {
-//                            onRoleGranted()
-//                        }
-//                    }
-//
-//                    val intent = it.createRequestRoleIntent(RoleManager.ROLE_BROWSER)
-//
-//                    launcher?.let {
-//                        launcher.launch(intent)
-//                    } ?: run {
-//                        startActivityForResult(
-//                            intent,
-//                            REQUEST_CODE_BROWSER_ROLE,
-//                        )
-//                    }
                     startActivityForResult(
                         it.createRequestRoleIntent(RoleManager.ROLE_BROWSER),
                         REQUEST_CODE_BROWSER_ROLE,

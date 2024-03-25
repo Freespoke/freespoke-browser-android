@@ -176,23 +176,22 @@ fun SubscriptionsView(
         }*/
     }
 
-    pageType?.let {
-        SubscriptionInfoBlock(
-            modifier = modifier,
-            subscriptionsUiModel = subscriptions,
-            type = it,
-            updatedOnboardingState = updatedOnboardingState,
-            onUpgradePlan = onUpgradePlan,
-            onCancelPlan = onCancelPlan,
-            onLaunchPurchaseFlow = { offerToken ->
-                activity?.let { activity ->
-                    viewModel.launchPurchaseFlow(activity, offerToken) {
-                        updatedOnboardingState(UpgradeOnboardingState.Premium)
-                    }
+
+    SubscriptionInfoBlock(
+        modifier = modifier,
+        subscriptionsUiModel = subscriptions,
+        type = pageType,
+        updatedOnboardingState = updatedOnboardingState,
+        onUpgradePlan = onUpgradePlan,
+        onCancelPlan = onCancelPlan,
+        onLaunchPurchaseFlow = { offerToken ->
+            activity?.let { activity ->
+                viewModel.launchPurchaseFlow(activity, offerToken) {
+                    updatedOnboardingState(UpgradeOnboardingState.Premium)
                 }
             }
-        )
-    }
+        },
+    )
 }
 
 enum class SubscriptionInfoBlockType {
@@ -206,7 +205,7 @@ enum class SubscriptionInfoBlockType {
 fun SubscriptionInfoBlock(
     modifier: Modifier,
     subscriptionsUiModel: SubscriptionsUiModel?,
-    type: SubscriptionInfoBlockType,
+    type: SubscriptionInfoBlockType?,
     updatedOnboardingState: (UpgradeOnboardingState) -> Unit,
     onLaunchPurchaseFlow: (String) -> Unit,
     onUpgradePlan: (() -> Unit)? = null,
@@ -227,7 +226,8 @@ fun SubscriptionInfoBlock(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        subscriptionsUiModel?.let { uiModel ->
+
+        if (subscriptionsUiModel != null && type != null) {
             if (type == SubscriptionInfoBlockType.Trial) {
                 Text(
                     modifier = Modifier
@@ -243,7 +243,7 @@ fun SubscriptionInfoBlock(
 
             SubscriptionInfoButtons(
                 type = type,
-                uiModel = uiModel,
+                uiModel = subscriptionsUiModel,
                 onPurchasePlan = { offerToken ->
                     onLaunchPurchaseFlow(offerToken)
                 },

@@ -215,6 +215,18 @@ class Billing(
             }
         }
 
+        fun List<ProductDetails.SubscriptionOfferDetails>.findMonthlyPlan(): ProductDetails.SubscriptionOfferDetails? {
+            return find {
+                it.basePlanId == PREMIUM_MONTHLY_PLAN_ID
+            }
+        }
+
+        fun List<ProductDetails.SubscriptionOfferDetails>.findYearlyPlan(): ProductDetails.SubscriptionOfferDetails? {
+            return find {
+                it.basePlanId == PREMIUM_YEARLY_PLAN_ID
+            }
+        }
+
 
         const val PREMIUM_MONTHLY_SUBSCRIPTION_ID = "premium_monthly"
         const val PREMIUM_YEARLY_SUBSCRIPTION_ID = "premium_annual"
