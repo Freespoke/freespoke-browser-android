@@ -60,8 +60,7 @@ fun FreespokeProfilePage(
     onBack: () -> Unit,
     onLogout: (onLogoutSuccess: (Boolean) -> Unit) -> Unit,
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val lifecycleState by MutableStateFlow(lifecycleOwner.lifecycle.currentState).collectAsState()
+    val lifecycleState by MutableStateFlow(LocalLifecycleOwner.current.lifecycle.currentState).collectAsState()
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
