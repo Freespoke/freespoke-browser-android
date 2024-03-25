@@ -115,33 +115,35 @@ fun BaseOnboardingView(
             }
         }
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 40.dp)
-            .background(FirefoxTheme.colors.layerOnboarding),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Divider(modifier = Modifier.fillMaxWidth(),
-            color = FirefoxTheme.colors.dividerColor)
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = 40.dp)
+                .background(FirefoxTheme.colors.layerOnboarding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                color = FirefoxTheme.colors.dividerColor,
+            )
 
             Spacer(modifier = Modifier.height(40.dp))
 
-        PrimaryButtonOnboarding(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp),
-            text = pageState.primaryButtonText,
-            onClick = {
-                if (pageState.type == UpgradeOnboardingState.CompleteOnboarding) {
-                    onDismiss()
-                } else {
-                    updatedOnboardingState(
-                        getNextStep(pageState.type),
-                    )
-                }
-            },
-        )
+            PrimaryButtonOnboarding(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp),
+                text = pageState.primaryButtonText,
+                onClick = {
+                    if (pageState.type == UpgradeOnboardingState.CompleteOnboarding) {
+                        onDismiss()
+                    } else {
+                        updatedOnboardingState(
+                            getNextStep(pageState.type),
+                        )
+                    }
+                },
+            )
 
 
             if (!pageState.secondaryButtonText.isNullOrEmpty()) {
@@ -170,9 +172,12 @@ fun BaseOnboardingView(
 
 fun shouldSkipScreen(context: Context?, type: UpgradeOnboardingState?): Boolean {
     return if (type == UpgradeOnboardingState.DefaultBrowser || type == UpgradeOnboardingState.DefaultBrowserShow) {
-    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))
-    val resolveInfo: ResolveInfo? =
-        context?.packageManager?.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://google.com"))
+        val resolveInfo: ResolveInfo? =
+            context?.packageManager?.resolveActivity(
+                browserIntent,
+                PackageManager.MATCH_DEFAULT_ONLY,
+            )
         var defaultBrowserPkg: String? = null
         if (resolveInfo?.activityInfo != null) {
             defaultBrowserPkg = resolveInfo.activityInfo.packageName
@@ -184,7 +189,7 @@ fun shouldSkipScreen(context: Context?, type: UpgradeOnboardingState?): Boolean 
 }
 
 fun getNextStep(type: UpgradeOnboardingState?): UpgradeOnboardingState {
-    return when(type) {
+    return when (type) {
         UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> UpgradeOnboardingState.DefaultBrowserShow
         UpgradeOnboardingState.Notifications, UpgradeOnboardingState.NotificationsSetup -> UpgradeOnboardingState.NotificationsSetup
         else -> UpgradeOnboardingState.CompleteOnboarding
@@ -194,7 +199,7 @@ fun getNextStep(type: UpgradeOnboardingState?): UpgradeOnboardingState {
 @Composable
 fun ComposableLifecycle(
     lifeCycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit
+    onEvent: (LifecycleOwner, Lifecycle.Event) -> Unit,
 ) {
     DisposableEffect(lifeCycleOwner) {
         val observer = LifecycleEventObserver { source, event ->
