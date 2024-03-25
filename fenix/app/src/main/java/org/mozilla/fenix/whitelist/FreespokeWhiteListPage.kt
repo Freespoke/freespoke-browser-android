@@ -190,8 +190,8 @@ fun FreespokeWhiteListPage(
                 },
                 label = null,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = FirefoxTheme.colors.dividerColor,
-                    unfocusedBorderColor = FirefoxTheme.colors.dividerColor,
+                    focusedBorderColor = FirefoxTheme.colors.freespokeBorderColor,
+                    unfocusedBorderColor = FirefoxTheme.colors.freespokeBorderColor,
                 ),
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -342,7 +342,7 @@ fun ComfirmDialog(
                     ),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Divider(modifier = Modifier.height(1.dp), color = FirefoxTheme.colors.dividerColor)
+                Divider(modifier = Modifier.height(1.dp), color = FirefoxTheme.colors.freespokeBorderColor)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -361,7 +361,7 @@ fun ComfirmDialog(
                             modifier = Modifier
                                 .width(1.dp)
                                 .height(44.dp),
-                            color = FirefoxTheme.colors.dividerColor,
+                            color = FirefoxTheme.colors.freespokeBorderColor,
                         )
                         TextButton(
                             modifier = Modifier.weight(1f),
@@ -382,7 +382,7 @@ fun WhiteListItem(data: String, modifier: Modifier = Modifier) {
         modifier = Modifier
             .fillMaxWidth()
             .background(color = FirefoxTheme.colors.freeSpokeProfileGradientEndColor)
-            .border(1.dp, FirefoxTheme.colors.dividerColor, RoundedCornerShape(4.dp))
+            .border(1.dp, FirefoxTheme.colors.freespokeBorderColor, RoundedCornerShape(4.dp))
             .padding(horizontal = 12.dp)
             .clip(RoundedCornerShape(4.dp))
             .height(40.dp),
