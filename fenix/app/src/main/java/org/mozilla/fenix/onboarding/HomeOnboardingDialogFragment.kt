@@ -5,6 +5,7 @@
 package org.mozilla.fenix.onboarding
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,7 +41,6 @@ class HomeOnboardingDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_TITLE, R.style.HomeOnboardingDialogStyle)
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     override fun onDestroy() {
@@ -80,10 +80,18 @@ class HomeOnboardingDialogFragment : DialogFragment() {
                             }
                         },
                         viewModel = viewModel,
+                        context = context
                     )
                 }
             }
         }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        context?.settings()?.showHomeOnboardingDialog = false
+        (activity as HomeActivity).binding.bottomNavigation.selectedItemId = R.id.action_home
+
+        super.onDismiss(dialog)
     }
 
     private fun onDismiss() {

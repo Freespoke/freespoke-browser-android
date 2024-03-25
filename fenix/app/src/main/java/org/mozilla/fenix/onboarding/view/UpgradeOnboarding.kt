@@ -4,6 +4,7 @@
 
 package org.mozilla.fenix.onboarding.view
 
+import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -54,13 +55,15 @@ enum class OnboardingAppSettings {
 fun UpgradeOnboarding(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
-    onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)? = null,
+    onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)?,
+    context: Context? = null
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection()) {
         UpgradeOnboardingContent(
             onDismiss = onDismiss,
             viewModel = viewModel,
             onSetupSettingsClick,
+            context
         )
     }
 }
@@ -70,6 +73,7 @@ private fun UpgradeOnboardingContent(
     onDismiss: () -> Unit,
     viewModel: AccountViewModel,
     onSetupSettingsClick: ((OnboardingAppSettings, (() -> Unit)?) -> Unit)?,
+    context: Context? = null,
 ) {
     var onboardingState by remember { mutableStateOf(UpgradeOnboardingState.Welcome) }
 
@@ -78,6 +82,7 @@ private fun UpgradeOnboardingContent(
             .background(FirefoxTheme.colors.layer1)
             .statusBarsPadding()
             .navigationBarsPadding()
+            .imePadding()
             .fillMaxSize(),
     ) {
         OnboardingPage(
@@ -133,7 +138,7 @@ private fun UpgradeOnboardingContent(
                 )
                 UpgradeOnboardingState.CompleteOnboarding -> OnboardingPageState(
                     type = onboardingState,
-                    image = R.drawable.ic_onboarding_tabs,
+                    image = R.drawable.ic_onboarding_completion,
                     title = stringResource(id = R.string.onboarding_complete_title),
                     description = stringResource(id = R.string.onboarding_complete_description),
                     primaryButtonText = stringResource(id = R.string.onboarding_finish),
@@ -159,9 +164,11 @@ private fun UpgradeOnboardingContent(
             },
             updatedOnboardingState = {
                 when (it) {
-                    UpgradeOnboardingState.DefaultBrowserShow -> onSetupSettingsClick?.invoke(
-                        OnboardingAppSettings.SetupDefaultBrowser, null
-                    )
+                    UpgradeOnboardingState.DefaultBrowserShow -> {
+                        onSetupSettingsClick?.invoke(OnboardingAppSettings.SetupDefaultBrowser) {
+                            onboardingState = UpgradeOnboardingState.Notifications
+                        }
+                    }
                     UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(
                         OnboardingAppSettings.Notifications, null
                     )
@@ -175,6 +182,7 @@ private fun UpgradeOnboardingContent(
             },
             viewModel = viewModel,
             modifier = Modifier.weight(1f),
+            context
         )
     }
 }

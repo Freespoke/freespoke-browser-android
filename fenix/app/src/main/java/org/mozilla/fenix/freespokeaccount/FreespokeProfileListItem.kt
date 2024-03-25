@@ -59,7 +59,7 @@ fun FreespokeProfileListItem(
             .fillMaxWidth()
             .height(56.dp)
             .background(color = FirefoxTheme.colors.freeSpokeProfileGradientEndColor)
-            .border(1.dp, FirefoxTheme.colors.dividerColor, RoundedCornerShape(4.dp))
+            .border(1.dp, FirefoxTheme.colors.freespokeBorderColor, RoundedCornerShape(4.dp))
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(4.dp))
             .then(clickableModifier),
@@ -166,7 +166,7 @@ fun FreespokeProfileListItemWithButton(
             .fillMaxWidth()
             .height(if (expanded) 114.dp else 56.dp)
             .background(color = FirefoxTheme.colors.freeSpokeProfileGradientEndColor)
-            .border(1.dp, FirefoxTheme.colors.dividerColor, RoundedCornerShape(4.dp))
+            .border(1.dp, FirefoxTheme.colors.freespokeBorderColor, RoundedCornerShape(4.dp))
             .padding(horizontal = 14.dp)
             .clip(RoundedCornerShape(4.dp)),
     ) {
@@ -182,7 +182,7 @@ fun FreespokeProfileListItemWithButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp),
-                color = FirefoxTheme.colors.dividerColor,
+                color = FirefoxTheme.colors.freespokeBorderColor,
             )
             Spacer(modifier = Modifier.height(12.dp))
             Button(

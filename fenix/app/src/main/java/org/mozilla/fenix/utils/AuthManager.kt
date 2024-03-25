@@ -152,7 +152,7 @@ class AuthManager(
         }
     }
 
-    fun refreshTokenAfterSingUp(userData: UserData) {
+    fun refreshTokenAfterSignUp(userData: UserData) {
         val tokenRefreshRequest = TokenRequest.Builder(
             authServiceConfig,
             "public",

@@ -30,7 +30,7 @@ class AccountViewModel(
             if (userDataResponse.isSuccessful) {
                 userDataResponse.body()?.let {
                     repository.writeUserData(it)
-                    authManager.refreshTokenAfterSingUp(it)
+                    authManager.refreshTokenAfterSignUp(it)
                 }
                 _uiState.value = SignUpUiState(isSuccessfulSignUp = true)
             } else {

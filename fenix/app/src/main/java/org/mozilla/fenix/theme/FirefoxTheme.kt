@@ -155,6 +155,7 @@ private val darkColorPalette = FirefoxColors(
     freeSpokeProfileGradientEndColor = PhotonColors.DarkGrey161616,
     manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundDarkColor,
     dialogButtonsBlueTextColor = PhotonColors.BlueButtonsTextColor,
+    freespokeBorderColor = PhotonColors.FreespokeGrayTextColor
 )
 
 private val lightColorPalette = FirefoxColors(
@@ -231,7 +232,8 @@ private val lightColorPalette = FirefoxColors(
     freeSpokeProfileGradientStartColor = PhotonColors.FreeSpokeProfileGradientStartColor,
     freeSpokeProfileGradientEndColor = PhotonColors.White,
     manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundLightColor,
-    dialogButtonsBlueTextColor = PhotonColors.BlueButtonsTextColor
+    dialogButtonsBlueTextColor = PhotonColors.BlueButtonsTextColor,
+    freespokeBorderColor = PhotonColors.LightGrey005
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -320,6 +322,7 @@ class FirefoxColors(
     freeSpokeProfileGradientEndColor: Color,
     manageWhiteListButtonBackgroundColor: Color,
     dialogButtonsBlueTextColor: Color,
+    freespokeBorderColor: Color,
 ) {
     // Layers
 
@@ -602,6 +605,9 @@ class FirefoxColors(
     var dialogButtonsBlueTextColor by mutableStateOf(dialogButtonsBlueTextColor)
         private set
 
+    var freespokeBorderColor by mutableStateOf(freespokeBorderColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -670,6 +676,9 @@ class FirefoxColors(
         dividerColor = other.dividerColor
         subtitleColor = other.subtitleColor
         errorColor = other.errorColor
+        manageWhiteListButtonBackgroundColor = other.manageWhiteListButtonBackgroundColor
+        dialogButtonsBlueTextColor = other.dialogButtonsBlueTextColor
+        freespokeBorderColor = other.freespokeBorderColor
     }
 
     /**
@@ -749,7 +758,8 @@ class FirefoxColors(
         freeSpokeProfileGradientStartColor: Color = this.freeSpokeProfileGradientStartColor,
         freeSpokeProfileGradientEndColor: Color = this.freeSpokeProfileGradientEndColor,
         manageWhiteListButtonBackgroundColor: Color = this.manageWhiteListButtonBackgroundColor,
-        dialogButtonsBlueTextColor: Color = this.dialogButtonsBlueTextColor
+        dialogButtonsBlueTextColor: Color = this.dialogButtonsBlueTextColor,
+        freespokeBorderColor: Color = this.freespokeBorderColor,
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -825,6 +835,7 @@ class FirefoxColors(
         freeSpokeProfileGradientEndColor = freeSpokeProfileGradientEndColor,
         manageWhiteListButtonBackgroundColor = manageWhiteListButtonBackgroundColor,
         dialogButtonsBlueTextColor = dialogButtonsBlueTextColor,
+        freespokeBorderColor = freespokeBorderColor,
     )
 }
 

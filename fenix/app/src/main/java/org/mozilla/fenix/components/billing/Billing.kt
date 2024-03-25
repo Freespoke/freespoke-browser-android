@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.mozilla.fenix.components.billing.Billing.Companion.filterTrialOffers
 import org.mozilla.fenix.perf.lazyMonitored
 
 class Billing(
@@ -93,14 +94,18 @@ class Billing(
         }.firstOrNull()
     }
 
-    suspend fun querySubscriptionOffers(): ProductDetails? {
+    suspend fun querySubscriptionOffers(): List<ProductDetails>? {
 
         return billingClient.whileReady {
             val productDetailsParams = QueryProductDetailsParams.newBuilder()
                 .setProductList(
                     listOf(
                         QueryProductDetailsParams.Product.newBuilder()
-                            .setProductId(PREMIUM_SUBSCRIPTION_ID)
+                            .setProductId(PREMIUM_MONTHLY_SUBSCRIPTION_ID)
+                            .setProductType(ProductType.SUBS)
+                            .build(),
+                        QueryProductDetailsParams.Product.newBuilder()
+                            .setProductId(PREMIUM_YEARLY_SUBSCRIPTION_ID)
                             .setProductType(ProductType.SUBS)
                             .build(),
                     ),
@@ -112,7 +117,7 @@ class Billing(
             }
 
             if (productDetailsResult.billingResult.responseCode == BillingResponseCode.OK) {
-                productDetailsResult.productDetailsList?.firstOrNull()
+                productDetailsResult.productDetailsList
             } else {
                 null
             }
@@ -182,26 +187,51 @@ class Billing(
 
     companion object {
 
-        fun ProductDetails.filterTrialOffers(): List<ProductDetails.SubscriptionOfferDetails> {
-            val offers = subscriptionOfferDetails ?: return emptyList()
+        fun List<ProductDetails>.filterTrialOffers(): List<ProductDetails.SubscriptionOfferDetails> {
+            val offers = this
+                .filter {
+                    it.subscriptionOfferDetails != null
+                }
+                .flatMap {
+                    it.subscriptionOfferDetails!!
+                }
 
             return offers.filter {
                 it.offerId == TRIAL_OFFER_ID
             }
         }
 
-        fun ProductDetails.filterBaseOffers(): List<ProductDetails.SubscriptionOfferDetails> {
-            val offers = subscriptionOfferDetails ?: return emptyList()
+        fun List<ProductDetails>.filterBaseOffers(): List<ProductDetails.SubscriptionOfferDetails> {
+            val offers = this
+                .filter {
+                    it.subscriptionOfferDetails != null
+                }
+                .flatMap {
+                    it.subscriptionOfferDetails!!
+                }
 
             return offers.filter {
                 it.offerId.isNullOrEmpty()
             }
         }
 
+        fun List<ProductDetails.SubscriptionOfferDetails>.findMonthlyPlan(): ProductDetails.SubscriptionOfferDetails? {
+            return find {
+                it.basePlanId == PREMIUM_MONTHLY_PLAN_ID
+            }
+        }
 
-        const val PREMIUM_SUBSCRIPTION_ID = "premium_monthly"
+        fun List<ProductDetails.SubscriptionOfferDetails>.findYearlyPlan(): ProductDetails.SubscriptionOfferDetails? {
+            return find {
+                it.basePlanId == PREMIUM_YEARLY_PLAN_ID
+            }
+        }
+
+
+        const val PREMIUM_MONTHLY_SUBSCRIPTION_ID = "premium_monthly"
+        const val PREMIUM_YEARLY_SUBSCRIPTION_ID = "premium_annual"
         const val PREMIUM_MONTHLY_PLAN_ID = "premium-monthly"
-        const val PREMIUM_YEARLY_PLAN_ID = "premium-annual"
+        const val PREMIUM_YEARLY_PLAN_ID = "premium-annual-base"
         const val TRIAL_OFFER_ID = "1-month-free-trial"
 
         const val GOOGLE_PLAY_SUBSCRIPTION_URL =
