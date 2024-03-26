@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.os.Build
 import android.text.TextUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,11 +23,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -155,7 +151,13 @@ fun BaseOnboardingView(
                         .clickable {
                             updatedOnboardingState(
                                 when (pageState.type) {
-                                    UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> UpgradeOnboardingState.Notifications
+                                    UpgradeOnboardingState.DefaultBrowser, UpgradeOnboardingState.DefaultBrowserShow -> {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                            UpgradeOnboardingState.Notifications
+                                        } else {
+                                            UpgradeOnboardingState.CompleteOnboarding
+                                        }
+                                    }
                                     else -> UpgradeOnboardingState.CompleteOnboarding
                                 },
                             )

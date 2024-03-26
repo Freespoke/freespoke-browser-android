@@ -66,7 +66,9 @@ class HomeOnboardingDialogFragment : DialogFragment() {
                                     (context as HomeActivity).openSetDefaultBrowserOption()
                                 }
                                 OnboardingAppSettings.Notifications -> {
-                                    (context as HomeActivity).navigateToNotificationAppsSettings()
+                                    (context as HomeActivity).requestNotificationPermission {
+                                        action?.invoke()
+                                    }
                                 }
                                 OnboardingAppSettings.Login -> {
                                     (context as HomeActivity).components.strictMode.allowDiskReads()
