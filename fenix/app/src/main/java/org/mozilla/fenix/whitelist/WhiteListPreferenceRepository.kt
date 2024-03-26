@@ -8,14 +8,14 @@ class WhiteListPreferenceRepository(context: Context) {
 
     private val sharedPreferences = context.getSharedPreferences(WHITE_LIST_PREF_NAME, Context.MODE_PRIVATE)
     fun getWhiteList(): List<String> {
-        return sharedPreferences.getString(WHITE_LIST_KEY, "")?.split(",")?.filter { it.isNotBlank() }.orEmpty()
+        return sharedPreferences.getString(WHITE_LIST_KEY, "")?.lowercase()?.split(",")?.filter { it.isNotBlank() }.orEmpty()
     }
 
     fun writeWhiteList(list: List<String>) {
         sharedPreferences.edit {
             putString(WHITE_LIST_KEY, StringBuffer().apply {
                 list.forEach {
-                    this.append(it)
+                    this.append(it.lowercase())
                     this.append(",")
                 }
             }.toString())

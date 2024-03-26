@@ -103,6 +103,7 @@ fun FreespokeWhiteListPage(
                 modifier = Modifier.rotate(180f),
                 painter = painterResource(id = R.drawable.ic_arrowhead_right),
                 contentDescription = null,
+                tint = FirefoxTheme.colors.textPrimary
             )
             Text(
                 modifier = Modifier.weight(1f),
@@ -175,6 +176,7 @@ fun FreespokeWhiteListPage(
                     fontWeight = FontWeight.Light,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Start,
+                    color = FirefoxTheme.colors.freespokeDescriptionColor
                 ),
                 shape = RoundedCornerShape(4.dp),
                 placeholder = {
@@ -192,6 +194,7 @@ fun FreespokeWhiteListPage(
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = FirefoxTheme.colors.freespokeBorderColor,
                     unfocusedBorderColor = FirefoxTheme.colors.freespokeBorderColor,
+                    textColor = FirefoxTheme.colors.freespokeDescriptionColor
                 ),
             )
             Spacer(modifier = Modifier.height(16.dp))

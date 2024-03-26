@@ -32,10 +32,10 @@ class BlockListHandler(private val context: Context) {
     }
 
     fun isAdsRequest(request: GeckoSession.NavigationDelegate.LoadRequest) =
-        (easyList.any { request.uri.contains(it) }
-            || pplyoyoList.any { request.uri.contains(it) }
-            || urlhausList.any { request.uri.contains(it) })
-            && whiteList.none { request.uri.contains(it) }
+        (easyList.any { request.uri.contains(it, true) }
+            || pplyoyoList.any { request.uri.contains(it, true) }
+            || urlhausList.any { request.uri.contains(it, true) })
+            && whiteList.none { request.uri.contains(it, true) }
 
     companion object {
         private const val WHITE_LIST_PREF_NAME = "whitelist_preferences"

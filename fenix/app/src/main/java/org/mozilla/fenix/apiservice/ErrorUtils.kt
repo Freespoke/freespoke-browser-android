@@ -11,16 +11,15 @@ import java.io.IOException
 class ErrorUtils {
 
     companion object {
-        fun parseSignUpError(response: Response<UserData>) : SignUpErrorResponse? {
+        fun parseSignUpError(response: Response<UserData>): SignUpErrorResponse? {
             val converter: Converter<ResponseBody, SignUpErrorResponse> = retrofit
                 .responseBodyConverter(SignUpErrorResponse::class.java, arrayOfNulls<Annotation>(0))
 
-            val error = try {
+            return try {
                 response.errorBody()?.let { converter.convert(it) }
             } catch (e: IOException) {
                 return null
             }
-            return error
 
         }
     }
