@@ -116,6 +116,7 @@ private val darkColorPalette = FirefoxColors(
     textOnColorPrimary = PhotonColors.LightGrey05,
     textOnColorSecondary = PhotonColors.LightGrey40,
     textActionPrimary = PhotonColors.LightGrey05,
+    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor,
     textActionSecondary = PhotonColors.DarkGrey90,
     textActionTertiary = PhotonColors.LightGrey05,
     textActionTertiaryActive = PhotonColors.LightGrey05,
@@ -145,14 +146,23 @@ private val darkColorPalette = FirefoxColors(
     borderAccent = PhotonColors.Violet40,
     borderDisabled = PhotonColors.LightGrey05A40,
     borderWarning = PhotonColors.Red40,
-    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor
+    onboardingTextColor = PhotonColors.White,
+    freespokeDescriptionColor = PhotonColors.DarkGreyO4,
+    dividerColor = PhotonColors.LightGrey005,
+    subtitleColor = PhotonColors.DarkGreyO4,
+    errorColor = PhotonColors.Red400,
+    freeSpokeProfileGradientStartColor = PhotonColors.DarkGrey161616,
+    freeSpokeProfileGradientEndColor = PhotonColors.DarkGrey161616,
+    manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundDarkColor,
+    dialogButtonsBlueTextColor = PhotonColors.BlueButtonsTextColor,
+    freespokeBorderColor = PhotonColors.FreespokeGrayTextColor
 )
 
 private val lightColorPalette = FirefoxColors(
     layer1 = PhotonColors.LightGrey10,
     layer2 = PhotonColors.White,
     layer3 = PhotonColors.LightGrey20,
-    layerOnboarding = PhotonColors.White,
+    layerOnboarding = PhotonColors.LightGrey07,
     layer4Start = PhotonColors.Purple70,
     layer4Center = PhotonColors.Violet80,
     layer4End = PhotonColors.Ink05,
@@ -213,7 +223,17 @@ private val lightColorPalette = FirefoxColors(
     borderAccent = PhotonColors.Ink20,
     borderDisabled = PhotonColors.DarkGrey90A40,
     borderWarning = PhotonColors.Red70,
-    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor
+    onboardingButtonColor = PhotonColors.FreeSpokeButtonColor,
+    onboardingTextColor = PhotonColors.FreeSpokeNavyTextColor,
+    freespokeDescriptionColor = PhotonColors.FreespokeGrayTextColor,
+    dividerColor = PhotonColors.LightGrey005,
+    subtitleColor = PhotonColors.LightGrey02,
+    errorColor = PhotonColors.Red600,
+    freeSpokeProfileGradientStartColor = PhotonColors.FreeSpokeProfileGradientStartColor,
+    freeSpokeProfileGradientEndColor = PhotonColors.White,
+    manageWhiteListButtonBackgroundColor = PhotonColors.ManageWhiteListButtonBackgroundLightColor,
+    dialogButtonsBlueTextColor = PhotonColors.BlueButtonsTextColor,
+    freespokeBorderColor = PhotonColors.LightGrey005
 )
 
 private val privateColorPalette = darkColorPalette.copy(
@@ -293,6 +313,16 @@ class FirefoxColors(
     borderAccent: Color,
     borderDisabled: Color,
     borderWarning: Color,
+    onboardingTextColor: Color,
+    freespokeDescriptionColor: Color,
+    dividerColor: Color,
+    subtitleColor: Color,
+    errorColor: Color,
+    freeSpokeProfileGradientStartColor: Color,
+    freeSpokeProfileGradientEndColor: Color,
+    manageWhiteListButtonBackgroundColor: Color,
+    dialogButtonsBlueTextColor: Color,
+    freespokeBorderColor: Color,
 ) {
     // Layers
 
@@ -550,6 +580,34 @@ class FirefoxColors(
     var onboardingButtonColor by mutableStateOf(onboardingButtonColor)
         private set
 
+    // Onboarding title
+    var onboardingTextColor by mutableStateOf(onboardingTextColor)
+        private set
+
+    var freespokeDescriptionColor by mutableStateOf(freespokeDescriptionColor)
+        private set
+
+    var dividerColor by mutableStateOf(dividerColor)
+
+    var subtitleColor by mutableStateOf(subtitleColor)
+
+    var errorColor by mutableStateOf(errorColor)
+
+    var freeSpokeProfileGradientStartColor by mutableStateOf(freeSpokeProfileGradientStartColor)
+        private set
+
+    var freeSpokeProfileGradientEndColor by mutableStateOf(freeSpokeProfileGradientEndColor)
+        private set
+
+    var manageWhiteListButtonBackgroundColor by mutableStateOf(manageWhiteListButtonBackgroundColor)
+        private set
+
+    var dialogButtonsBlueTextColor by mutableStateOf(dialogButtonsBlueTextColor)
+        private set
+
+    var freespokeBorderColor by mutableStateOf(freespokeBorderColor)
+        private set
+
     fun update(other: FirefoxColors) {
         layer1 = other.layer1
         layer2 = other.layer2
@@ -615,6 +673,12 @@ class FirefoxColors(
         borderAccent = other.borderAccent
         borderDisabled = other.borderDisabled
         borderWarning = other.borderWarning
+        dividerColor = other.dividerColor
+        subtitleColor = other.subtitleColor
+        errorColor = other.errorColor
+        manageWhiteListButtonBackgroundColor = other.manageWhiteListButtonBackgroundColor
+        dialogButtonsBlueTextColor = other.dialogButtonsBlueTextColor
+        freespokeBorderColor = other.freespokeBorderColor
     }
 
     /**
@@ -685,7 +749,17 @@ class FirefoxColors(
         borderAccent: Color = this.borderAccent,
         borderDisabled: Color = this.borderDisabled,
         borderWarning: Color = this.borderWarning,
-        buttonOnboarding: Color = this.onboardingButtonColor
+        buttonOnboarding: Color = this.onboardingButtonColor,
+        onboardingTextColor: Color = this.onboardingTextColor,
+        freespokeDescriptionColor: Color = this.freespokeDescriptionColor,
+        dividerColor: Color = this.dividerColor,
+        subtitleColor: Color = this.subtitleColor,
+        errorColor: Color = this.errorColor,
+        freeSpokeProfileGradientStartColor: Color = this.freeSpokeProfileGradientStartColor,
+        freeSpokeProfileGradientEndColor: Color = this.freeSpokeProfileGradientEndColor,
+        manageWhiteListButtonBackgroundColor: Color = this.manageWhiteListButtonBackgroundColor,
+        dialogButtonsBlueTextColor: Color = this.dialogButtonsBlueTextColor,
+        freespokeBorderColor: Color = this.freespokeBorderColor,
     ): FirefoxColors = FirefoxColors(
         layer1 = layer1,
         layer2 = layer2,
@@ -722,6 +796,7 @@ class FirefoxColors(
         textOnColorPrimary = textOnColorPrimary,
         textOnColorSecondary = textOnColorSecondary,
         textActionPrimary = textActionPrimary,
+        onboardingButtonColor = buttonOnboarding,
         textActionSecondary = textActionSecondary,
         textActionTertiary = textActionTertiary,
         textActionTertiaryActive = textActionTertiaryActive,
@@ -751,7 +826,16 @@ class FirefoxColors(
         borderAccent = borderAccent,
         borderDisabled = borderDisabled,
         borderWarning = borderWarning,
-        onboardingButtonColor = buttonOnboarding
+        onboardingTextColor = onboardingTextColor,
+        freespokeDescriptionColor = freespokeDescriptionColor,
+        dividerColor = dividerColor,
+        subtitleColor = subtitleColor,
+        errorColor = errorColor,
+        freeSpokeProfileGradientStartColor = freeSpokeProfileGradientStartColor,
+        freeSpokeProfileGradientEndColor = freeSpokeProfileGradientEndColor,
+        manageWhiteListButtonBackgroundColor = manageWhiteListButtonBackgroundColor,
+        dialogButtonsBlueTextColor = dialogButtonsBlueTextColor,
+        freespokeBorderColor = freespokeBorderColor,
     )
 }
 

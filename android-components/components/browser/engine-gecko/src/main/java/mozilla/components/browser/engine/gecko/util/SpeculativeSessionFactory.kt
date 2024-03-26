@@ -29,6 +29,7 @@ internal class SpeculativeSessionFactory {
         private: Boolean,
         contextId: String?,
         defaultSettings: Settings?,
+        blockListHandler: BlockListHandler
     ) {
         if (speculativeEngineSession?.matches(private, contextId) == true) {
             // We already have a speculative engine session for this configuration. Nothing to do here.
@@ -44,6 +45,7 @@ internal class SpeculativeSessionFactory {
             private,
             contextId,
             defaultSettings,
+            blockListHandler = blockListHandler
         )
     }
 
@@ -126,8 +128,9 @@ internal class SpeculativeEngineSession constructor(
             private: Boolean,
             contextId: String?,
             defaultSettings: Settings?,
+            blockListHandler: BlockListHandler
         ): SpeculativeEngineSession {
-            val engineSession = GeckoEngineSession(runtime, private, defaultSettings, contextId)
+            val engineSession = GeckoEngineSession(runtime, private, defaultSettings, contextId, blockListHandler = blockListHandler)
             val observer = SpeculativeSessionObserver(factory)
             engineSession.register(observer)
 

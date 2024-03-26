@@ -365,4 +365,6 @@
     <color name="font_secondary_color">#606671</color>
     <color name="red_bg_color">#C43351</color>
     <color name="bookmark_default_color">#E0E0E6</color>
+    <color name="text_view_text_color">#606671</color>
+    <color name="text_view_link_color">#2F3644</color>
 </resources>

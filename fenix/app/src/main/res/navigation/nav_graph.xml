@@ -38,6 +38,10 @@
         app:destination="@id/freespokeHomeFragment" />
 
     <action
+        android:id="@+id/action_global_freespoke_profile"
+        app:destination="@id/freespokeProfileFragment" />
+
+    <action
         android:id="@+id/action_global_home_notification_permission_dialog"
         app:destination="@id/homeNotificationPermissionDialogFragment" />
 
@@ -205,6 +209,9 @@
         android:id="@+id/freespokeHomeFragment"
         android:name="org.mozilla.fenix.freespokehome.FreespokeHomeFragment"
         tools:layout="@layout/fragment_freespoke_home">
+        <action
+            android:id="@+id/action_freespokeHomeFragment_to_freespokeProfileFragment"
+            app:destination="@id/freespokeProfileFragment" />
     </fragment>
 
     <dialog
@@ -1396,4 +1403,28 @@
                 app:popExitAnim="@anim/slide_out_right" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/freespokeProfileFragment"
+        android:name="org.mozilla.fenix.freespokeaccount.FreespokeProfileFragment"
+        android:label="FreespokeProfileFragment" >
+        <action
+            android:id="@+id/action_freespokeProfileFragment_to_subscriptionManagementFragment"
+            app:destination="@id/subscriptionManagementFragment" />
+
+        <action
+            android:id="@+id/action_freespokeProfileFragment_to_freespokeWhiteListFragment"
+            app:destination="@id/freespokeWhiteListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/freespokeWhiteListFragment"
+        android:name="org.mozilla.fenix.whitelist.FreespokeWhiteListFragment"
+        android:label="FreespokeWhiteListFragment" >
+    </fragment>
+    <action
+        android:id="@+id/action_global_customizationFragment"
+        app:destination="@id/customizationFragment" />
+    <fragment
+        android:id="@+id/subscriptionManagementFragment"
+        android:name="org.mozilla.fenix.freespokepremium.SubscriptionManagementFragment"
+        android:label="SubscriptionManagementFragment" />
 </navigation>

@@ -49,7 +49,8 @@ object PhotonColors {
     val Red70 = Color(0xFFC50042)
     val Red80 = Color(0xFF810220)
     val Red90 = Color(0xFF440306)
-
+    val Red400 = Color(0xFFFC486D)
+    val Red600 = Color(0xFFC43351)
     // Yellow is primarily used for attention / caution / warning status in user interface.
     val Yellow05 = Color(0xFFFFFFCC)
     val Yellow10 = Color(0xFFFFFF98)
@@ -113,7 +114,10 @@ object PhotonColors {
     val Ink90 = Color(0xFF1D1133)
 
     // Light grey should primarily be used for the Light Theme and secondary buttons.
+    val LightGrey02 = Color(0xFF606671)
+    val LightGrey005 = Color(0xFFE1E5EB)
     val LightGrey05 = Color(0xFFFBFBFE)
+    val LightGrey07 = Color(0xFFF8F9FB)
     val LightGrey05A40 = Color(0x66FBFBFE)
     val LightGrey05A60 = Color(0x99FBFBFE)
     val LightGrey10 = Color(0xFFF9F9FB)
@@ -127,6 +131,7 @@ object PhotonColors {
     val LightGrey90 = Color(0xFF80808E)
 
     // Dark grey should primarily be used for the Dark theme and secondary buttons.
+    val DarkGreyO4 = Color(0xFFB5BCC9)
     val DarkGrey05 = Color(0xFF5B5B66)
     val DarkGrey05A45 = Color(0x735B5B66)
     val DarkGrey10 = Color(0xFF52525E)
@@ -145,6 +150,7 @@ object PhotonColors {
     val DarkGrey90A95 = Color(0xF215141A)
     val DarkGrey90A96 = Color(0xF515141A)
     val DarkGrey1D1D1D = Color(0xFF1D1D1D)
+    val DarkGrey161616 = Color(0xFF161616)
 
     // Violet
     val Violet05 = Color(0xFFE7DFFF)
@@ -169,5 +175,12 @@ object PhotonColors {
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
 
-    val FreeSpokeButtonColor = Color(0xFFC43351)
+    val FreeSpokeButtonColor = Color(0xFF149590)
+    val FreeSpokeNavyTextColor = Color(0xFF081A33)
+    val FreespokeGrayTextColor = Color(0xFF2F3644)
+
+    val FreeSpokeProfileGradientStartColor = Color(0xFFEDF0F5)
+    val ManageWhiteListButtonBackgroundLightColor = Color(0xFFEDF0F5)
+    val ManageWhiteListButtonBackgroundDarkColor = Color(0xFF2F3644)
+    val BlueButtonsTextColor = Color(0xFF007AFF)
 }

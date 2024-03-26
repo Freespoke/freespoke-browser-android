@@ -101,3 +101,4 @@ DerivedData
 .build
 
 freespoke.keystore
+*.aab

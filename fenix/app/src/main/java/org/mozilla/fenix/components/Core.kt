@@ -135,6 +135,8 @@ class Core(
             cookieBannerHandlingMode = context.settings().getCookieBannerHandling(),
             cookieBannerHandlingDetectOnlyMode = context.settings()
                 .shouldShowCookieBannerReEngagementDialog(),
+            adBlockingEnabled =  context.settings().adBlockingEnabled,
+            adsBlockEnabled =  context.settings().adsBlockFeatureEnabled
         )
 
         GeckoEngine(
