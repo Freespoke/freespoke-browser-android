@@ -218,6 +218,16 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             }
         }
 
+    private var notificationPermissionListener: (() -> Unit)? = null
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) {
+        if (it) {
+            notificationPermissionListener?.invoke()
+            notificationPermissionListener = null
+        }
+    }
+
     private val onboarding by lazy { FenixOnboarding(applicationContext) }
 
     private val externalSourceIntentProcessors by lazy {
@@ -363,7 +373,7 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
             }
         }
 
-        showNotificationPermissionPromptIfRequired()
+        //showNotificationPermissionPromptIfRequired()
 
         authManager.initAuthManager()
 
@@ -659,6 +669,12 @@ open class HomeActivity : LocaleAwareAppCompatActivity(), NavHostActivity {
                 ensureMarketingChannelExists(applicationContext)
             }
         }
+    }
+
+    fun requestNotificationPermission(onPermissionGranted: () -> Unit) {
+        notificationPermissionListener = onPermissionGranted
+        ensureMarketingChannelExists(applicationContext)
+        notificationPermissionLauncher.launch("android.permission.POST_NOTIFICATIONS")
     }
 
     private fun checkAndExitPiP() {

@@ -169,9 +169,11 @@ private fun UpgradeOnboardingContent(
                             onboardingState = UpgradeOnboardingState.Notifications
                         }
                     }
-                    UpgradeOnboardingState.NotificationsSetup -> onSetupSettingsClick?.invoke(
-                        OnboardingAppSettings.Notifications, null
-                    )
+                    UpgradeOnboardingState.NotificationsSetup -> {
+                        onSetupSettingsClick?.invoke(OnboardingAppSettings.Notifications) {
+                            onboardingState = UpgradeOnboardingState.CompleteOnboarding
+                        }
+                    }
                     UpgradeOnboardingState.Login -> {
                         onSetupSettingsClick?.invoke(OnboardingAppSettings.Login) {
                             onboardingState = UpgradeOnboardingState.Subscriptions
