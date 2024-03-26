@@ -25,15 +25,23 @@ import org.mozilla.fenix.freespokeaccount.store.ClearStore
 import org.mozilla.fenix.freespokeaccount.store.FreespokeProfileStore
 import org.mozilla.fenix.freespokeaccount.store.UpdateProfileAction
 import org.mozilla.fenix.utils.AuthManager
+import org.mozilla.fenix.utils.Settings
+import org.mozilla.fenix.whitelist.WhiteListPreferenceRepository
 
 class FreespokeProfileViewModel(
     private val freespokeProfileStore: FreespokeProfileStore,
     userRepository: UserPreferenceRepository,
-    authManager: AuthManager
+    authManager: AuthManager,
+    whiteListPreferenceRepository: WhiteListPreferenceRepository,
+    private val settings: Settings,
 ) : ViewModel() {
 
     private val _profileData: MutableStateFlow<ProfileUiModel?> = MutableStateFlow(null)
     val profileData = _profileData.asStateFlow()
+    private val _adsBlockEnabled: MutableStateFlow<Boolean> = MutableStateFlow(settings.adsBlockFeatureEnabled)
+    val adsBlockEnabled = _adsBlockEnabled.asStateFlow()
+    private val _whiteListCount: MutableStateFlow<Int> = MutableStateFlow(0)
+    val whiteListCount = _whiteListCount.asStateFlow()
 
     init {
         freespokeProfileStore.flow()
@@ -43,6 +51,8 @@ class FreespokeProfileViewModel(
             .launchIn(viewModelScope)
 
         viewModelScope.launch {
+            updateAdsState()
+            _whiteListCount.value = whiteListPreferenceRepository.getWhiteList().size
             userRepository.getAuthFlow().collectLatest {
                 it ?: run {
                     _profileData.value = null
@@ -73,8 +83,21 @@ class FreespokeProfileViewModel(
         }
     }
 
+    fun updateAdsState() {
+        viewModelScope.launch {
+            _adsBlockEnabled.emit(settings.adsBlockFeatureEnabled)
+        }
+    }
+
     fun onLogout() {
         freespokeProfileStore.dispatch(ClearStore)
+    }
+
+    fun updateAdsBlockState(isEnabled: Boolean) {
+        viewModelScope.launch {
+            settings.adsBlockFeatureEnabled = isEnabled
+            _adsBlockEnabled.emit(isEnabled)
+        }
     }
 
     companion object {
@@ -90,7 +113,9 @@ class FreespokeProfileViewModel(
                 return FreespokeProfileViewModel(
                     application.components.freespokeProfileStore,
                     UserPreferenceRepository(context = application.baseContext),
-                    application.components.authManager
+                    application.components.authManager,
+                    WhiteListPreferenceRepository(application.baseContext),
+                    application.components.settings
                 ) as T
             }
         }

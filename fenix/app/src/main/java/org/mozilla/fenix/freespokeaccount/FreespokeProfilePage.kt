@@ -20,19 +20,26 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import org.mozilla.fenix.R
 import org.mozilla.fenix.freespokeaccount.profile.ProfileBubble
 import org.mozilla.fenix.onboarding.view.UpgradeOnboardingState
@@ -48,11 +55,13 @@ fun FreespokeProfilePage(
     onShare: () -> Unit,
     onSupport: () -> Unit,
     onManageDarkMode: () -> Unit,
+    onManageWhiteList: () -> Unit,
+    onManageAdBlocking: (isEnabled: Boolean) -> Unit,
     onBack: () -> Unit,
     onLogout: (onLogoutSuccess: (Boolean) -> Unit) -> Unit,
 ) {
+    val lifecycleState by MutableStateFlow(LocalLifecycleOwner.current.lifecycle.currentState).collectAsState()
     val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +79,17 @@ fun FreespokeProfilePage(
     ) {
 
         val profile by viewModel.profileData.collectAsState()
-
+        val adsBlockEnabled by viewModel.adsBlockEnabled.collectAsState()
+        val whiteListCount by viewModel.whiteListCount.collectAsState()
+        LaunchedEffect(lifecycleState) {
+            if (lifecycleState == Lifecycle.State.RESUMED) {
+                viewModel.updateAdsState()
+            }
+        }
+        //todo uncomment when premium starts working
+        /*val hasPremium by remember {
+            mutableStateOf(profile?.hasPremium == true)
+        }*/
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -82,7 +101,7 @@ fun FreespokeProfilePage(
                         MutableInteractionSource()
                     },
                     indication = null,
-                    onClick = onBack
+                    onClick = onBack,
                 ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -95,7 +114,7 @@ fun FreespokeProfilePage(
                     text = stringResource(id = R.string.browser_menu_back),
                     color = FirefoxTheme.colors.freespokeDescriptionColor,
                     style = FirefoxTheme.typography.headline7.copy(
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     ),
                 )
             }
@@ -103,7 +122,7 @@ fun FreespokeProfilePage(
             ProfileBubble(
                 profileUiModel = profile,
                 onClick = {},
-                isEnabled = false
+                isEnabled = false,
             )
         }
 
@@ -113,7 +132,7 @@ fun FreespokeProfilePage(
             text = stringResource(id = R.string.freefolk_profile).uppercase(),
             color = FirefoxTheme.colors.freespokeDescriptionColor,
             style = FirefoxTheme.typography.headline6.copy(
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             ),
         )
 
@@ -136,6 +155,27 @@ fun FreespokeProfilePage(
                 text = stringResource(id = R.string.list_item_account),
                 iconPainter = painterResource(id = R.drawable.ic_freespoke_flame),
             )
+            //todo uncomment when premium starts working
+//            if (hasPremium) {
+                var expanded by remember { mutableStateOf(adsBlockEnabled) }
+                FreespokeProfileListItemWithButton(
+                    type = FreespokeProfileListItemType.Toggle(
+                        expanded,
+                        onToggled = {
+                            viewModel.updateAdsBlockState(it)
+                            expanded = it
+                            onManageAdBlocking(it)
+                        },
+                    ),
+                    text = stringResource(id = R.string.text_block_ads),
+                    iconPainter = painterResource(id = R.drawable.ic_settings_drawer),
+                    buttonText = stringResource(id = R.string.text_manage_whitelist, whiteListCount),
+                    onButtonClick = {
+                        onManageWhiteList()
+                    },
+                    expanded = adsBlockEnabled,
+                )
+//            }
             FreespokeProfileListItem(
                 type = FreespokeProfileListItemType.Default {
                     onManageDarkMode()

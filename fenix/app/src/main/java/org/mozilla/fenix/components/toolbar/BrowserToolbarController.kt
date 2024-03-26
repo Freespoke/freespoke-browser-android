@@ -47,6 +47,7 @@ interface BrowserToolbarController {
      * @see [BrowserToolbarInteractor.onHomeButtonClicked]
      */
     fun handleHomeButtonClick()
+    fun handleAdBlockEnabled(enabled: Boolean)
 }
 
 @Suppress("LongParameterList")
@@ -62,6 +63,7 @@ class DefaultBrowserToolbarController(
     private val browserAnimator: BrowserAnimator,
     private val onTabCounterClicked: () -> Unit,
     private val onCloseTab: (SessionState) -> Unit,
+    private val onAdBlockStateChanged: (isEnabled: Boolean) -> Unit,
 ) : BrowserToolbarController {
 
     private val currentSession
@@ -178,6 +180,10 @@ class DefaultBrowserToolbarController(
                 BrowserFragmentDirections.actionGlobalHome(),
             )
         }
+    }
+
+    override fun handleAdBlockEnabled(enabled: Boolean) {
+        onAdBlockStateChanged(enabled)
     }
 
     companion object {

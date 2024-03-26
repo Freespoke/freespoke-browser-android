@@ -4,18 +4,26 @@
 
 package mozilla.components.concept.toolbar
 
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.text.TextUtils
+import android.text.util.Linkify
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
 import android.view.View.NO_ID
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.annotation.Dimension.Companion.DP
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import mozilla.components.support.base.android.Padding
 import mozilla.components.support.ktx.android.content.res.resolveAttribute
@@ -159,6 +167,11 @@ interface Toolbar {
     fun addNavigationAction(action: Action)
 
     /**
+     * Adds an action to be displayed on the far left side of the URL in display mode.
+     */
+    fun addAdBlockAction(action: Action)
+
+    /**
      * Adds an action to be displayed at the start of the URL in edit mode.
      */
     fun addEditActionStart(action: Action)
@@ -289,26 +302,27 @@ interface Toolbar {
         private val listener: () -> Unit,
     ) : Action {
 
-        override fun createView(parent: ViewGroup): View = AppCompatImageButton(parent.context).also { imageButton ->
-            imageButton.setImageDrawable(imageDrawable)
-            imageButton.contentDescription = contentDescription
-            imageButton.setTintResource(iconTintColorResource)
-            imageButton.setOnClickListener { listener.invoke() }
-            imageButton.setOnLongClickListener {
-                longClickListener?.invoke()
-                true
-            }
-            imageButton.isLongClickable = longClickListener != null
+        override fun createView(parent: ViewGroup): View =
+            AppCompatImageButton(parent.context).also { imageButton ->
+                imageButton.setImageDrawable(imageDrawable)
+                imageButton.contentDescription = contentDescription
+                imageButton.setTintResource(iconTintColorResource)
+                imageButton.setOnClickListener { listener.invoke() }
+                imageButton.setOnLongClickListener {
+                    longClickListener?.invoke()
+                    true
+                }
+                imageButton.isLongClickable = longClickListener != null
 
-            val backgroundResource = if (background == 0) {
-                parent.context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless)
-            } else {
-                background
-            }
+                val backgroundResource = if (background == 0) {
+                    parent.context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless)
+                } else {
+                    background
+                }
 
-            imageButton.setBackgroundResource(backgroundResource)
-            padding?.let { imageButton.setPadding(it) }
-        }
+                imageButton.setBackgroundResource(backgroundResource)
+                padding?.let { imageButton.setPadding(it) }
+            }
 
         override fun bind(view: View) = Unit
     }
@@ -339,24 +353,25 @@ interface Toolbar {
     ) : Action {
         private var view: WeakReference<ImageButton>? = null
 
-        override fun createView(parent: ViewGroup): View = AppCompatImageButton(parent.context).also { imageButton ->
-            view = WeakReference(imageButton)
+        override fun createView(parent: ViewGroup): View =
+            AppCompatImageButton(parent.context).also { imageButton ->
+                view = WeakReference(imageButton)
 
-            imageButton.scaleType = ImageView.ScaleType.CENTER
-            imageButton.setOnClickListener { toggle() }
-            imageButton.isSelected = selected
+                imageButton.scaleType = ImageView.ScaleType.CENTER
+                imageButton.setOnClickListener { toggle() }
+                imageButton.isSelected = selected
 
-            updateViewState()
+                updateViewState()
 
-            val backgroundResource = if (background == 0) {
-                parent.context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless)
-            } else {
-                background
+                val backgroundResource = if (background == 0) {
+                    parent.context.theme.resolveAttribute(android.R.attr.selectableItemBackgroundBorderless)
+                } else {
+                    background
+                }
+
+                imageButton.setBackgroundResource(backgroundResource)
+                padding?.let { imageButton.setPadding(it) }
             }
-
-            imageButton.setBackgroundResource(backgroundResource)
-            padding?.let { imageButton.setPadding(it) }
-        }
 
         /**
          * Changes the selected state of the action to the inverse of its current state.
@@ -410,6 +425,117 @@ interface Toolbar {
     }
 
     /**
+     * An action switch button with two states, selected and unselected. When the switch is pressed, the
+     * state changes automatically.
+     *
+     * @param textValue The text description that shows near switch.
+     * @param switchTextSize The text size that shows near switch.
+     * @param visible Lambda that returns true or false to indicate whether this button should be shown.
+     * @param selected Sets whether this button should be checked initially.
+     * @param padding A optional custom padding.
+     * @param listener Callback that will be invoked whenever the checked state changes.
+     * @param track A optional custom track for switch.
+     * @param thumb A optional custom thumb for switch.
+     */
+    open class ActionSwitchButton(
+        private val textValue: CharSequence,
+        private val switchTextSize: Float? = null,
+        override val visible: () -> Boolean = { true },
+        private var selected: Boolean = true,
+        private val padding: Padding? = null,
+        @DrawableRes private val track: Int? = null,
+        @DrawableRes private val thumb: Int? = null,
+        private val listener: ((isEnabled: Boolean) -> Unit)?,
+    ) : Action {
+        private var view: WeakReference<LinearLayoutCompat>? = null
+
+        override fun createView(parent: ViewGroup): View =
+            LinearLayoutCompat(parent.context).also { container ->
+                view = WeakReference(container)
+                val switch = SwitchCompat(parent.context).also { switch ->
+                    with(switch) {
+                        isSelected = selected
+                        isChecked = selected
+                        track?.let {
+                            trackDrawable = ContextCompat.getDrawable(context, it)
+                        }
+                        thumb?.let {
+                            thumbDrawable = ContextCompat.getDrawable(context, it)
+                        }
+                        setOnCheckedChangeListener { _, _ ->
+                            toggle(true)
+                        }
+                        layoutParams = ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                        )
+                    }
+                }
+                val textView = TextView(parent.context).also { textView ->
+                    with(textView) {
+                        text = textValue
+                        typeface = Typeface.SANS_SERIF
+                        maxLines = 1
+                        ellipsize = TextUtils.TruncateAt.END
+                        switchTextSize?.let {
+                            setTextSize(TypedValue.COMPLEX_UNIT_PX, it)
+                        }
+                        padding?.let { setPadding(Padding(it.left, 0, 0, 0)) }
+                    }
+                }
+                with(container) {
+                    orientation = LinearLayoutCompat.HORIZONTAL
+                    gravity = Gravity.CENTER_VERTICAL
+                    addView(switch)
+                    addView(textView)
+                    updateViewState()
+                }
+            }
+
+        /**
+         * Changes the selected state of the action to the inverse of its current state.
+         *
+         * @param notifyListener If true (default) the listener will be notified about the state change.
+         */
+        fun toggle(notifyListener: Boolean = true) {
+            setSelected(!selected, notifyListener)
+        }
+
+        /**
+         * Changes the selected state of the action.
+         *
+         * @param selected The new selected state
+         * @param notifyListener If true (default) the listener will be notified about a state change.
+         */
+        fun setSelected(selected: Boolean, notifyListener: Boolean = true) {
+            if (this.selected == selected) {
+                // Nothing to do here.
+                return
+            }
+
+            this.selected = selected
+            updateViewState()
+
+            if (notifyListener) {
+                listener?.invoke(selected)
+            }
+        }
+
+        /**
+         * Returns the current selected state of the action.
+         */
+        fun isSelected() = selected
+
+        private fun updateViewState() {
+            view?.get()?.let {
+                it.isSelected = selected
+            }
+        }
+
+        override fun bind(view: View) = Unit
+    }
+
+    /**
      * An "empty" action with a desired width to be used as "placeholder".
      *
      * @param desiredWidth The desired width in density independent pixels for this action.
@@ -442,18 +568,19 @@ interface Toolbar {
         private val padding: Padding? = null,
     ) : Action {
 
-        override fun createView(parent: ViewGroup): View = AppCompatImageView(parent.context).also { image ->
-            image.minimumWidth = imageDrawable.intrinsicWidth
-            image.setImageDrawable(imageDrawable)
+        override fun createView(parent: ViewGroup): View =
+            AppCompatImageView(parent.context).also { image ->
+                image.minimumWidth = imageDrawable.intrinsicWidth
+                image.setImageDrawable(imageDrawable)
 
-            image.contentDescription = contentDescription
-            image.importantForAccessibility = if (contentDescription.isNullOrEmpty()) {
-                View.IMPORTANT_FOR_ACCESSIBILITY_NO
-            } else {
-                View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+                image.contentDescription = contentDescription
+                image.importantForAccessibility = if (contentDescription.isNullOrEmpty()) {
+                    View.IMPORTANT_FOR_ACCESSIBILITY_NO
+                } else {
+                    View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+                }
+                padding?.let { pd -> image.setPadding(pd) }
             }
-            padding?.let { pd -> image.setPadding(pd) }
-        }
 
         override fun bind(view: View) = Unit
     }

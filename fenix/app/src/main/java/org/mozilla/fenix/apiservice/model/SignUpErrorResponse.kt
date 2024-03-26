@@ -5,10 +5,10 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class SignUpErrorResponse(
-    @Json(name = "message") val message: String,
-    @Json(name = "name") val name: String,
-    @Json(name = "code") val code: String,
-    @Json(name = "details") val errorDetails: Details
+    @Json(name = "message") val message: String?,
+    @Json(name = "name") val name: String?,
+    @Json(name = "code") val code: String?,
+    @Json(name = "details") val errorDetails: Details?
 )
 
 @JsonClass(generateAdapter = true)

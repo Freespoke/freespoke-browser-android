@@ -22,6 +22,7 @@ import org.mozilla.fenix.ext.components
 import org.mozilla.fenix.ext.hideToolbar
 import org.mozilla.fenix.ext.navigateToNotificationAppsSettings
 import org.mozilla.fenix.ext.openSetDefaultBrowserOption
+import org.mozilla.fenix.ext.settings
 import org.mozilla.fenix.theme.FirefoxTheme
 
 class FreespokeProfileFragment : Fragment() {
@@ -88,6 +89,14 @@ class FreespokeProfileFragment : Fragment() {
                             (context as HomeActivity).startLogoutFlow {
                                 onLogoutSuccess(it)
                             }
+                        },
+                        onManageWhiteList =  {
+                            findNavController().navigate(
+                                FreespokeProfileFragmentDirections.actionFreespokeProfileFragmentToFreespokeWhiteListFragment()
+                            )
+                        },
+                        onManageAdBlocking = {
+                            context.settings().adsBlockFeatureEnabled = it
                         }
                     )
                 }

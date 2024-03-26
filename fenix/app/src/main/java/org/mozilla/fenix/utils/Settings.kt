@@ -160,6 +160,16 @@ class Settings(private val appContext: Context) : PreferencesHolder {
         default = false,
     )
 
+    var adBlockingEnabled by booleanPreference(
+        appContext.getPreferenceKey(R.string.pref_key_ad_blocking_enabled),
+        default = false,
+    )
+
+    var adsBlockFeatureEnabled by booleanPreference(
+        appContext.getPreferenceKey(R.string.pref_key_ads_block_enabled),
+        default = false,
+    )
+
     var adjustCampaignId by stringPreference(
         appContext.getPreferenceKey(R.string.pref_key_adjust_campaign),
         default = "",

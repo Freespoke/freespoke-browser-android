@@ -29,5 +29,7 @@
 
   <declare-styleable name="ActionContainer">
     <attr name="actionContainerItemSize" format="dimension" />
+    <attr name="actionContainerItemWidth" format="dimension" />
+    <attr name="actionContainerItemHeight" format="dimension" />
   </declare-styleable>
 </resources>

@@ -25,7 +25,6 @@ class UserPreferenceRepository(
         val USER_ACCESS_TOKEN = stringPreferencesKey("access_token")
         val USER_REFRESH_TOKEN = stringPreferencesKey("refresh_token")
         val USER_ID = stringPreferencesKey("user_id")
-
         val USER_AUTH_STATE = stringPreferencesKey("user_auth_state")
     }
 

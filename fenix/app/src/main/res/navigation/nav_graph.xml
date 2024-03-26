@@ -1410,6 +1410,15 @@
         <action
             android:id="@+id/action_freespokeProfileFragment_to_subscriptionManagementFragment"
             app:destination="@id/subscriptionManagementFragment" />
+
+        <action
+            android:id="@+id/action_freespokeProfileFragment_to_freespokeWhiteListFragment"
+            app:destination="@id/freespokeWhiteListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/freespokeWhiteListFragment"
+        android:name="org.mozilla.fenix.whitelist.FreespokeWhiteListFragment"
+        android:label="FreespokeWhiteListFragment" >
     </fragment>
     <action
         android:id="@+id/action_global_customizationFragment"

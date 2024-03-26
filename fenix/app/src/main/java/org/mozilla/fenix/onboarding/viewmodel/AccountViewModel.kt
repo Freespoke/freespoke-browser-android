@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.mozilla.fenix.apiservice.ErrorUtils
 import org.mozilla.fenix.apiservice.FreespokeApi
+import org.mozilla.fenix.apiservice.model.FieldsError
 import org.mozilla.fenix.apiservice.model.SignUpUserModel
 import org.mozilla.fenix.domain.repositories.UserPreferenceRepository
 import org.mozilla.fenix.ext.components
@@ -39,7 +40,7 @@ class AccountViewModel(
                 errorData?.let {
                     _uiState.value = SignUpUiState(
                         isSuccessfulSignUp = false,
-                        errorData = errorData.errorDetails.fieldsError
+                        errorData = errorData.errorDetails?.fieldsError ?: FieldsError()
                     )
                 }
             }

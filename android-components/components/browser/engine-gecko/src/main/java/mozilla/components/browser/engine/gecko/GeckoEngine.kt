@@ -19,6 +19,7 @@ import mozilla.components.browser.engine.gecko.mediaquery.from
 import mozilla.components.browser.engine.gecko.mediaquery.toGeckoValue
 import mozilla.components.browser.engine.gecko.profiler.Profiler
 import mozilla.components.browser.engine.gecko.serviceworker.GeckoServiceWorkerDelegate
+import mozilla.components.browser.engine.gecko.util.BlockListHandler
 import mozilla.components.browser.engine.gecko.util.SpeculativeSessionFactory
 import mozilla.components.browser.engine.gecko.webextension.GeckoWebExtension
 import mozilla.components.browser.engine.gecko.webextension.GeckoWebExtensionException
@@ -83,15 +84,24 @@ class GeckoEngine(
 ) : Engine, WebExtensionRuntime {
     private val executor by lazy { executorProvider.invoke() }
     private val localeUpdater = LocaleSettingUpdater(context, runtime)
-
-    @VisibleForTesting internal val speculativeConnectionFactory = SpeculativeSessionFactory()
+    private val blockListHandler = BlockListHandler(context)
+    @VisibleForTesting
+    internal val speculativeConnectionFactory = SpeculativeSessionFactory()
     private var webExtensionDelegate: WebExtensionDelegate? = null
     private val webExtensionActionHandler = object : ActionHandler {
-        override fun onBrowserAction(extension: WebExtension, session: EngineSession?, action: Action) {
+        override fun onBrowserAction(
+            extension: WebExtension,
+            session: EngineSession?,
+            action: Action,
+        ) {
             webExtensionDelegate?.onBrowserActionDefined(extension, action)
         }
 
-        override fun onPageAction(extension: WebExtension, session: EngineSession?, action: Action) {
+        override fun onPageAction(
+            extension: WebExtension,
+            session: EngineSession?,
+            action: Action,
+        ) {
             webExtensionDelegate?.onPageActionDefined(extension, action)
         }
 
@@ -101,13 +111,19 @@ class GeckoEngine(
                 GeckoEngineSession(
                     runtime,
                     defaultSettings = defaultSettings,
+                    blockListHandler = blockListHandler,
                 ),
                 action,
             )
         }
     }
     private val webExtensionTabHandler = object : TabHandler {
-        override fun onNewTab(webExtension: WebExtension, engineSession: EngineSession, active: Boolean, url: String) {
+        override fun onNewTab(
+            webExtension: WebExtension,
+            engineSession: EngineSession,
+            active: Boolean,
+            url: String,
+        ) {
             webExtensionDelegate?.onNewTab(webExtension, engineSession, active, url)
         }
     }
@@ -175,7 +191,13 @@ class GeckoEngine(
     override fun createSession(private: Boolean, contextId: String?): EngineSession {
         ThreadUtils.assertOnUiThread()
         val speculativeSession = speculativeConnectionFactory.get(private, contextId)
-        return speculativeSession ?: GeckoEngineSession(runtime, private, defaultSettings, contextId)
+        return speculativeSession ?: GeckoEngineSession(
+            runtime,
+            private,
+            defaultSettings,
+            contextId,
+            blockListHandler = blockListHandler,
+        )
     }
 
     /**
@@ -197,7 +219,13 @@ class GeckoEngine(
      */
     override fun speculativeCreateSession(private: Boolean, contextId: String?) {
         ThreadUtils.assertOnUiThread()
-        speculativeConnectionFactory.create(runtime, private, contextId, defaultSettings)
+        speculativeConnectionFactory.create(
+            runtime,
+            private,
+            contextId,
+            defaultSettings,
+            blockListHandler,
+        )
     }
 
     /**
@@ -227,7 +255,7 @@ class GeckoEngine(
         onError: ((String, Throwable) -> Unit),
     ): CancellableOperation {
         val onInstallSuccess: ((org.mozilla.geckoview.WebExtension) -> Unit) = {
-            val installedExtension = GeckoWebExtension(it, runtime)
+            val installedExtension = GeckoWebExtension(it, runtime, blockListHandler)
             webExtensionDelegate?.onInstalled(installedExtension)
             installedExtension.registerActionHandler(webExtensionActionHandler)
             installedExtension.registerTabHandler(webExtensionTabHandler, defaultSettings)
@@ -293,24 +321,25 @@ class GeckoEngine(
         onSuccess: (WebExtension?) -> Unit,
         onError: (String, Throwable) -> Unit,
     ) {
-        runtime.webExtensionController.update((extension as GeckoWebExtension).nativeExtension).then(
-            { geckoExtension ->
-                val updatedExtension = if (geckoExtension != null) {
-                    GeckoWebExtension(geckoExtension, runtime).also {
-                        it.registerActionHandler(webExtensionActionHandler)
-                        it.registerTabHandler(webExtensionTabHandler, defaultSettings)
+        runtime.webExtensionController.update((extension as GeckoWebExtension).nativeExtension)
+            .then(
+                { geckoExtension ->
+                    val updatedExtension = if (geckoExtension != null) {
+                        GeckoWebExtension(geckoExtension, runtime, blockListHandler).also {
+                            it.registerActionHandler(webExtensionActionHandler)
+                            it.registerTabHandler(webExtensionTabHandler, defaultSettings)
+                        }
+                    } else {
+                        null
                     }
-                } else {
-                    null
-                }
-                onSuccess(updatedExtension)
-                GeckoResult<Void>()
-            },
-            { throwable ->
-                onError(extension.id, GeckoWebExtensionException(throwable))
-                GeckoResult<Void>()
-            },
-        )
+                    onSuccess(updatedExtension)
+                    GeckoResult<Void>()
+                },
+                { throwable ->
+                    onError(extension.id, GeckoWebExtensionException(throwable))
+                    GeckoResult<Void>()
+                },
+            )
     }
 
     /**
@@ -324,7 +353,7 @@ class GeckoEngine(
 
         val promptDelegate = object : WebExtensionController.PromptDelegate {
             override fun onInstallPrompt(ext: org.mozilla.geckoview.WebExtension): GeckoResult<AllowOrDeny>? {
-                val extension = GeckoWebExtension(ext, runtime)
+                val extension = GeckoWebExtension(ext, runtime, blockListHandler)
                 return if (webExtensionDelegate.onInstallPermissionRequest(extension)) {
                     GeckoResult.allow()
                 } else {
@@ -340,11 +369,10 @@ class GeckoEngine(
             ): GeckoResult<AllowOrDeny>? {
                 val result = GeckoResult<AllowOrDeny>()
                 webExtensionDelegate.onUpdatePermissionRequest(
-                    GeckoWebExtension(current, runtime),
-                    GeckoWebExtension(updated, runtime),
+                    GeckoWebExtension(current, runtime, blockListHandler),
+                    GeckoWebExtension(updated, runtime, blockListHandler),
                     newPermissions.toList() + newOrigins.toList(),
-                ) {
-                        allow ->
+                ) { allow ->
                     if (allow) result.complete(AllowOrDeny.ALLOW) else result.complete(AllowOrDeny.DENY)
                 }
                 return result
@@ -364,12 +392,14 @@ class GeckoEngine(
     /**
      * See [Engine.listInstalledWebExtensions].
      */
-    override fun listInstalledWebExtensions(onSuccess: (List<WebExtension>) -> Unit, onError: (Throwable) -> Unit) {
+    override fun listInstalledWebExtensions(
+        onSuccess: (List<WebExtension>) -> Unit,
+        onError: (Throwable) -> Unit,
+    ) {
         runtime.webExtensionController.list().then(
             {
-                val extensions = it?.map {
-                        extension ->
-                    GeckoWebExtension(extension, runtime)
+                val extensions = it?.map { extension ->
+                    GeckoWebExtension(extension, runtime, blockListHandler)
                 } ?: emptyList()
 
                 extensions.forEach { extension ->
@@ -396,9 +426,12 @@ class GeckoEngine(
         onSuccess: (WebExtension) -> Unit,
         onError: (Throwable) -> Unit,
     ) {
-        runtime.webExtensionController.enable((extension as GeckoWebExtension).nativeExtension, source.id).then(
+        runtime.webExtensionController.enable(
+            (extension as GeckoWebExtension).nativeExtension,
+            source.id,
+        ).then(
             {
-                val enabledExtension = GeckoWebExtension(it!!, runtime)
+                val enabledExtension = GeckoWebExtension(it!!, runtime, blockListHandler)
                 webExtensionDelegate?.onEnabled(enabledExtension)
                 onSuccess(enabledExtension)
                 GeckoResult<Void>()
@@ -419,9 +452,12 @@ class GeckoEngine(
         onSuccess: (WebExtension) -> Unit,
         onError: (Throwable) -> Unit,
     ) {
-        runtime.webExtensionController.disable((extension as GeckoWebExtension).nativeExtension, source.id).then(
+        runtime.webExtensionController.disable(
+            (extension as GeckoWebExtension).nativeExtension,
+            source.id,
+        ).then(
             {
-                val disabledExtension = GeckoWebExtension(it!!, runtime)
+                val disabledExtension = GeckoWebExtension(it!!, runtime, blockListHandler)
                 webExtensionDelegate?.onDisabled(disabledExtension)
                 onSuccess(disabledExtension)
                 GeckoResult<Void>()
@@ -447,7 +483,7 @@ class GeckoEngine(
             allowed,
         ).then(
             {
-                val ext = GeckoWebExtension(it!!, runtime)
+                val ext = GeckoWebExtension(it!!, runtime, blockListHandler)
                 webExtensionDelegate?.onAllowedInPrivateBrowsingChanged(ext)
                 onSuccess(ext)
                 GeckoResult<Void>()
@@ -532,6 +568,7 @@ class GeckoEngine(
             delegate = serviceWorkerDelegate,
             runtime = runtime,
             engineSettings = defaultSettings,
+            blockListHandler = blockListHandler,
         )
     }
 
@@ -562,8 +599,7 @@ class GeckoEngine(
                 onSuccess()
                 GeckoResult<Void>()
             },
-            {
-                    throwable ->
+            { throwable ->
                 onError(throwable)
                 GeckoResult<Void>()
             },
@@ -588,15 +624,21 @@ class GeckoEngine(
     override val settings: Settings = object : Settings() {
         override var javascriptEnabled: Boolean
             get() = runtime.settings.javaScriptEnabled
-            set(value) { runtime.settings.javaScriptEnabled = value }
+            set(value) {
+                runtime.settings.javaScriptEnabled = value
+            }
 
         override var webFontsEnabled: Boolean
             get() = runtime.settings.webFontsEnabled
-            set(value) { runtime.settings.webFontsEnabled = value }
+            set(value) {
+                runtime.settings.webFontsEnabled = value
+            }
 
         override var automaticFontSizeAdjustment: Boolean
             get() = runtime.settings.automaticFontSizeAdjustment
-            set(value) { runtime.settings.automaticFontSizeAdjustment = value }
+            set(value) {
+                runtime.settings.automaticFontSizeAdjustment = value
+            }
 
         override var automaticLanguageAdjustment: Boolean
             get() = localeUpdater.enabled
@@ -622,7 +664,8 @@ class GeckoEngine(
                         }
 
                         if (strictSocialTrackingProtection != value.getStrictSocialTrackingProtection()) {
-                            strictSocialTrackingProtection = policy.getStrictSocialTrackingProtection()
+                            strictSocialTrackingProtection =
+                                policy.getStrictSocialTrackingProtection()
                         }
 
                         if (antiTrackingCategories != value.getAntiTrackingPolicy()) {
@@ -647,7 +690,8 @@ class GeckoEngine(
                 }
             }
 
-        override var cookieBannerHandlingMode: CookieBannerHandlingMode = CookieBannerHandlingMode.DISABLED
+        override var cookieBannerHandlingMode: CookieBannerHandlingMode =
+            CookieBannerHandlingMode.DISABLED
             set(value) {
                 with(runtime.settings.contentBlocking) {
                     if (this.cookieBannerMode != value.mode) {
@@ -680,31 +724,45 @@ class GeckoEngine(
 
         override var remoteDebuggingEnabled: Boolean
             get() = runtime.settings.remoteDebuggingEnabled
-            set(value) { runtime.settings.remoteDebuggingEnabled = value }
+            set(value) {
+                runtime.settings.remoteDebuggingEnabled = value
+            }
 
         override var historyTrackingDelegate: HistoryTrackingDelegate?
             get() = defaultSettings?.historyTrackingDelegate
-            set(value) { defaultSettings?.historyTrackingDelegate = value }
+            set(value) {
+                defaultSettings?.historyTrackingDelegate = value
+            }
 
         override var testingModeEnabled: Boolean
             get() = defaultSettings?.testingModeEnabled ?: false
-            set(value) { defaultSettings?.testingModeEnabled = value }
+            set(value) {
+                defaultSettings?.testingModeEnabled = value
+            }
 
         override var userAgentString: String?
             get() = "${GeckoSession.getDefaultUserAgent()} Freespoke/2.0.0"
-            set(value) { defaultSettings?.userAgentString = value }
+            set(value) {
+                defaultSettings?.userAgentString = value
+            }
 
         override var preferredColorScheme: PreferredColorScheme
             get() = PreferredColorScheme.from(runtime.settings.preferredColorScheme)
-            set(value) { runtime.settings.preferredColorScheme = value.toGeckoValue() }
+            set(value) {
+                runtime.settings.preferredColorScheme = value.toGeckoValue()
+            }
 
         override var suspendMediaWhenInactive: Boolean
             get() = defaultSettings?.suspendMediaWhenInactive ?: false
-            set(value) { defaultSettings?.suspendMediaWhenInactive = value }
+            set(value) {
+                defaultSettings?.suspendMediaWhenInactive = value
+            }
 
         override var clearColor: Int?
             get() = defaultSettings?.clearColor
-            set(value) { defaultSettings?.clearColor = value }
+            set(value) {
+                defaultSettings?.clearColor = value
+            }
 
         override var fontInflationEnabled: Boolean?
             get() = runtime.settings.fontInflationEnabled
@@ -735,15 +793,33 @@ class GeckoEngine(
 
         override var loginAutofillEnabled: Boolean
             get() = runtime.settings.loginAutofillEnabled
-            set(value) { runtime.settings.loginAutofillEnabled = value }
+            set(value) {
+                runtime.settings.loginAutofillEnabled = value
+            }
 
         override var forceUserScalableContent: Boolean
             get() = runtime.settings.forceUserScalableEnabled
-            set(value) { runtime.settings.forceUserScalableEnabled = value }
+            set(value) {
+                runtime.settings.forceUserScalableEnabled = value
+            }
 
         override var enterpriseRootsEnabled: Boolean
             get() = runtime.settings.enterpriseRootsEnabled
-            set(value) { runtime.settings.enterpriseRootsEnabled = value }
+            set(value) {
+                runtime.settings.enterpriseRootsEnabled = value
+            }
+
+        override var adBlockingEnabled: Boolean
+            get() = defaultSettings?.adBlockingEnabled == true
+            set(value) {
+                defaultSettings?.adBlockingEnabled = value
+            }
+
+        override var adsBlockEnabled: Boolean
+            get() = defaultSettings?.adsBlockEnabled == true
+            set(value) {
+                defaultSettings?.adsBlockEnabled = value
+            }
 
         override var httpsOnlyMode: Engine.HttpsOnlyMode
             get() = when (runtime.settings.allowInsecureConnections) {
@@ -779,15 +855,19 @@ class GeckoEngine(
             this.enterpriseRootsEnabled = it.enterpriseRootsEnabled
             this.httpsOnlyMode = it.httpsOnlyMode
             this.cookieBannerHandlingMode = it.cookieBannerHandlingMode
-            this.cookieBannerHandlingModePrivateBrowsing = it.cookieBannerHandlingModePrivateBrowsing
+            this.cookieBannerHandlingModePrivateBrowsing =
+                it.cookieBannerHandlingModePrivateBrowsing
             this.cookieBannerHandlingDetectOnlyMode = it.cookieBannerHandlingDetectOnlyMode
+            this.adBlockingEnabled = it.adBlockingEnabled
+            this.adsBlockEnabled = it.adsBlockEnabled
         }
     }
 
     @Suppress("ComplexMethod")
     internal fun ContentBlockingController.LogEntry.BlockingData.getLoadedCategory(): TrackingCategory {
-        val socialTrackingProtectionEnabled = settings.trackingProtectionPolicy?.strictSocialTrackingProtection
-            ?: false
+        val socialTrackingProtectionEnabled =
+            settings.trackingProtectionPolicy?.strictSocialTrackingProtection
+                ?: false
 
         return when (category) {
             Event.LOADED_FINGERPRINTING_CONTENT -> TrackingCategory.FINGERPRINTING
@@ -795,9 +875,11 @@ class GeckoEngine(
             Event.LOADED_SOCIALTRACKING_CONTENT -> {
                 if (socialTrackingProtectionEnabled) TrackingCategory.MOZILLA_SOCIAL else TrackingCategory.NONE
             }
+
             Event.COOKIES_LOADED_SOCIALTRACKER -> {
                 if (!socialTrackingProtectionEnabled) TrackingCategory.MOZILLA_SOCIAL else TrackingCategory.NONE
             }
+
             Event.LOADED_LEVEL_1_TRACKING_CONTENT -> TrackingCategory.SCRIPTS_AND_SUB_RESOURCES
             Event.LOADED_LEVEL_2_TRACKING_CONTENT -> {
                 // We are making sure that we are only showing trackers that our settings are
@@ -816,12 +898,14 @@ class GeckoEngine(
                     TrackingCategory.NONE
                 }
             }
+
             else -> TrackingCategory.NONE
         }
     }
 
-    private fun isCategoryActive(category: TrackingCategory) = settings.trackingProtectionPolicy?.contains(category)
-        ?: false
+    private fun isCategoryActive(category: TrackingCategory) =
+        settings.trackingProtectionPolicy?.contains(category)
+            ?: false
 
     /**
      * Mimics the behavior for categorizing trackers from desktop, they should be kept in sync,

@@ -6,10 +6,14 @@ package org.mozilla.fenix.browser
 
 import android.content.Context
 import android.os.StrictMode
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -88,6 +92,67 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
         }
 
         updateToolbarActions(isTablet = resources.getBoolean(R.bool.tablet))
+
+        val adBlockText = if (isTablet) {
+            SpannableString(getString(R.string.mozac_feature_customtabs_adblock_tablet_switch_text)).apply {
+                setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(context, R.color.text_view_link_color),
+                    ),
+                    0,
+                    this.length, 0,
+                )
+            }
+        } else {
+            SpannableString(
+                context.getString(
+                    R.string.mozac_feature_customtabs_adblock_switch_text,
+                    tab.content.url.toUri().host,
+                ),
+            ).apply {
+                setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(context, R.color.text_view_text_color),
+                    ),
+                    0,
+                    this.length - (tab.content.url.toUri().host?.length ?: 0), 0,
+                )
+                setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.text_view_link_color,
+                        ),
+                    ),
+                    this.length - (tab.content.url.toUri().host?.length ?: 0), this.length, 0,
+                )
+            }
+        }
+        val adBlockAction =
+            BrowserToolbar.SwitchButton(
+                text = adBlockText,
+                selected = context.settings().adBlockingEnabled,
+                visible = {
+                    true
+                },
+                listener = {
+                    browserToolbarInteractor.onBrowserToolbarAdBlockChanged(it)
+                    browserToolbarView.view.adBlockingEnabled = it
+                },
+                textSize = resources.getDimensionPixelSize(R.dimen.mozac_browser_toolbar_adblock_textsize)
+                    .toFloat(),
+            )
+
+        browserToolbarView.view.adBlockingEnabled = context.settings().adsBlockFeatureEnabled.also {
+            if (it) {
+                if (!isTablet) {
+                    browserToolbarView.view.addAdBlockAction(adBlockAction)
+                } else {
+                    browserToolbarView.view.addPageAction(adBlockAction)
+                }
+            }
+        }
+
 
         val readerModeAction =
             BrowserToolbar.ToggleButton(
@@ -437,9 +502,11 @@ class BrowserFragment : BaseBrowserFragment(), UserInteractionHandler {
                     isNewCollection -> {
                         R.string.create_collection_tabs_saved_new_collection
                     }
+
                     tabSize > 1 -> {
                         R.string.create_collection_tabs_saved
                     }
+
                     else -> {
                         R.string.create_collection_tab_saved
                     }

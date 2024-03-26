@@ -346,6 +346,10 @@ abstract class BaseBrowserFragment :
                     operation = { },
                 )
             },
+            onAdBlockStateChanged = {
+                requireComponents.settings.adBlockingEnabled = it
+                requireComponents.core.engine.settings.adBlockingEnabled = it
+            }
         )
         val browserToolbarMenuController = DefaultBrowserToolbarMenuController(
             store = store,
